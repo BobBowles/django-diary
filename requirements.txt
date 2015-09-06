@@ -1,0 +1,5 @@
+Django==1.8.3
+django-datetime-widget==0.9.3
+django-model-utils==2.3.1
+pytz==2015.4
+six==1.9.0

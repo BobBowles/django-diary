@@ -1,0 +1,64 @@
+{% extends 'diary/main_base.html' %}
+{% load staticfiles %}
+
+{% block head_extra %}
+    <link rel="stylesheet" href="{% static "diary/base.css" %}" />
+
+    {% block diary_head_extra %}
+    {% endblock diary_head_extra %}
+
+{% endblock head_extra %}
+
+{% block links %}
+    <a class="top-menu" href="{% url 'home' %}">
+        <span class="glyphicon glyphicon-home">
+        </span>
+    </a>
+{% endblock links %}
+
+{% block content %}
+
+    {# place-holders for overriding in children of diary_nav #}
+    {% url '' as diary_nav_up %}
+    {% url '' as diary_nav_prev %}
+    {% url '' as diary_nav_next %}
+
+    <div class="page-head">
+        {% block diary_nav %} {# override url definitions in children #}
+            <a class="top-menu" href="{{ cal_nav_next }}">
+                    <span class="glyphicon glyphicon-forward">
+                    </span>
+            </a>
+            <a class="top-menu" href="{{ cal_nav_prev }}">
+                    <span class="glyphicon glyphicon-backward">
+                    </span>
+            </a>
+            <a class="top-menu" href="{{ cal_nav_up }}">
+                    <span class="glyphicon glyphicon-eject">
+                    </span>
+            </a>
+        {% endblock diary_nav %}
+        <h1>
+            <a href="">
+                {% block diary_title %}
+                    Calendar
+                {% endblock diary_title %}
+            </a>
+        </h1>
+    </div>
+
+
+{# SAMPLE CHILD BLOCK for diary_nav #}
+{#{% block diary_nav %}#}
+{#    {% url 'diary.views.year' year=next_year as diary_nav_next %}#}
+{#    {% url 'diary.views.year' year=prev_year as diary_nav_prev %}#}
+{#    {% url 'diary.views.year' as diary_nav_up %}#}
+{#    {{ block.super }}#}
+{#{% endblock diary_nav %}#}
+
+
+    {% block diary_content %}
+    {% endblock diary_content %}
+
+
+{% endblock content %}

@@ -1,0 +1,86 @@
+{% extends 'diary/day_base.html' %}
+
+
+{% block diary_nav %}
+    {% url 'diary.views.multi_day' slug=nav_slug change='next' as diary_nav_next %}
+    {% url 'diary.views.multi_day' slug=nav_slug change='prev' as diary_nav_prev %}
+    {% url 'diary.views.month' year=date.year month=date.month as diary_nav_up %}
+    {{ block.super }}
+{% endblock diary_nav %}
+
+
+{% block diary_title %}
+    Calendar  {{ date.year }} {{ date_start_head }} - {{ date_end_head }}
+{% endblock diary_title %}
+
+
+{% block diary_content %}
+    {{ block.super }}
+
+    <div class="container-fluid">
+        <!-- column headers -->
+        <div class="row">
+            <div class="col-md-1">
+                <i>Time</i>
+            </div>
+            {% for date, day_header, date_slug in date_slots %}
+                <a href="{% url 'diary.views.day' slug=date_slug %}">
+                    <div class="col-md-2">
+                        <b>
+                            {{ day_header }}
+                        </b>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+        <!-- time slot rows -->
+        {% for label, start_time, day_entries in time_slots %}
+            <div class="row">
+                <div class="col-md-1">
+                    <b>{{ label }}</b>
+                </div>
+                {% for datetime_slug, entries, current in day_entries %}
+                    <span class="parent">　<!-- common parent -->
+                        <div 
+                            id="{{ datetime_slug }}"
+                            class=
+                        "col-md-2 droptarget{% if current %} current{% endif %}"
+                            ondragenter="dragenter(event);"
+                            ondragleave="dragleave(event);"
+                            ondragover="dragover(event);"
+                            ondrop="drop(event);"
+                            ondragend="dragend(event);"
+                            >
+                            {% for entry in entries %}
+    {% url 'diary.views.entry' pk=entry.pk as url_edit %}
+    {% url 'diary.views.entry_delete' pk=entry.pk as url_delete %}
+                                <div 
+                                    class="entry"
+                                    id="{{ entry.pk }}"
+                                    draggable="True"
+                                    ondragstart="drag(event);"
+                                    >
+                                    <div 
+                data-href="{% url 'diary.views.entry_modal' pk=entry.pk %}"
+                                        data-toggle="modal"
+                                        data-target="#ajaxModal"
+                                        >
+                                        <b>{{ entry.creator.username }}</b>
+                                    </div>
+                                </div>
+                            {% endfor %}
+    {% url 'diary.views.entry' slug=datetime_slug as diary_new_entry %}
+                            <button type="button" 
+                                class="btn btn-default btn-xs new"
+                                onclick="location.href='{{ diary_new_entry }}'">
+                                New
+                            </button>
+                        </div>
+                    </span> <!-- common parent -->
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </div>
+
+{% endblock diary_content %}
+

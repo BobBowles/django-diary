@@ -1,0 +1,69 @@
+{% extends 'diary/day_base.html' %}
+
+
+{% block diary_nav %}
+    {% url 'diary.views.day' slug=nav_slug change='next' as diary_nav_next %}
+    {% url 'diary.views.day' slug=nav_slug change='prev' as diary_nav_prev %}
+    {% url 'diary.views.multi_day' slug=nav_slug as diary_nav_up %}
+    {{ block.super }}
+{% endblock diary_nav %}
+
+
+{% block diary_title %}
+    Calendar {{ date.day }} {{ month_name }} {{ date.year }}
+{% endblock diary_title %}
+
+
+{% block diary_content %}
+    {{ block.super }}
+
+    <div class="container-fluid">
+        {% for label, datetime_slug, start_time, entries, current in time_slots %}
+            <div class="row">
+                <div class="col-md-1">
+                    <b>{{ label }}</b>
+                </div>
+                <span class="parent">
+                    <div 
+                        id="{{ datetime_slug }}"
+                        class=
+                        "col-md-11 droptarget{% if current %} current{% endif %}"
+                        ondragenter="dragenter(event);"
+                        ondragleave="dragleave(event);"
+                        ondragover="dragover(event);"
+                        ondrop="drop(event);"
+                        ondragend="dragend(event);"
+                        >
+                        {% for entry in entries %}
+    {% url 'diary.views.entry' pk=entry.pk as url_edit %}
+    {% url 'diary.views.entry_delete' pk=entry.pk as url_delete %}
+                            <div 
+                                class="entry"
+                                id="{{ entry.pk }}"
+                                draggable="true"
+                                ondragstart="drag(event);"
+                                >
+                                <div 
+                data-href="{% url 'diary.views.entry_modal' pk=entry.pk %}"
+                                    data-toggle="modal"
+                                    data-target="#ajaxModal"
+                                    >
+                                    <b>{{ entry.creator.username }}</b> -
+                                    {{ entry.short|safe }}
+                                </div>
+                            </div>
+                        {% endfor %}
+    {% url 'diary.views.entry' slug=datetime_slug as diary_new_entry %}
+                        <button type="button" 
+                            class="btn btn-default btn-xs new"
+                            onclick="location.href='{{ diary_new_entry }}'">
+                            New
+                        </button>
+                    </div>
+                </span> <!-- parent -->
+            </div>
+        {% endfor %}
+    </div>
+
+{% endblock diary_content %}
+

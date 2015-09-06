@@ -1,0 +1,44 @@
+{% extends 'diary/base.html' %}
+
+{% block diary_head_extra %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    {{ form.media }}
+{% endblock diary_head_extra %}
+
+
+{% block diary_nav %}
+    {% url 'diary.views.day' slug=nav_slug change='next' as diary_nav_next %}
+    {% url 'diary.views.day' slug=nav_slug change='prev' as diary_nav_prev %}
+    {% url 'diary.views.day' slug=nav_slug as diary_nav_up %}
+    {{ block.super }}
+{% endblock diary_nav %}
+
+
+{% block diary_title %}
+    {% if form.entry.pk %}
+        New
+    {% endif %}
+    Calendar Entry {{ date.day }} {{ month_name }} {{ date.year }}
+{% endblock diary_title %}
+
+
+{% block diary_content %}
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-8">
+                <form class="post-form" method="POST">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button class="save btn btn-default" type="submit">
+                        Save
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock diary_content %}
+

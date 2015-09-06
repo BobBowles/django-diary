@@ -1,0 +1,53 @@
+{# html snippet for creating entry modals dynamically #}
+{# all the modals have the same id because they are destroyed after each use #}
+{# id is 'ajaxModal' #}
+
+{% url 'diary.views.entry' pk=entry.pk as url_edit %}
+{% url 'diary.views.entry_delete' pk=entry.pk as url_delete %}
+
+<!--div class="modal fade" id="ajaxModal" role="dialog"-->
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" 
+                data-dismiss="modal">&times;
+            </button>
+            <h4>
+                {{ entry.date }}:
+                {{ entry.time }} - 
+                {{ entry.time_end }}: 
+                {{ entry.title }}
+            </h4>
+        </div>
+        <div class="modal-body">
+            <p>
+                {{ entry.snippet }}
+            </p>
+            <textarea disabled rows="20" cols="60">
+                {{ entry.body }}
+            </textarea>
+        </div>
+        <div class="modal-footer">
+            <button type="button" 
+                class="btn btn-danger" 
+                onclick="next_url('{{ url_delete }}');"
+                >
+                Delete
+            </button>
+            <button type="button" 
+                class="btn btn-default" 
+                onclick="next_url('{{ url_edit }}');"
+                >
+                Edit
+            </button>
+            <button type="button" 
+                class="btn btn-default" 
+                data-href="#"
+                data-dismiss="modal">
+                Close
+            </button>
+        </div>
+    </div>
+</div>
+<!--/div-->
+

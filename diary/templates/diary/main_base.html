@@ -1,0 +1,87 @@
+{#% extends whatever %#}
+{% load staticfiles %}
+
+<html>
+    <head>
+        {# layouts are based on bootstrap so these links need to be somewhere #}
+        <link rel="stylesheet" 
+href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" />
+        <link rel="stylesheet" 
+href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css" />
+        {# careful about css #}
+        <!--link rel="stylesheet" href="{#% static "blog/base.css" %#}" /-->
+        <link rel="stylesheet" type="text/css" 
+href="http://fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext" />
+        {% block head_extra %} {# needed for day multi_day and entry #}
+        {% endblock head_extra %}
+        {% block title %} {# override or delete as required #}
+            <title>Django Diary</title>
+        {% endblock title %}
+    </head>
+    
+    <body>
+        {% block body %} {# override or delete as required #}
+            {% block nav_menu %} {# override or delete as required #}
+            <div class="page-head">
+                <!-- top menu functions depend on logged-in status -->
+                {% if user.is_authenticated %}
+                    <p class="top-menu">
+                        Hello {{ user.username }}
+                        <small>(
+                            <a href="{% url 'django.contrib.auth.views.logout' %}">
+                                Logout
+                            </a>)
+                        </small>
+                    </p>
+                    {% block links %}
+                        <a class="top-menu" href="{% url 'diary.views.year' %}">
+                            <span class="glyphicon glyphicon-calendar">
+                            </span>
+                        </a>
+                    {% endblock links %}
+                {% else %}
+                    <a class="top-menu" 
+                        href="{% url "django.contrib.auth.views.login" %}">
+                        <span class="glyphicon glyphicon-lock">
+                        </span>
+                    </a>
+                {% endif %}
+                
+                <h1><a href="">Diary Test App</a></h1>
+            </div>
+            {% endblock nav_menu %}
+
+            <div class="content">
+                <div class="row">
+                    <div class="col-md-8">
+                        {% block content %} {# diary main content goes here #}
+                        {% endblock content %}
+                    </div>
+                    <div class="col-md-4">
+                        {% block sidebar %} {# diary sidebar reminders go here #}
+                            {% if reminders %}
+                            <div class="reminders">
+                                <div class="page-head">
+                                    <h1>Alerts</h1>
+                                </div>
+                                {% for reminder in reminders %}
+                                    <p>
+                                        {{ reminder.date }} - 
+                                        {{ reminder.time }}: 
+                                        {{ reminder.creator }}
+                                    </p>
+                                    <p> {{ reminder.short|safe }}</p>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        {% endblock sidebar %}
+                    </div>
+                </div>
+            </div>
+
+        {% endblock body %}
+    </body>
+    {% block foot_extra %}
+    {% endblock foot_extra %}
+</html>
+

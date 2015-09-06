@@ -1,0 +1,59 @@
+{% extends 'diary/base.html' %}
+
+{% block head_extra %}
+    <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    {{ entries.media }}
+{% endblock head_extra %}
+
+
+{% block diary_nav %}
+    {% url 'diary.views.day_list' year=date.year month=date.month day=date.day change='next' as diary_nav_next %}
+    {% url 'diary.views.day_list' year=date.year month=date.month day=date.day change='prev' as diary_nav_prev %}
+    {% url 'diary.views.month' year=date.year month=date.month as diary_nav_up %}
+    {{ block.super }}
+{% endblock diary_nav %}
+
+
+{% block diary_title %}
+    Calendar Entry List {{ date.day }} {{ month_name }} {{ date.year }}
+{% endblock diary_title %}
+
+
+{% block diary_content %}
+
+    <form 
+action="{% url 'diary.views.day' year=date.year month=date.month day=date.day %}"
+method="POST">
+        {% csrf_token %}
+
+        {{ entries.management_form }}
+        {% for entry in entries.forms %}
+            {{ entry.id }}
+            <div class="row">
+                <div class="col-md-1">Time:</div>
+                <div class="col-md-3">{{ entry.time }}</div>
+                <div class="col-md-1">Duration:</div>
+                <div class="col-md-3">{{ entry.duration }}</div>
+                <div class="right">Delete: {{ entry.DELETE }}</div>
+            </div>
+            <div class="row">
+                <div id="inp1" class="col-md-1">Title:</div>
+                <div class="col-md-2">{{ entry.title }}</div>
+                <div class="col-md-offset-1 col-md-1">Snippet:</div>
+                <div class="col-md-3">{{ entry.snippet }}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    {{ entry.body }}
+                </div>
+                <div class="right">Remind: {{ entry.remind }}</div>
+            </div>
+            <hr />
+        {% endfor %}
+        <input type="submit" value="Save" />
+    </form>
+
+
+{% endblock diary_content %}
+
