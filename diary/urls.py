@@ -58,8 +58,4 @@ views.day_list,
     ),
     url(r'^day_list/$', views.day_list),            # default day is today
 
-
-    # catch-all home page only used for testing (we hope?)
-    url(r'', views.home, name='home'),
 ]
-

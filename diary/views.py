@@ -529,10 +529,3 @@ def entry_delete(request, pk):
         slug=date.strftime(DATE_SLUG_FORMAT),
     )
 
-
-def home(request):
-    """
-    A noddy home page for testing/development purposes.
-    """
-    return render_to_response('diary/home.html', {})
-
