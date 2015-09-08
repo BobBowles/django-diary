@@ -8,8 +8,6 @@
 href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" />
         <link rel="stylesheet" 
 href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css" />
-        {# careful about css #}
-        <!--link rel="stylesheet" href="{#% static "blog/base.css" %#}" /-->
         <link rel="stylesheet" type="text/css" 
 href="http://fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext" />
         {% block head_extra %} {# needed for day multi_day and entry #}
@@ -17,6 +15,45 @@ href="http://fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext" />
         {% block title %} {# override or delete as required #}
             <title>Django Diary</title>
         {% endblock title %}
+
+        <style> {# some minimal styling for the page head #}
+
+.page-head {
+    background-color: #729fcf;
+    margin-top: 0;
+    padding: 20px, 20px, 20px, 40px;
+}
+
+.page-head h1, 
+.page-head h1 a, 
+.page-head h1 a:visited, 
+.page-head h1 a:active {
+    color: white;
+    font-size: 36pt;
+    text-decoration: none;
+}
+
+
+h1, h2, h3, h4, p.top-menu {
+    font-family: 'Lobster', cursive;
+}
+
+.top-menu, .top-menu:hover, .top-menu:visited {
+    color: white;
+    float: right;
+    font-size: 26pt;
+    margin-right: 20px;
+}
+
+p.top-menu a {
+    color: white;
+}
+
+.content {
+    margin-left: 40px;
+}
+
+        </style>
     </head>
 
     <body>
@@ -27,11 +64,11 @@ href="http://fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext" />
                     {% if user.is_authenticated %}
                         <p class="top-menu">
                             Hello {{ user.username }}
-                            <bold>(
+                            (
                                 <a href="{% url 'django.contrib.auth.views.logout' %}">
                                     Logout
                                 </a>)
-                            </bold>
+                            
                         </p>
                         {% block links %}
                             <a 
