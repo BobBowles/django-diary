@@ -2,9 +2,9 @@
 
 
 {% block diary_nav %}
-    {% url 'diary.views.multi_day' slug=nav_slug change='next' as diary_nav_next %}
-    {% url 'diary.views.multi_day' slug=nav_slug change='prev' as diary_nav_prev %}
-    {% url 'diary.views.month' year=date.year month=date.month as diary_nav_up %}
+    {% url 'diary:multi_day_nav' slug=nav_slug change='next' as diary_nav_next %}
+    {% url 'diary:multi_day_nav' slug=nav_slug change='prev' as diary_nav_prev %}
+    {% url 'diary:month' year=date.year month=date.month as diary_nav_up %}
     {{ block.super }}
 {% endblock diary_nav %}
 
@@ -24,7 +24,7 @@
                 <i>Time</i>
             </div>
             {% for date, day_header, date_slug in date_slots %}
-                <a href="{% url 'diary.views.day' slug=date_slug %}">
+                <a href="{% url 'diary:day' slug=date_slug %}">
                     <div class="col-md-2">
                         <b>
                             {{ day_header }}
@@ -52,8 +52,6 @@
                             ondragend="dragend(event);"
                             >
                             {% for entry in entries %}
-    {% url 'diary.views.entry' pk=entry.pk as url_edit %}
-    {% url 'diary.views.entry_delete' pk=entry.pk as url_delete %}
                                 <div 
                                     class="entry"
                                     id="{{ entry.pk }}"
@@ -61,7 +59,7 @@
                                     ondragstart="drag(event);"
                                     >
                                     <div 
-                data-href="{% url 'diary.views.entry_modal' pk=entry.pk %}"
+                data-href="{% url 'diary:entry_modal' pk=entry.pk %}"
                                         data-toggle="modal"
                                         data-target="#ajaxModal"
                                         >
@@ -69,10 +67,10 @@
                                     </div>
                                 </div>
                             {% endfor %}
-    {% url 'diary.views.entry' slug=datetime_slug as diary_new_entry %}
+                    {% url 'diary:entry_new' slug=datetime_slug as new_entry %}
                             <button type="button" 
                                 class="btn btn-default btn-xs new"
-                                onclick="location.href='{{ diary_new_entry }}'">
+                                onclick="location.href='{{ new_entry }}'">
                                 New
                             </button>
                         </div>

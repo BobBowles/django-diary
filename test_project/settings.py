@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'diary',
+    'datetimewidget',
     'home', # a dummy home page for development purposes
 )
 
@@ -96,6 +97,16 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+# the default does not allow time with meridian
+TIME_INPUT_FORMATS = (
+    '%H:%M:%S',
+    '%H:%M',
+    '%I %p',
+    '%I:%M %p',
+    '%I:%M%p',
+    '%H:%M:%S.%f',
+)
 
 
 # User customisation

@@ -137,7 +137,7 @@ function drop(ev) {
     //console.log('pk from data transfer is ['+pk+']');
     var slug = ev.target.id;
     /* ajax stuff goes here */
-    url = "{% url 'diary.views.entry_update' %}"
+    url = "{% url 'diary:entry_dnd' %}"
     $.ajax({
         url: url,
         type: "post",

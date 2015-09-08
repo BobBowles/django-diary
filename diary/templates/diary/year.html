@@ -2,9 +2,9 @@
 
 
 {% block diary_nav %}
-    {% url 'diary.views.year' year=next_year as diary_nav_next %}
-    {% url 'diary.views.year' year=prev_year as diary_nav_prev %}
-    {% url 'diary.views.year' as diary_nav_up %}
+    {% url 'diary:year' year=next_year as diary_nav_next %}
+    {% url 'diary:year' year=prev_year as diary_nav_prev %}
+    {% url 'diary:year_now' as diary_nav_up %}
     {{ block.super }}
 {% endblock diary_nav %}
 
@@ -21,7 +21,7 @@
         {% for month in months %}
             <div class="month{% if month.current %} current{% endif %}
                 {% if month.entry %} hasentry{% endif %}">
-                <a href="{% url 'diary.views.month' year=year month=month.n %}">
+                <a href="{% url 'diary:month' year=year month=month.n %}">
                     {{ month.name }}
                 </a>
             </div>

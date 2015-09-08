@@ -2,9 +2,9 @@
 
 
 {% block diary_nav %}
-    {% url 'diary.views.month' year=date.year month=date.month change='next' as diary_nav_next %}
-    {% url 'diary.views.month' year=date.year month=date.month change='prev' as diary_nav_prev %}
-    {% url 'diary.views.year' year=date.year as diary_nav_up %}
+    {% url 'diary:month_nav' year=date.year month=date.month change='next' as diary_nav_next %}
+    {% url 'diary:month_nav' year=date.year month=date.month change='prev' as diary_nav_prev %}
+    {% url 'diary:year' year=date.year as diary_nav_up %}
     {{ block.super }}
 {% endblock diary_nav %}
 
@@ -30,7 +30,7 @@
 "day{% if day != 0 %} regular{% endif %}{% if current %} current{% endif %}"
                             {% if day != 0 %}
                                 onclick=
-"parent.location='{% url 'diary.views.multi_day' slug=nav_slug %}'"
+"parent.location='{% url 'diary:multi_day' slug=nav_slug %}'"
                             {% endif %}
                             >
                             {% if day != 0 %}

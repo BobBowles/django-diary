@@ -8,9 +8,9 @@
 
 
 {% block diary_nav %}
-    {% url 'diary.views.day' slug=nav_slug change='next' as diary_nav_next %}
-    {% url 'diary.views.day' slug=nav_slug change='prev' as diary_nav_prev %}
-    {% url 'diary.views.day' slug=nav_slug as diary_nav_up %}
+    {% url 'diary:day_nav' slug=nav_slug change='next' as diary_nav_next %}
+    {% url 'diary:day_nav' slug=nav_slug change='prev' as diary_nav_prev %}
+    {% url 'diary:day' slug=nav_slug as diary_nav_up %}
     {{ block.super }}
 {% endblock diary_nav %}
 

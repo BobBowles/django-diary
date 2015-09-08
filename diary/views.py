@@ -234,15 +234,14 @@ def getDatetimeFromSlug(slug):
 
 
 @login_required
-def multi_day(request, year=None, month=None, day=None, slug=None, change=None):
+def multi_day(request, slug=None, change=None):
     """
     Display entries in a calendar-style 4-day layout.
     """
     today = timezone.localtime(timezone.now()).date()
     now = timezone.localtime(timezone.now()).time()
-    date = (
-        getDate(year, month, day, change) if year # deprecated
-        else getDateFromSlug(slug, change)
+    date = (getDateFromSlug(slug, change) if slug
+        else today
     )
 
     # get date information etc for the days to display
@@ -306,16 +305,16 @@ def multi_day(request, year=None, month=None, day=None, slug=None, change=None):
 
 
 @login_required
-def day(request, year=None, month=None, day=None, slug=None, change=None):
+def day(request, slug=None, change=None):
     """
     Display entries in a particular day in a calendar-style day view.
     """
-    date = (
-        getDate(year, month, day, change) if year # deprecated
-        else getDateFromSlug(slug, change)
-    )
-    currentDate = (date == timezone.now().date())
+    today = timezone.localtime(timezone.now()).date()
     now = timezone.localtime(timezone.now()).time()
+    date = (getDateFromSlug(slug, change) if slug
+        else today
+    )
+    currentDate = (date == today)
     date_slug = date.strftime(DATE_SLUG_FORMAT)
 
     # obtain the day's entries divided into time slots
@@ -354,6 +353,7 @@ def day_list(request, year=None, month=None, day=None, change=None):
     """
     Display entries in a particular day in an editable list.
     """
+    print('DEPRECATION WARNING: day_list is not maintained')
     date = getDate(year, month, day, change)
 
     # create a form for entry of new entries (sic)
@@ -435,7 +435,7 @@ def entry(request, pk=None, slug=None,):
 
             # in case the date has been edited re-calculate the navigation slug
             return redirect(
-                'diary.views.day', 
+                'diary:day', 
                 slug=entry.date.strftime(DATE_SLUG_FORMAT),
             )
     else:
@@ -525,7 +525,7 @@ def entry_delete(request, pk):
     date = entry.date
     entry.delete()
     return redirect(
-        'diary.views.day', 
+        'diary:day', 
         slug=date.strftime(DATE_SLUG_FORMAT),
     )
 

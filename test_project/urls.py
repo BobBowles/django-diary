@@ -22,6 +22,6 @@ urlpatterns = [
     url(r'^accounts/logout/$', 
         'django.contrib.auth.views.logout', 
         {'next_page': '/'}),
-    url(r'^diary/', include('diary.urls')),
+    url(r'^diary/', include('diary.urls', namespace='diary')),
     url(r'', include('home.urls')),
 ]

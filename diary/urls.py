@@ -5,46 +5,67 @@ from . import views
 urlpatterns = [
 
     # year and month views
-    url(r'^(?P<year>\d{4})/$', views.year),
-    url(r'^$', views.year),                         # default is this year
+    url(r'^year/(?P<year>\d{4})/$', views.year, name='year',),
+    url(r'^year/$', views.year, name='year_now'),   # default is this year
     url(r'^month/(?P<year>\d{4})/(?P<month>\d+)/(?P<change>prev|next)/$',
         views.month,
+        name='month_nav',
     ),
-    url(r'^month/(?P<year>\d{4})/(?P<month>\d+)/$', views.month),
-    url(r'^month/$', views.month),                  # default is this month
+    url(r'^month/(?P<year>\d{4})/(?P<month>\d+)/$', 
+        views.month,
+        name='month',
+    ),
+    url(r'^month/$', views.month, name='month_now'),# default is this month
 
 
-    # slug format multi-day views
-    url(
-        r'^multi_day/(?P<slug>\d{4}-\d\d-\d\d)/(?P<change>prev|next)/$', 
-        views.multi_day
+    # slug format multi-day views. this is the default landing area
+    url(r'^multi_day/(?P<slug>\d{4}-\d\d-\d\d)/(?P<change>prev|next)/$', 
+        views.multi_day,
+        name='multi_day_nav',
     ),
-    url(r'^multi_day/(?P<slug>\d{4}-\d\d-\d\d)/$', views.multi_day),
-    url(r'^multi_day/$', views.multi_day),           # default day is today
+    url(r'^multi_day/(?P<slug>\d{4}-\d\d-\d\d)/$', 
+        views.multi_day,
+        name='multi_day',
+    ),
+    url(r'^multi_day/$', 
+        views.multi_day, 
+        name='multi_day_now',
+    ),                                              # default day is today
+    url(r'^multi_day/$', 
+        views.multi_day, 
+        name='home'
+    ),                                              # 'home' page
 
 
     # slug format day views
     url(
         r'^day/(?P<slug>\d{4}-\d\d-\d\d)/(?P<change>prev|next)/$',
         views.day,
+        name='day_nav',
     ),
-    url(r'^day/(?P<slug>\d{4}-\d\d-\d\d)/$', views.day),
-    url(r'^day/$', views.day),                      # default day is today
+    url(r'^day/(?P<slug>\d{4}-\d\d-\d\d)/$', views.day, name='day'),
+    url(r'^day/$', views.day, name='day_now'),      # default day is today
 
 
     # slug format entry views
-    url(r'^entry/(?P<slug>\d{4}-\d\d-\d\d_\d\d-\d\d)/$', views.entry,),
-    url(r'^entry/(?P<pk>\d+)/$', views.entry),
-    url(r'^entry/$', views.entry),                  # default is create new
-    url(r'^entry_delete/(?P<pk>\d+)/$', views.entry_delete),
+    url(r'^entry/(?P<slug>\d{4}-\d\d-\d\d_\d\d-\d\d)/$', 
+        views.entry,
+        name='entry_new'
+    ),
+    url(r'^entry/(?P<pk>\d+)/$', views.entry, name='entry',),
+    url(r'^entry/$', 
+        views.entry, 
+        name='entry_empty',
+    ),                                              # default is create new
+    url(r'^entry_delete/(?P<pk>\d+)/$', views.entry_delete, name='entry_delete'),
 
 
     # for drag-and-drop with ajax
-    url(r'^entry_update/$', views.entry_update),
+    url(r'^entry_update/$', views.entry_update, name='entry_dnd',),
 
 
     # ajax dynamic modals
-    url(r'^entry_modal/(?P<pk>\d+)/$', views.entry_modal),
+    url(r'^entry_modal/(?P<pk>\d+)/$', views.entry_modal, name='entry_modal',),
 
 
     # the following are redundant and not maintained

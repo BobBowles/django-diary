@@ -18,37 +18,42 @@ href="http://fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext" />
             <title>Django Diary</title>
         {% endblock title %}
     </head>
-    
+
     <body>
         {% block body %} {# override or delete as required #}
             {% block nav_menu %} {# override or delete as required #}
-            <div class="page-head">
-                <!-- top menu functions depend on logged-in status -->
-                {% if user.is_authenticated %}
-                    <p class="top-menu">
-                        Hello {{ user.username }}
-                        <small>(
-                            <a href="{% url 'django.contrib.auth.views.logout' %}">
-                                Logout
-                            </a>)
-                        </small>
-                    </p>
-                    {% block links %}
-                        <a class="top-menu" href="{% url 'diary.views.year' %}">
-                            <span class="glyphicon glyphicon-calendar">
+                <div class="page-head">
+                    <!-- top menu functions depend on logged-in status -->
+                    {% if user.is_authenticated %}
+                        <p class="top-menu">
+                            Hello {{ user.username }}
+                            <bold>(
+                                <a href="{% url 'django.contrib.auth.views.logout' %}">
+                                    Logout
+                                </a>)
+                            </bold>
+                        </p>
+                        {% block links %}
+                            <a 
+                                class="top-menu" 
+                                href="{% url 'diary:multi_day_now' %}"
+                                >
+                                <span class="glyphicon glyphicon-calendar">
+                                </span>
+                            </a>
+                        {% endblock links %}
+                    {% else %}
+                        <a 
+                            class="top-menu" 
+                            href="{% url "django.contrib.auth.views.login" %}"
+                            >
+                            <span class="glyphicon glyphicon-lock">
                             </span>
                         </a>
-                    {% endblock links %}
-                {% else %}
-                    <a class="top-menu" 
-                        href="{% url "django.contrib.auth.views.login" %}">
-                        <span class="glyphicon glyphicon-lock">
-                        </span>
-                    </a>
-                {% endif %}
-                
-                <h1><a href="">Diary Test App</a></h1>
-            </div>
+                    {% endif %}
+                    
+                    <h1><a href="">Diary Test App</a></h1>
+                </div>
             {% endblock nav_menu %}
 
             <div class="content">
