@@ -2,13 +2,19 @@
 {% load staticfiles %}
 
 {% block head_extra %}
+
+    {# inherit the head_extra block in case parents have already used it #}
+    {{ block.super }}
     <link rel="stylesheet" href="{% static "diary/base.css" %}" />
 
+    {# attachment point for js etc specific to certain diary pages. #}
     {% block diary_head_extra %}
     {% endblock diary_head_extra %}
 
 {% endblock head_extra %}
 
+{# this block is only used in the test app to give a home page nav link #}
+{# you can most likely ignore this block in your override :) #}
 {% block links %}
     <a class="top-menu" href="{% url 'home' %}">
         <span class="glyphicon glyphicon-home">
@@ -16,49 +22,4 @@
     </a>
 {% endblock links %}
 
-{% block content %}
 
-    {# place-holders for overriding in children of diary_nav #}
-    {% url '' as diary_nav_up %}
-    {% url '' as diary_nav_prev %}
-    {% url '' as diary_nav_next %}
-
-    <div class="page-head">
-        {% block diary_nav %} {# override url definitions in children #}
-            <a class="top-menu" href="{{ diary_nav_next }}">
-                    <span class="glyphicon glyphicon-forward">
-                    </span>
-            </a>
-            <a class="top-menu" href="{{ diary_nav_prev }}">
-                    <span class="glyphicon glyphicon-backward">
-                    </span>
-            </a>
-            <a class="top-menu" href="{{ diary_nav_up }}">
-                    <span class="glyphicon glyphicon-eject">
-                    </span>
-            </a>
-        {% endblock diary_nav %}
-        <h1>
-            <a href="">
-                {% block diary_title %}
-                    Calendar
-                {% endblock diary_title %}
-            </a>
-        </h1>
-    </div>
-
-
-{# SAMPLE CHILD BLOCK for diary_nav #}
-{#{% block diary_nav %}#}
-{#    {% url 'diary:year_nav' year=next_year as diary_nav_next %}#}
-{#    {% url 'diary:year_nav' year=prev_year as diary_nav_prev %}#}
-{#    {% url 'diary:year_now' as diary_nav_up %}#}
-{#    {{ block.super }}#}
-{#{% endblock diary_nav %}#}
-
-
-    {% block diary_content %}
-    {% endblock diary_content %}
-
-
-{% endblock content %}

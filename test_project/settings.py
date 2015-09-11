@@ -98,7 +98,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-# the default does not allow time with meridian
+# the django default does not allow time with meridian
 TIME_INPUT_FORMATS = (
     '%H:%M:%S',
     '%H:%M',

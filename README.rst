@@ -24,12 +24,56 @@ Customers may be users of the system, but they have additional attributes. In ke
 In the interests of confidentiality, customers may only see and alter their own details and appointments. Staff members are able to see and alter the details of all entries.
 
 
+Installation
+------------
+
+1)  Install `django-diary` [TODO: from Pypi] and its dependencies.
+2)  Add `diary` and `datetimewidget` to your `INSTALLED_APPS` in `settings.py`::
+
+    'diary',
+    'datetimewidget',
+
+3)  Also in `settings.py` configure meridian time displays [TODO: if you are using them - need configuration option]::
+
+    # the django default does not allow time with meridian
+    TIME_INPUT_FORMATS = (
+        '%H:%M:%S',
+        '%H:%M',
+        '%I %p',
+        '%I:%M %p',
+        '%I:%M%p',
+        '%H:%M:%S.%f',
+    )
+
+4)  Add the following to `settings.py` to enable the use of the `Customer` subclass of `User`::
+
+    # User customisation
+    # NOTE: use of InheritanceQuerySet in the backend dispenses with the need for 
+    # any other setting. (django-model-utils)
+    # http://scottbarnham.com/blog/2008/08/21/extending-the-django-user-model-with-inheritance/
+    AUTHENTICATION_BACKENDS = (
+        'diary.backends.CustomUserModelBackend',
+    )
+
+5)  Override `templates/diary/main_base.html` to customise layout and styling for your site. `main_base.html` (and/or its parents) need to provide the following five blocks:
+
+*   **head_extra**      for adding elements to the document head
+*   **diary_nav**       for navigating between diary views. The nav-bar can itself be completely re-written to your tastes, subject only to providing link placeholders described in the example implementation provided.
+*   **diary_content**   attachment point for the diary content.
+*   **diary_title**     attachment point for the page title.
+*   **diary_sidebar**   attachment point for reminders / ticker information.
+
+6)  Configure the customisable parameters in `settings.py`::
+
+    DIARY_XXXXX         TODO: some documentation would be nice :)
+
+
 Dependencies
 ------------
 
 At the fundamental level the dependencies of this app are recorded in the requirements.txt file.
 
-The styling, layout, widgets, and javascript all utilize Twitter Bootstrap and jQuery. Hopefully the dependencies are self-contained, but obviously it is more harmonious if the project as a whole is designed around Bootstrap.
+The styling, layout, widgets, and javascript all utilize Twitter Bootstrap and jQuery. Hopefully the dependencies are self-contained, but obviously it is more harmonious if your project as a whole is designed around Bootstrap.
 
 I have made no effort to write this for Python 2.7, targeting Python 3.4. I may look at that at a future date.
 
@@ -66,7 +110,7 @@ Reusability
 
 At this early stage reusability is an aspiration rather than a reality. To achieve this the following considerations have been/need to be made:
 
-*  Overriding of templates and styles. A main_base.html template is to be constructed that forms the basis of a working example of the app, and at the same time provides a starting point for overriding. Attention also needs to be given to navigation hooks.
+*  Overriding of templates and styles. A main_base.html template has been constructed that forms the basis of a working example of the app, and at the same time provides a starting point for overriding. Attention also needs to be given to navigation hooks.
 *  Configuration. While wanting the diary app to be configurable for different scenarios, it is also important to keep focused on core function and _not_ provide too many hooks. A settings.py file exists in the diary which provides default values for a few parameters that can be overridden in the project's settings file. For easy discrimination, all configurable parameters have names of the form DIARY_XXXXX. The parameter names will be chosen to be reasonably self-explanatory, and (eventually) will be documented somewhere.
 *  Dependencies. Kept to a minimum. They will be documented (promise!).
 
