@@ -27,13 +27,16 @@ In the interests of confidentiality, customers may only see and alter their own 
 Installation
 ------------
 
-1)  Install `django-diary` [TODO: from Pypi] and its dependencies.
-2)  Add `diary` and `datetimewidget` to your `INSTALLED_APPS` in `settings.py`::
+1.  Install `django-diary` [TODO: from Pypi] and its dependencies.
+2.  Add `diary` and `datetimewidget` to your `INSTALLED_APPS` in `settings.py`:
+
+::
 
     'diary',
     'datetimewidget',
 
-3)  Also in `settings.py` configure meridian time displays [TODO: if you are using them - need configuration option]:
+3.  Also in `settings.py` configure meridian time displays [TODO: if you are using them - need configuration option]:
+
 ::
 
     # the django default does not allow time with meridian
@@ -47,7 +50,8 @@ Installation
     )
 
 
-4)  Add the following to `settings.py` to enable the use of the `Customer` subclass of `User`:
+4.  Add the following to `settings.py` to enable the use of the `Customer` subclass of `User`:
+
 ::
 
     # User customisation
@@ -58,7 +62,7 @@ Installation
         'diary.backends.CustomUserModelBackend',
     )
 
-5)  Override `templates/diary/main_base.html` to customise layout and styling for your site. `main_base.html` (and/or its parents) need to provide the following five blocks:
+5.  Override `templates/diary/main_base.html` to customise layout and styling for your site. `main_base.html` (and/or its parents) need to provide the following five blocks:
 
 ==================== ===========================================================
 Block                Description
@@ -74,17 +78,20 @@ Block                Description
                      required.
 ==================== ===========================================================
 
-6)  Configure the customisable parameters in `settings.py`:
+6.  Configure the customisable parameters in `settings.py`:
+
 ::
 
     DIARY_FIRST_DAY_OF_WEEK     default=0 (Monday)
     DIARY_MULTI_DAY_NUMBER      default=3 (show 3 days on multi-day page)
     DIARY_XXXXX                 TODO: some documentation would be nice :)
 
-7)  Run the migrations:
+7.  Run the migrations:
+
 ::
 
     ./manage.py migrate
+
 
 
 Dependencies
