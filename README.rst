@@ -69,6 +69,10 @@ Installation
     DIARY_MULTI_DAY_NUMBER      default=3 (show 3 days on multi-day page)
     DIARY_XXXXX                 TODO: some documentation would be nice :)
 
+7)  Run the migrations::
+
+    ./manage.py migrate
+
 
 Dependencies
 ------------
