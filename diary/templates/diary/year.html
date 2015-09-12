@@ -15,20 +15,28 @@
 
 
 {% block diary_content %}
-    {% for year, months in years %}
-        <div class="clear"></div> <!-- duh? -->
-        <h4>{{ year }}</h4>
-        {% for month in months %}
-            <div class="month{% if month.current %} current{% endif %}
-                {% if month.entry %} hasentry{% endif %}">
-                <a href="{% url 'diary:month' year=year month=month.n %}">
-                    {{ month.name }}
-                </a>
+    <div class="container-fluid">
+        {% for year, months in years %}
+            <div class="row">
+                <div class="col-md-12">
+                    <h4>{{ year }}</h4>
+                </div>
             </div>
-            {% if month.n == 6 or month.n == 12 %}
-                <br />
-            {% endif %}
+            <div class="row">
+                {% for month in months %}
+                    <div class="col-md-2{% if month.current %} current{% endif %}
+                        {% if month.entry %} hasentry{% endif %}">
+                        <a href="{% url 'diary:month' year=year month=month.n %}">
+                            {{ month.name }}
+                        </a>
+                    </div>
+                    {% if month.n == 6 or month.n == 12 %}
+            </div>
+            <div class="row">
+                    {% endif %}
+                {% endfor %}
+            </div>
         {% endfor %}
-    {% endfor %}
+    </div>
 {% endblock diary_content %}
 

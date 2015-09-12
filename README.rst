@@ -58,14 +58,16 @@ Installation
 5)  Override `templates/diary/main_base.html` to customise layout and styling for your site. `main_base.html` (and/or its parents) need to provide the following five blocks:
 
 *   **head_extra**      for adding elements to the document head
-*   **diary_nav**       for navigating between diary views. The nav-bar can itself be completely re-written to your tastes, subject only to providing link placeholders described in the example implementation provided.
+*   **diary_nav**       for navigating between diary views. The nav-bar itself can be completely re-written to your tastes, subject only to providing link placeholders described in the example implementation provided.
 *   **diary_content**   attachment point for the diary content.
 *   **diary_title**     attachment point for the page title.
-*   **diary_sidebar**   attachment point for reminders / ticker information.
+*   **diary_sidebar**   attachment point for reminders / ticker information if required.
 
 6)  Configure the customisable parameters in `settings.py`::
 
-    DIARY_XXXXX         TODO: some documentation would be nice :)
+    DIARY_FIRST_DAY_OF_WEEK     default=0 (Monday)
+    DIARY_MULTI_DAY_NUMBER      default=3 (show 3 days on multi-day page)
+    DIARY_XXXXX                 TODO: some documentation would be nice :)
 
 
 Dependencies

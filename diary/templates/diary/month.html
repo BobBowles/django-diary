@@ -16,22 +16,31 @@
 
 {% block diary_content %}
 
-    <div class="month">
-        <table class="weeks">
-            <tr>
-                {% for day in day_names %}
-                    <th class="day">{{ day }}</th>
-                {% endfor %}
-            </tr>
-            {% for week in weeks %}
-                <tr>
-                    {% for day, nav_slug, entries, current in week %}
-                        <td class=
-"day{% if day != 0 %} regular{% endif %}{% if current %} current{% endif %}"
-                            {% if day != 0 %}
-                                onclick=
-"parent.location='{% url 'diary:multi_day' slug=nav_slug %}'"
-                            {% endif %}
+    <div class="container-fluid">
+
+        {# the week headers with day names #}
+        <div class="row seven-cols">
+            {% for day in day_names %}
+                <div class="col-md-1 day">
+                    {{ day }}
+                </div>
+            {% endfor %}
+        </div>
+
+        {# one week = seven days per row #}
+        {% for week in weeks %}
+            <div class="row seven-cols">
+                {% for day, nav_slug, entries, current in week %}
+                    <a href=
+                        {% if day != 0 %}
+                            "{% url 'diary:multi_day' slug=nav_slug %}"
+                        {% else %}
+                            ""
+                        {% endif %}
+                        >
+                        <div class="col-md-1 day
+{% if day != 0 %} regular{% endif %}
+{% if current %} current{% endif %}"
                             >
                             {% if day != 0 %}
                                 {{ day }}
@@ -42,11 +51,12 @@
                                 {% endfor %}
                                 </b>
                             {% endif %}
-                        </td>
-                    {% endfor %}
-                </tr>
-            {% endfor %}
-        </table>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+        {% endfor %}
+
     </div>
 
 {% endblock diary_content %}
