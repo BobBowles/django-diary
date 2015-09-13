@@ -1,6 +1,6 @@
 {% extends "diary/main_base.html" %}
 
-{% block content %}
+{% block diary_content %}
 
     {% if form.errors %}
         <p>Your userid and password did not match. Please try again.</p>
@@ -15,5 +15,5 @@
         <input type="hidden" name="next" value="{{ next }}" />
     </form>
 
-{% endblock content %}
+{% endblock diary_content %}
 
