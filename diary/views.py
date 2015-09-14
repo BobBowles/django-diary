@@ -19,7 +19,7 @@ from django.template.loader import render_to_string
 
 # Create your views here.
 
-from .models import Entry
+from .models import Entry, Customer
 from .forms import EntryForm
 from . import settings
 
@@ -80,12 +80,18 @@ def reminders(request):
     """
     today = timezone.localtime(timezone.now()).date()
     tomorrow = today + datetime.timedelta(days=1)
-    # we can merge two queries together easily like this:...
-    return Entry.objects.filter(
-        Q(date=today)|Q(date=tomorrow), 
-        creator=request.user, 
-        remind=True,
-    ).order_by('date', 'time')
+
+    user = request.user
+    queryset = (                            # customers see their own entries
+        Entry.objects.filter(
+            Q(date=today)|Q(date=tomorrow), 
+            customer=user, 
+        ) if isinstance(user, Customer)
+        else Entry.objects.filter(          # admin/staff users see everything
+            Q(date=today)|Q(date=tomorrow), 
+        )
+    )
+    return queryset.order_by('date', 'time')
 
 
 

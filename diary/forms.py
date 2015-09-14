@@ -32,10 +32,7 @@ class EntryForm(forms.ModelForm):
             'date',
             'time',
             'duration',
-            'title',
-            'snippet',
-            'body',
-            'remind',
+            'notes',
         )
         widgets = {
             'date': DateWidget(

@@ -6,27 +6,13 @@ from django.contrib.auth.admin import UserAdmin
 
 # Register your models here.
 
-from .models import Customer, Entry
-
-@admin.register(Entry)
-class EntryAdmin(admin.ModelAdmin):
-    list_display = [
-        'creator',
-        'date',
-        'time',
-        'duration',
-        'title',
-        'snippet',
-    ]
-    list_filter = [
-        'creator',
-        'date',
-    ]
-    
+from .models import Customer, Treatment, Resource, Entry
 
 class CustomerCreationForm(forms.ModelForm):
-    """A form for creating new Customers. Includes all the required
-    fields, plus a repeated password."""
+    """
+    A form for creating new Customers. Includes all the required
+    fields, plus a repeated password.
+    """
     password1 = forms.CharField(
         label='Password', widget=forms.PasswordInput)
     password2 = forms.CharField(
@@ -41,6 +27,8 @@ class CustomerCreationForm(forms.ModelForm):
             'last_name', 
             'phone', 
             'date_of_birth',
+            'gender',
+            'notes',
         )
         exclude = (
             'staff_status',
@@ -81,6 +69,8 @@ class CustomerChangeForm(forms.ModelForm):
             'email', 
             'phone',
             'date_of_birth', 
+            'gender',
+            'notes',
             'is_active', 
         )
         exclude = (
@@ -115,6 +105,8 @@ class CustomerAdmin(UserAdmin):
                                 'last_name',
                                 'phone',
                                 'date_of_birth',
+                                'gender',
+                                'notes',
                                 )}),
 #        ('Permissions', {'fields': ('is_admin',)}),
     )
@@ -132,3 +124,28 @@ class CustomerAdmin(UserAdmin):
 
 
 admin.site.register(Customer, CustomerAdmin)
+
+
+admin.site.register(Treatment)
+admin.site.register(Resource)
+
+
+@admin.register(Entry)
+class EntryAdmin(admin.ModelAdmin):
+    list_display = [
+        'creator',
+        'date',
+        'time',
+        'customer',
+        'treatment',
+        'resource',
+        'duration',
+        'notes',
+    ]
+    list_filter = [
+        'creator',
+        'customer',
+        'date',
+    ]
+    
+
