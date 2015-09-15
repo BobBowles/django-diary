@@ -169,8 +169,6 @@ class Entry(models.Model):
 #    duration = models.DurationField(blank=True, default=DEFAULT_DURATION)
     duration = models.TimeField(blank=True, default=DEFAULT_DURATION)
 
-#    title = models.CharField(max_length=40)
-#    snippet = models.CharField(max_length=150, blank=True)
     notes = models.TextField(blank=True)
     creator = models.ForeignKey(
         User, 
@@ -179,7 +177,6 @@ class Entry(models.Model):
         related_name='created_entries'
     )
     created = models.DateTimeField(auto_now_add=True)
-#    remind = models.BooleanField(default=False)
 
     customer = models.ForeignKey(
         Customer, 
@@ -233,12 +230,6 @@ class Entry(models.Model):
         equal).
         NOTE: time period end time is non-inclusive.
         """
-
-        # if the entries do not share a resource there is no problem
-        if not self.resource:
-            return False
-        elif self.resource != other.resource:
-            return False
 
         # dates must be equal to start with
         # TODO: note time rounding kludge
@@ -312,6 +303,31 @@ class Entry(models.Model):
                         )
 
 
+    def validateCustomerNotDoubleBooked(self):
+        """
+        Context validation of customer.
+        
+        A named customer cannot have two entries at the same time, irrespective
+        of other resource criteria.
+        """
+        if self.customer:
+
+            # get any existing entries for the same customer on the same day
+            savedEntries = Entry.objects.filter(
+                date=self.date, 
+                customer=self.customer,
+            )
+
+            # ensure no time clashes
+            for other in savedEntries:
+                if self == other:
+                    # if we are just saving the same entry, its OK
+                    if not self.pk or (self.pk and self.pk != other.pk):
+                        raise ValidationError(
+    'Double booking is not allowed. Please choose another time.'
+                        )
+
+
     def clean(self, *args, **kwargs):
         """
         Override Model method to validate the content in context. 
@@ -319,6 +335,7 @@ class Entry(models.Model):
         self.validateResourceRequirement()
         self.validateDuration()
         self.validateNoResourceConflicts()
+        self.validateCustomerNotDoubleBooked()
 
         # now do the standard field validation
         super(Entry, self).clean(*args, **kwargs)

@@ -77,6 +77,24 @@ class CustomerTests(TestCase):
 
 
 
+def create_customer(username):
+    """
+    Utility to generate a customer
+    """
+    customer = Customer.objects.create_user(
+        username,                                   # username
+        username,                                   # first_name
+        username,                                   # last_name
+        username+'@example.com',                    # email
+        '123456',                                   # phone
+        datetime.date(year=1950, month=6, day=1),   # d-o-b
+        'M',                                        # gender
+        'test user',                                # notes
+    )
+    customer.save()
+    return customer
+
+
 def create_treatment(name, min_duration, resource_required):
     """
     Utility to create a treatment.
@@ -205,64 +223,10 @@ class EntryModelTests(TestCase):
             )
 
 
-    def test_entry_resource_clash_no_resource_means_no_clash(self):
+    def test_entry_equality_different_days(self):
         """
-        Entries using no resources are not regarded as equal even when they are
-        identical.
+        Entries on different days are not equal.
         """
-        dateDelta1 = datetime.timedelta(days=0)
-        time = datetime.time(hour=12)
-        duration = datetime.timedelta(hours=1)
-        entry1 = create_entry(
-            dateDelta1, 
-            time,
-            duration,
-            'resource_conflict_test_entry_1',
-        )
-        dateDelta2 = datetime.timedelta(days=0)
-        entry2 = create_entry(
-            dateDelta2, 
-            time,
-            duration,
-            'resource_conflict_test_entry_2',
-        )
-        self.assertFalse(entry1 == entry2)
-
-
-    def test_entry_resource_clash_different_resource_means_no_clash(self):
-        """
-        Entries using different resources are not regarded as equal, 
-        even when dates and times are the same.
-        """
-        dateDelta1 = datetime.timedelta(days=0)
-        time = datetime.time(hour=12)
-        duration = datetime.timedelta(hours=1)
-        entry1 = create_entry(
-            dateDelta1, 
-            time,
-            duration,
-            'resource_conflict_test_entry_1',
-        )
-        entry1.resource = create_resource('resource_1', 'resource_1')
-
-        dateDelta2 = datetime.timedelta(days=0)
-        entry2 = create_entry(
-            dateDelta2, 
-            time,
-            duration,
-            'resource_conflict_test_entry_2',
-        )
-        entry2.resource = create_resource('resource_2', 'resource_2')
-
-        self.assertFalse(entry1 == entry2)
-
-
-    def test_entry_resource_clash_different_days_means_no_clash(self):
-        """
-        Entries on different days are not equal, even when they share resource.
-        """
-        resource = create_resource('resource', 'resource')
-
         dateDelta1 = datetime.timedelta(days=0)
         time = datetime.time(hour=12)
         duration = datetime.timedelta(hours=1)
@@ -272,7 +236,6 @@ class EntryModelTests(TestCase):
             duration,
             'time calc test 1',
         )
-        entry1.resource = resource
 
         dateDelta2 = datetime.timedelta(days=1)
         entry2 = create_entry(
@@ -281,17 +244,14 @@ class EntryModelTests(TestCase):
             duration,
             'time calc test 1',
         )
-        entry2.resource = resource
 
         self.assertFalse(entry1 == entry2)
 
 
-    def test_entry_resource_clash_identity(self):
+    def test_entry_equality_identity(self):
         """
-        Entries with identical dates, times, resources and durations are equal.
+        Entries with identical dates, times and durations are equal.
         """
-        resource = create_resource('resource', 'resource')
-
         dateDelta1 = datetime.timedelta(days=0)
         time1 = datetime.time(hour=12)
         duration1 = datetime.timedelta(hours=1)
@@ -301,7 +261,6 @@ class EntryModelTests(TestCase):
             duration1,
             'time calc test 1',
         )
-        entry1.resource = resource
 
         dateDelta2 = datetime.timedelta(days=0)
         time2 = datetime.time(hour=12)
@@ -312,17 +271,15 @@ class EntryModelTests(TestCase):
             duration2,
             'time calc test 1',
         )
-        entry2.resource = resource
 
         self.assertTrue(entry1 == entry2)
 
 
-    def test_entry_resource_clash_no_time_clash_before(self):
+    def test_entry_equality_no_overlap_before(self):
         """
-        Entries sharing resource on the same day where the first ends before 
-        the second starts are not equal.
+        Entries on the same day where the first ends before the second starts
+        are not equal.
         """
-        resource = create_resource('resource', 'resource')
         dateDelta = datetime.timedelta(days=0)
 
         time1 = datetime.time(hour=12)
@@ -333,7 +290,6 @@ class EntryModelTests(TestCase):
             duration1,
             'time calc test 1',
         )
-        entry1.resource = resource
 
         time2 = datetime.time(hour=14)
         duration2 = datetime.timedelta(hours=1)
@@ -343,17 +299,15 @@ class EntryModelTests(TestCase):
             duration2,
             'time calc test 1',
         )
-        entry2.resource = resource
 
         self.assertFalse(entry1 == entry2)
 
 
-    def test_entry_resource_clash_no_time_clash_after(self):
+    def test_entry_equality_no_overlap_after(self):
         """
-        Entries sharing resource on the same day where the first starts after
-        the second ends are not equal.
+        Entries on the same day where the first starts after the second ends are
+        not equal.
         """
-        resource = create_resource('resource', 'resource')
         dateDelta = datetime.timedelta(days=0)
 
         time1 = datetime.time(hour=12)
@@ -364,7 +318,6 @@ class EntryModelTests(TestCase):
             duration1,
             'time calc test 1',
         )
-        entry1.resource = resource
 
         time2 = datetime.time(hour=9)
         duration2 = datetime.timedelta(hours=1)
@@ -374,17 +327,15 @@ class EntryModelTests(TestCase):
             duration2,
             'time calc test 1',
         )
-        entry2.resource = resource
 
         self.assertFalse(entry1 == entry2)
 
 
-    def test_entry_resource_clash_consecutive(self):
+    def test_entry_equality_consecutive(self):
         """
-        Entries sharing resource on the same day where the first and second
+        Entries on the same day where the first and second
         events are consecutive are not equal.
         """
-        resource = create_resource('resource', 'resource')
         dateDelta = datetime.timedelta(days=0)
 
         time1 = datetime.time(hour=12)
@@ -395,7 +346,6 @@ class EntryModelTests(TestCase):
             duration1,
             'time calc test 1',
         )
-        entry1.resource = resource
 
         time2 = entry1.time_end()
         duration2 = datetime.timedelta(hours=1)
@@ -405,17 +355,15 @@ class EntryModelTests(TestCase):
             duration2,
             'time calc test 1',
         )
-        entry2.resource = resource
 
         self.assertFalse(entry1 == entry2)
 
 
-    def test_entry_resource_clash_envelope(self):
+    def test_entry_equality_envelope(self):
         """
-        Entries sharing resource on the same day where one event encompasses 
-        the other are 'equal' (i.e. they clash).
+        Entries on the same day where one event encompasses the other are
+        'equal' (i.e. they overlap in time).
         """
-        resource = create_resource('resource', 'resource')
         dateDelta = datetime.timedelta(days=0)
 
         time1 = datetime.time(hour=12)
@@ -426,7 +374,6 @@ class EntryModelTests(TestCase):
             duration1,
             'time calc test 1',
         )
-        entry1.resource = resource
 
         time2 = datetime.time(hour=13)
         duration2 = datetime.timedelta(hours=1)
@@ -436,7 +383,6 @@ class EntryModelTests(TestCase):
             duration2,
             'time calc test 1',
         )
-        entry2.resource = resource
 
         self.assertTrue(entry1 == entry2)
 
@@ -514,7 +460,7 @@ class EntryModelTests(TestCase):
         # make sure an exception is NOT raised
         try:
             entry2.clean()
-            self.assertFalse(entry1 == entry2)
+            self.assertTrue(entry1 == entry2)
         except Exception as e:
             traceback.print_exc()
             self.fail(
@@ -555,6 +501,76 @@ class EntryModelTests(TestCase):
                 'Cleaning an entry that already exists \n'\
                 'raised an unexpected exception: \n{0}'.format(e)
             )
+
+
+    def test_entry_resource_clash_no_resource_means_no_clash(self):
+        """
+        Entries using no resources do not generate any conflicts even when they
+        overlap in time.
+        """
+        dateDelta1 = datetime.timedelta(days=0)
+        time = datetime.time(hour=12)
+        duration = datetime.timedelta(hours=1)
+        entry1 = create_entry(
+            dateDelta1, 
+            time,
+            duration,
+            'resource_conflict_test_entry_1',
+        )
+        entry1.save()
+
+        dateDelta2 = datetime.timedelta(days=0)
+        entry2 = create_entry(
+            dateDelta2, 
+            time,
+            duration,
+            'resource_conflict_test_entry_2',
+        )
+
+        # make sure an exception is NOT raised
+        try:
+            entry2.clean()
+            self.assertTrue(entry1 == entry2)
+        except Exception as e:
+            traceback.print_exc()
+            self.fail(
+                'Cleaning an entry with no resources \n'\
+                'raised an unexpected exception: \n{0}'.format(e)
+            )
+
+
+    def test_entry_customer_double_booked(self):
+        """
+        Make sure customer cannot double-book (irrespective of resource).
+        """
+        customer = create_customer('test')
+
+        dateDelta1 = datetime.timedelta(days=0)
+        time1 = datetime.time(hour=12)
+        duration1 = datetime.timedelta(hours=1)
+        entry1 = create_entry(
+            dateDelta1, 
+            time1,
+            duration1,
+            'double-book test 1',
+        )
+        entry1.customer = customer
+        entry1.save()
+
+        entry2 = create_entry(
+            dateDelta1,
+            time1,
+            duration1,
+            'double-book test 2',
+        )
+        entry2.customer = customer
+
+        self.assertTrue(entry1 == entry2) # this passes the other tests
+        self.assertRaisesMessage(
+            ValidationError, 
+            'Double booking is not allowed. Please choose another time.',
+            entry2.clean,
+        )
 
 
 
