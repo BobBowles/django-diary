@@ -89,21 +89,6 @@ $(document).ajaxSend(function() {
 });
 
 
-/* organise the disabled status of 'new' buttons */
-
-function updateNewButtons() {
-    var btnList = document.getElementsByClassName('new');
-    //console.log('btnList length: '+btnList.length)
-    var i;
-    for (i=0; i < btnList.length; i++) {
-        var btn = btnList[i];
-        // find any siblings of the button that are entry elements
-        var parent = btn.parentElement;
-        btnList[i].disabled = $(parent).find('.entry').length;
-    };
-};
-
-
 /* drag and drop handlers attached to targets in html via onXXXX syntax 
  e.g. <div ondragover="dragover(event);" etc...> */
 
@@ -146,7 +131,6 @@ function drop(ev) {
             /* if the post succeeds continue with the drop */
             ev.target.appendChild(document.getElementById(pk));
             //console.log('Dropped target in ['+ev.target.id+']');
-            updateNewButtons(); // because the async call is last to complete
         },
         error: function (xhr, ajaxOptions, thrownError) {
             //console.log(xhr);
@@ -160,14 +144,7 @@ function drop(ev) {
 function dragend(ev) {
     /* tidy up after the drag */
     //console.log('Drag ended for element ['+ev.target.id+']');
-    //updateNewButtons(); // ajax is asynchronous so this happens too soon here
 }
-
-
-jQuery(document).ready(function(){
-    //console.log('Updating button status at start...');
-    updateNewButtons();
-});
 
     </script>
 {% endblock diary_head_extra %}
