@@ -200,8 +200,8 @@ class Entry(models.Model):
 
     def short(self):
         return '{0}'.format(
-            self.notes if self.notes
-            else self
+            self.resource if self.resource
+            else self.notes
         )
 
 

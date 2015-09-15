@@ -63,7 +63,11 @@
                                         data-toggle="modal"
                                         data-target="#ajaxModal"
                                         >
-                                        <b>{{ entry.creator.username }}</b>
+                                        {% if entry.customer %}
+                                            <b>{{ entry.customer }}</b>
+                                        {% else %}
+                                            <b>{{ entry.creator }}</b>
+                                        {% endif %}
                                     </div>
                                 </div>
                             {% endfor %}

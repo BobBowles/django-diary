@@ -165,7 +165,10 @@ def month(request, year=None, month=None, change=None):
         nav_slug = None
         if day:
             dayDate = datetime.date(year=date.year, month=date.month, day=day)
-            entries = Entry.objects.filter(date=dayDate)
+            entries = (
+                Entry.objects.filter(date=dayDate) if request.user.is_staff
+                else Entry.objects.filter(date=dayDate, customer=request.user)
+            )
             nav_slug = dayDate.strftime(DATE_SLUG_FORMAT)
             current = (dayDate == today)
         weeks[week_no].append((day, nav_slug, entries, current))
@@ -276,13 +279,20 @@ def multi_day(request, slug=None, change=None):
         day_entries = []
         currentTime = (now >= startTime and now < endTime)
         for day, dayHeader, date_slug in date_slots:
-            entries = Entry.objects\
-                .filter(
+            entries = (
+                Entry.objects.filter(
                     date=day, 
                     time__gte=startTime, 
                     time__lt=endTime, 
-                    creator=request.user
-                ).order_by('time')
+                ) if request.user.is_staff
+                else Entry.objects.filter(
+                    date=day,
+                    time__gte=startTime, 
+                    time__lt=endTime, 
+                    customer=request.user,
+                )
+            
+            ).order_by('time')
             day_entries.append((
                 '_'.join((date_slug, time_slug)), 
                 entries,
@@ -326,13 +336,19 @@ def day(request, slug=None, change=None):
     # obtain the day's entries divided into time slots
     time_slots = []
     for timeLabel, time_slug, startTime, endTime in TIME_SLOTS:
-        entries = Entry.objects\
-            .filter(
-                date=date, 
-                time__gte=startTime, 
-                time__lt=endTime, 
-                creator=request.user
-            ).order_by('time')
+        entries = (
+            Entry.objects.filter(
+                    date=date, 
+                    time__gte=startTime, 
+                    time__lt=endTime,
+            ) if request.user.is_staff
+            else Entry.objects.filter(
+                    date=date, 
+                    time__gte=startTime, 
+                    time__lt=endTime, 
+                    customer=request.user,
+            )
+        ).order_by('time')
         time_slots.append((
             timeLabel, 
             '_'.join((date_slug, time_slug)),
@@ -427,14 +443,27 @@ def entry(request, pk=None, slug=None,):
         # determine the date and time to use
         if slug:
             date, time = getDatetimeFromSlug(slug)
-        entry = Entry(
-            date=date,
-            time=time,
-            creator=request.user,
+        entry = (
+            Entry(
+                date=date,
+                time=time,
+                creator=request.user,
+            ) if request.user.is_staff
+            else Entry(
+                date=date,
+                time=time,
+                creator=request.user,
+                customer=request.user,
+            )
         )
 
+    exclude_customer = isinstance(request.user, Customer)
     if request.method == 'POST':
-        form = EntryForm(request.POST, instance=entry)
+        form = EntryForm(
+            request.POST, 
+            instance=entry, 
+            exclude_customer=exclude_customer
+        )
         if form.is_valid():
             entry = form.save(commit=False)
             entry.save()
@@ -445,7 +474,7 @@ def entry(request, pk=None, slug=None,):
                 slug=entry.date.strftime(DATE_SLUG_FORMAT),
             )
     else:
-        form = EntryForm(instance=entry)
+        form = EntryForm(instance=entry, exclude_customer=exclude_customer)
     return render(
         request, 
         'diary/entry.html', 

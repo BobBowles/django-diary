@@ -31,7 +31,10 @@
                 <form class="post-form" method="POST">
                     {% csrf_token %}
                     {{ form.as_p }}
-                    <button class="save btn btn-default" type="submit">
+                    <button 
+                        class="save btn btn-default diarybutton" 
+                        type="submit"
+                        >
                         Save
                     </button>
                 </form>

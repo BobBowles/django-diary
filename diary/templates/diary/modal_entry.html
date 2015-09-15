@@ -14,15 +14,18 @@
                 {{ entry.date }}:
                 {{ entry.time }} - 
                 {{ entry.time_end }}: 
-                {{ entry.title }}
+                {{ entry.customer }}
             </h4>
         </div>
         <div class="modal-body">
             <p>
-                {{ entry.snippet }}
+                Treatment: {{ entry.treatment }}
+            </p>
+            <p>
+                Resource: {{ entry.resource }}
             </p>
             <textarea disabled rows="20" cols="60">
-                {{ entry.body }}
+                {{ entry.notes }}
             </textarea>
         </div>
         <div class="modal-footer">

@@ -26,12 +26,26 @@ DURATION_WIDGET_OPTIONS = {
 
 class EntryForm(forms.ModelForm):
 
+
+    def __init__(self, *args, **kwargs):
+        """
+        Override constructor to allow customer field to be configurably visible.
+        """
+        exclude_customer = kwargs.pop('exclude_customer', False)
+        super(EntryForm, self).__init__(*args, **kwargs)
+        if exclude_customer:
+            del self.fields['customer']
+
+
     class Meta:
         model = Entry
         fields = (
+            'customer',
             'date',
             'time',
+            'treatment',
             'duration',
+            'resource',
             'notes',
         )
         widgets = {
