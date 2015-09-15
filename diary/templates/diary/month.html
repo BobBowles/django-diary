@@ -1,4 +1,10 @@
 {% extends 'diary/base.html' %}
+{% load staticfiles %}
+
+
+{% block diary_head_extra %}
+    <link rel="stylesheet" href="{% static 'diary/multi_col.css' %}" />
+{% endblock diary_head_extra %}
 
 
 {% block diary_nav %}
@@ -19,7 +25,7 @@
     <div class="container-fluid">
 
         {# the week headers with day names #}
-        <div class="row seven-cols">
+        <div class="row cols-7">
             {% for day in day_names %}
                 <div class="col-md-1 day">
                     {{ day }}
@@ -29,7 +35,7 @@
 
         {# one week = seven days per row #}
         {% for week in weeks %}
-            <div class="row seven-cols">
+            <div class="row cols-7">
                 {% for day, nav_slug, entries, current in week %}
                     <a href=
                         {% if day != 0 %}

@@ -108,6 +108,7 @@ TIME_INPUT_FORMATS = (
     '%H:%M:%S.%f',
 )
 
+DIARY_MULTI_DAY_NUMBER = 4
 
 # User customisation
 # NOTE: use of InheritanceQuerySet in the backend dispenses with the need for 

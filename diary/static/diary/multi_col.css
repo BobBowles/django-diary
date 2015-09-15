@@ -1,0 +1,181 @@
+/* this supplements the bootstrap grid layout with custom multi-column grids */
+/* if we did this in less it would be much slicker but if it works... */
+/* cols 3-8 are supported */
+
+/* 3-col grid layout */
+@media (min-width: 768px){
+  .cols-3 .col-md-1,
+  .cols-3 .col-sm-1,
+  .cols-3 .col-lg-1  {
+    width: 100%;
+    *width: 100%;
+  }
+}
+
+@media (min-width: 992px) {
+  .cols-3 .col-md-1,
+  .cols-3 .col-sm-1,
+  .cols-3 .col-lg-1 {
+    width: 33.333333333333333333333333333333%;
+    *width: 33.333333333333333333333333333333%;
+/*  width: 14.285714285714285714285714285714%;*/
+  }
+}
+    width: 14.285714285714285714285714285714%;
+
+@media (min-width: 1200px) {
+  .cols-3 .col-md-1,
+  .cols-3 .col-sm-1,
+  .cols-3 .col-lg-1 {
+    width: 33.333333333333333333333333333333%;
+    *width: 33.333333333333333333333333333333%;
+  }
+}
+
+
+/* 4-col grid layout */
+@media (min-width: 768px){
+  .cols-4 .col-md-1,
+  .cols-4 .col-sm-1,
+  .cols-4 .col-lg-1  {
+    width: 100%;
+    *width: 100%;
+  }
+}
+
+@media (min-width: 992px) {
+  .cols-4 .col-md-1,
+  .cols-4 .col-sm-1,
+  .cols-4 .col-lg-1 {
+    width: 25%;
+    *width: 25%;
+  }
+}
+
+@media (min-width: 1200px) {
+  .cols-4 .col-md-1,
+  .cols-4 .col-sm-1,
+  .cols-4 .col-lg-1 {
+    width: 25%;
+    *width: 25%;
+  }
+}
+
+
+/* 5-col grid layout */
+@media (min-width: 768px){
+  .cols-5 .col-md-1,
+  .cols-5 .col-sm-1,
+  .cols-5 .col-lg-1  {
+    width: 100%;
+    *width: 100%;
+  }
+}
+
+@media (min-width: 992px) {
+  .cols-5 .col-md-1,
+  .cols-5 .col-sm-1,
+  .cols-5 .col-lg-1 {
+    width: 20%;
+    *width: 20%;
+  }
+}
+
+@media (min-width: 1200px) {
+  .cols-5 .col-md-1,
+  .cols-5 .col-sm-1,
+  .cols-5 .col-lg-1 {
+    width: 20%;
+    *width: 20%;
+  }
+}
+
+
+/* 6-col grid layout */
+@media (min-width: 768px){
+  .cols-6 .col-md-1,
+  .cols-6 .col-sm-1,
+  .cols-6 .col-lg-1  {
+    width: 100%;
+    *width: 100%;
+  }
+}
+
+@media (min-width: 992px) {
+  .cols-6 .col-md-1,
+  .cols-6 .col-sm-1,
+  .cols-6 .col-lg-1 {
+    width: 16.666666666666666666666666666666%;
+    *width: 16.666666666666666666666666666666%;
+  }
+}
+
+@media (min-width: 1200px) {
+  .cols-6 .col-md-1,
+  .cols-6 .col-sm-1,
+  .cols-6 .col-lg-1 {
+    width: 16.666666666666666666666666666666%;
+    *width: 16.666666666666666666666666666666%;
+  }
+}
+
+
+/* 7-col grid layout for week display in months */
+@media (min-width: 768px){
+  .cols-7 .col-md-1,
+  .cols-7 .col-sm-1,
+  .cols-7 .col-lg-1  {
+    width: 100%;
+    *width: 100%;
+  }
+}
+
+@media (min-width: 992px) {
+  .cols-7 .col-md-1,
+  .cols-7 .col-sm-1,
+  .cols-7 .col-lg-1 {
+    width: 14.285714285714285714285714285714%;
+    *width: 14.285714285714285714285714285714%;
+  }
+}
+
+@media (min-width: 1200px) {
+  .cols-7 .col-md-1,
+  .cols-7 .col-sm-1,
+  .cols-7 .col-lg-1 {
+    width: 14.285714285714285714285714285714%;
+    *width: 14.285714285714285714285714285714%;
+  }
+}
+
+
+/* 8-col grid layout for week display in months */
+@media (min-width: 768px){
+  .cols-8 .col-md-1,
+  .cols-8 .col-sm-1,
+  .cols-8 .col-lg-1  {
+    width: 100%;
+    *width: 100%;
+  }
+}
+
+@media (min-width: 992px) {
+  .cols-8 .col-md-1,
+  .cols-8 .col-sm-1,
+  .cols-8 .col-lg-1 {
+    width: 12.5%;
+    *width: 12.5%;
+  }
+}
+
+@media (min-width: 1200px) {
+  .cols-8 .col-md-1,
+  .cols-8 .col-sm-1,
+  .cols-8 .col-lg-1 {
+    width: 12.5%;
+    *width: 12.5%;
+  }
+}
+
+
+

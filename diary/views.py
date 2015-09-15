@@ -308,6 +308,7 @@ def multi_day(request, slug=None, change=None):
         'diary/multi_day.html', 
         {
             'date': date,
+            'n_cols': settings.DIARY_MULTI_DAY_NUMBER+1,
             'date_start_head': date_start_head,
             'date_end_head': date_end_head,
             'nav_slug': nav_slug,

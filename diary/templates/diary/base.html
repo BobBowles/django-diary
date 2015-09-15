@@ -5,7 +5,7 @@
 
     {# inherit the head_extra block in case parents have already used it #}
     {{ block.super }}
-    <link rel="stylesheet" href="{% static "diary/base.css" %}" />
+    <link rel="stylesheet" href="{% static 'diary/base.css' %}" />
 
     {# attachment point for js etc specific to certain diary pages. #}
     {% block diary_head_extra %}
