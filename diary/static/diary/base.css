@@ -38,8 +38,6 @@
 }
 
 .new {
-    float: right;
-    inline: true;
 }
 
 
@@ -56,11 +54,12 @@
 
 .droptarget {
     height: 25px;
-    border: 1px solid #cccccc;
+    outline: 1px solid #cccccc;
+    outline-offset: -1px;
 }
 
 .dragover {
-    border: 2px solid #ff0000;
+    outline: 2px solid #ff0000;
 }
 
 div.entry {

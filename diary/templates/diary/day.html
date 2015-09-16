@@ -23,43 +23,40 @@
                 <div class="col-md-1">
                     <b>{{ label }}</b>
                 </div>
-                <span class="parent">
-                    <div 
-                        id="{{ datetime_slug }}"
-                        class=
-                        "col-md-11 droptarget{% if current %} current{% endif %}"
-                        ondragenter="dragenter(event);"
-                        ondragleave="dragleave(event);"
-                        ondragover="dragover(event);"
-                        ondrop="drop(event);"
-                        ondragend="dragend(event);"
-                        >
-                        {% for entry in entries %}
+                <div 
+                    id="{{ datetime_slug }}"
+                    class=
+                    "col-md-11 droptarget{% if current %} current{% endif %}"
+                    ondragenter="dragenter(event);"
+                    ondragleave="dragleave(event);"
+                    ondragover="dragover(event);"
+                    ondrop="drop(event);"
+                    ondragend="dragend(event);"
+                    >
+                {% url 'diary:entry_new' slug=datetime_slug as new_entry %}
+                    <a href="{{ new_entry }}">
+                        <span class="glyphicon glyphicon-plus new">
+                        </span>
+                    </a>
+                    {% for entry in entries %}
+                        <div 
+                            class="entry"
+                            id="{{ entry.pk }}"
+                            draggable="true"
+                            ondragstart="drag(event);"
+                            >
                             <div 
-                                class="entry"
-                                id="{{ entry.pk }}"
-                                draggable="true"
-                                ondragstart="drag(event);"
+                                data-href=
+                            "{% url 'diary:entry_modal' pk=entry.pk %}"
+                                data-toggle="modal"
+                                data-target="#ajaxModal"
                                 >
-                                <div 
-                                    data-href=
-                                "{% url 'diary:entry_modal' pk=entry.pk %}"
-                                    data-toggle="modal"
-                                    data-target="#ajaxModal"
-                                    >
-                                    <b>{{ entry.customer }}</b> -
-                                    {{ entry.short }}
-                                </div>
+                                <b>{{ entry.customer }}</b> -
+                                {{ entry.short }}
                             </div>
-                        {% endfor %}
-                    {% url 'diary:entry_new' slug=datetime_slug as new_entry %}
-                        <button type="button" 
-                            class="btn btn-default btn-xs new"
-                            onclick="location.href='{{ new_entry }}'">
-                            New
-                        </button>
-                    </div>
-                </span> <!-- parent -->
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
         {% endfor %}
     </div>

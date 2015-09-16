@@ -94,8 +94,9 @@ p.top-menu a {
 
         {# this is the base for bootstrap column layout #}
         <div class="content">
-            <div class="row">
-                <div class="col-md-10">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-10">
 
 
 {#==========================Diary Navigation==================================#}
@@ -142,29 +143,30 @@ p.top-menu a {
 {#======================End Diary Navigation==================================#}
 
 
-                    {# diary main content goes here #}
-                    {% block diary_content %} 
-                    {% endblock diary_content %}
-                </div>
-                <div class="col-md-2">
-                    {# diary sidebar reminders go here #}
-                    {% block diary_sidebar %} 
-                        {% if reminders %}
-                        <div class="reminders">
-                            <div class="page-head">
-                                <h1>Alerts</h1>
+                        {# diary main content goes here #}
+                        {% block diary_content %} 
+                        {% endblock diary_content %}
+                    </div>
+                    <div class="col-md-2">
+                        {# diary sidebar reminders go here #}
+                        {% block diary_sidebar %} 
+                            {% if reminders %}
+                            <div class="reminders">
+                                <div class="page-head">
+                                    <h1>Alerts</h1>
+                                </div>
+                                {% for reminder in reminders %}
+                                    <p>
+                                        {{ reminder.date }} - 
+                                        {{ reminder.time }}: 
+                                        {{ reminder.customer }}
+                                    </p>
+                                    <p> {{ reminder.short }}</p>
+                                {% endfor %}
                             </div>
-                            {% for reminder in reminders %}
-                                <p>
-                                    {{ reminder.date }} - 
-                                    {{ reminder.time }}: 
-                                    {{ reminder.customer }}
-                                </p>
-                                <p> {{ reminder.short }}</p>
-                            {% endfor %}
-                        </div>
-                        {% endif %}
-                    {% endblock diary_sidebar %}
+                            {% endif %}
+                        {% endblock diary_sidebar %}
+                    </div>
                 </div>
             </div>
         </div>
