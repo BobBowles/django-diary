@@ -12,9 +12,8 @@ from .models import Customer, Treatment, Resource, Entry
 
 
 DATE_WIDGET_OPTIONS = {
-#    'todayBtn': True,
     'minView': 2,
-    'maxView': 3,
+    'maxView': 4,
 }
 
 

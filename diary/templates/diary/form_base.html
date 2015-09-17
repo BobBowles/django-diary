@@ -1,0 +1,58 @@
+{% extends 'diary/base.html' %}
+
+{% block diary_head_extra %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    {{ form.media }}
+{% endblock diary_head_extra %}
+
+
+{% block diary_content %}
+
+{% for hidden in form.hidden_fields %}
+    {{ hidden }}
+{% endfor %}
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <form class="post-form" method="POST">
+                    {% csrf_token %}
+                    {#{ form.as_p }#}
+                    <div class="row">
+                        <div class="col-md-12">
+                            {{ form.non_field_errors }}
+                        </div>
+                    </div>
+                    {% for field in form.visible_fields %}
+                        <div class="row">
+                            <div class="col-md-2">
+                                {{ field.label_tag }}:
+                            </div>
+                            <div class="col-md-6">
+                                {{ field }}
+                            </div>
+                            <div class="col-md-4">
+                                {{ field.help_text }}
+                                {{ field.errors }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                    <div class="row">
+                        <div class="col-md-12">
+                            <button 
+                                class="save btn btn-default diarybutton" 
+                                type="submit"
+                                >
+                                Save
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock diary_content %}
+
