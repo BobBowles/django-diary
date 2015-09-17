@@ -45,8 +45,15 @@ h1, h2, h3, h4, p.top-menu {
     margin-right: 20px;
 }
 
-p.top-menu a {
+p.top-menu,
+a.topmenu {
     color: white;
+    background-color: #729fcf;
+}
+
+ul.nav {
+    color: white;
+    background-color: #729fcf;
 }
 
 .content {
@@ -110,27 +117,32 @@ p.top-menu a {
 {% with diary_nav_up='' diary_nav_prev='' diary_nav_next='' %}
 
 {% block diary_nav %} {# override url definitions in children #}
-    <div class="page-head">
-        <a class="top-menu" href="{{ diary_nav_next }}">
-                <span class="glyphicon glyphicon-forward">
-                </span>
-        </a>
-        <a class="top-menu" href="{{ diary_nav_prev }}">
-                <span class="glyphicon glyphicon-backward">
-                </span>
-        </a>
-        <a class="top-menu" href="{{ diary_nav_up }}">
-                <span class="glyphicon glyphicon-eject">
-                </span>
-        </a>
-        <h1>
-            <a href="">
+    <ul class="nav nav-btn nav-justified">
+        <li role="presentation">
+            <h1>
                 Diary
                 {% block diary_title %}
                 {% endblock diary_title %}
+            </h1>
+        <li role="presentation" class="active">
+            <a class="top-menu" href="{{ diary_nav_prev }}">
+                    <span class="glyphicon glyphicon-backward">
+                    </span>
             </a>
-        </h1>
-    </div>
+        </li>
+        <li role="presentation" class="active">
+            <a class="top-menu" href="{{ diary_nav_up }}">
+                    <span class="glyphicon glyphicon-eject">
+                    </span>
+            </a>
+        </li>
+        <li role="presentation" class="active">
+            <a class="top-menu" href="{{ diary_nav_next }}">
+                    <span class="glyphicon glyphicon-forward">
+                    </span>
+            </a>
+        </li>
+    </ul>
 {% endblock diary_nav %}
 {% endwith %}
 
