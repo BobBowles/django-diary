@@ -2,11 +2,23 @@ from django.contrib import admin
 from django import forms
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.contrib.auth.admin import UserAdmin
+from datetimewidget.widgets import DateWidget
 
 
 # Register your models here.
 
 from .models import Customer, Treatment, Resource, Entry
+
+
+
+DATE_WIDGET_OPTIONS = {
+#    'todayBtn': True,
+    'minView': 2,
+    'maxView': 3,
+}
+
+
+
 
 class CustomerCreationForm(forms.ModelForm):
     """
@@ -17,6 +29,7 @@ class CustomerCreationForm(forms.ModelForm):
         label='Password', widget=forms.PasswordInput)
     password2 = forms.CharField(
         label='Password confirmation', widget=forms.PasswordInput)
+
 
     class Meta:
         model = Customer
@@ -30,6 +43,12 @@ class CustomerCreationForm(forms.ModelForm):
             'gender',
             'notes',
         )
+        widgets = {
+            'date_of_birth': DateWidget(
+                bootstrap_version=3,
+                options=DATE_WIDGET_OPTIONS,
+            ),
+        }
         exclude = (
             'staff_status',
             'superuser_status',
@@ -73,10 +92,17 @@ class CustomerChangeForm(forms.ModelForm):
             'notes',
             'is_active', 
         )
+        widgets = {
+            'date_of_birth': DateWidget(
+                bootstrap_version=3,
+                options=DATE_WIDGET_OPTIONS,
+            ),
+        }
         exclude = (
             'staff_status',
             'superuser_status',
         )
+
 
     def clean_password(self):
         """

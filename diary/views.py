@@ -4,7 +4,7 @@ from django.shortcuts import (
     render, 
     render_to_response,
 )
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 import datetime
 from django.utils import timezone
 import calendar
@@ -21,6 +21,7 @@ from django.template.loader import render_to_string
 
 from .models import Entry, Customer
 from .forms import EntryForm
+from .admin import CustomerCreationForm, CustomerChangeForm
 from . import settings
 
 
@@ -428,7 +429,7 @@ def day_list(request, year=None, month=None, day=None, change=None):
 
 
 @login_required
-def entry(request, pk=None, slug=None,):
+def entry(request, pk=None, slug=None, customer_pk=None):
     """
     Edit/create an entry for the diary.
     """
@@ -444,21 +445,24 @@ def entry(request, pk=None, slug=None,):
         # determine the date and time to use
         if slug:
             date, time = getDatetimeFromSlug(slug)
-        entry = (
-            Entry(
-                date=date,
-                time=time,
-                creator=request.user,
-            ) if request.user.is_staff
-            else Entry(
-                date=date,
-                time=time,
-                creator=request.user,
-                customer=request.user,
-            )
+        entry = Entry(
+            date=date,
+            time=time,
+            creator=request.user,
+            customer=(
+                request.user if not request.user.is_staff
+                else None
+            ),
         )
+        # save the entry now so we can redirect to it
+        entry.save()
 
-    exclude_customer = isinstance(request.user, Customer)
+    # if a customer pk is specified set it as the customer
+    if customer_pk:
+        customer = get_object_or_404(Customer, pk=customer_pk)
+        entry.customer = customer
+
+    exclude_customer = not request.user.is_staff
     if request.method == 'POST':
         form = EntryForm(
             request.POST, 
@@ -476,16 +480,26 @@ def entry(request, pk=None, slug=None,):
             )
     else:
         form = EntryForm(instance=entry, exclude_customer=exclude_customer)
-    return render(
-        request, 
-        'diary/entry.html', 
-        {
-            'form': form,
-            'date': entry.date,
-            'nav_slug': entry.date.strftime(DATE_SLUG_FORMAT),
-            'reminders': reminders(request),
-        },
-    )
+
+    context = {
+        'form': form,
+        'date': entry.date,
+        'nav_slug': entry.date.strftime(DATE_SLUG_FORMAT),
+        'reminders': reminders(request),
+    }
+    context.update(csrf(request))
+    return render_to_response('diary/entry.html', context)
+
+#    return render(
+#        request, 
+#        'diary/entry.html', 
+#        {
+#            'form': form,
+#            'date': entry.date,
+#            'nav_slug': entry.date.strftime(DATE_SLUG_FORMAT),
+#            'reminders': reminders(request),
+#        },
+#    )
 
 
 @login_required
@@ -565,3 +579,52 @@ def entry_delete(request, pk):
         slug=date.strftime(DATE_SLUG_FORMAT),
     )
 
+
+@permission_required('customer.can_add_customer')
+def customer_add(request, entry_pk=None):
+    """
+    Customer creation.
+    
+    The entry_pk gives a way to redirect to the entry form where this method 
+    was invoked.
+    """
+    if request.method == 'POST':
+        form = CustomerCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            if entry_pk:
+                return HttpResponseRedirect(
+                    reverse(
+                        'diary:entry_new_customer', 
+                        kwargs={
+                            'pk': entry_pk,
+                            'customer_pk': form.instance.pk,
+                        },
+                    )
+                )
+            else:
+                return HttpResponseRedirect(
+                    reverse('diary:entry')
+                )
+    else:
+        form = CustomerCreationForm()
+
+    context = {
+        'form': form,
+        'entry_pk': entry_pk,
+        'reminders': reminders(request),
+    }
+    context.update(csrf(request))
+    return render_to_response('diary/customer_add.html', context)
+
+
+#@permission_required('customer_can_change_customer')
+#def customer_change(request, pk=None, entry_pk=None):
+#    """
+#    Change a customer's details.
+#    
+#    The entry_pk gives a way to redirect to the entry form where this method 
+#    was invoked.
+#    """
+#    print('Hello Customer Change World')
+#    pass

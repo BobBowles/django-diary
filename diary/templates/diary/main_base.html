@@ -104,9 +104,10 @@ p.top-menu a {
 {# The only requirement is that it defines links for the placeholders below. #}
 
 {# place-holders for overriding in children of diary_nav #}
-{% url '' as diary_nav_up %}
-{% url '' as diary_nav_prev %}
-{% url '' as diary_nav_next %}
+{#% url '' as diary_nav_up %#}
+{#% url '' as diary_nav_prev %#}
+{#% url '' as diary_nav_next %#}
+{% with diary_nav_up='' diary_nav_prev='' diary_nav_next='' %}
 
 {% block diary_nav %} {# override url definitions in children #}
     <div class="page-head">
@@ -131,6 +132,7 @@ p.top-menu a {
         </h1>
     </div>
 {% endblock diary_nav %}
+{% endwith %}
 
 {# SAMPLE CHILD BLOCK for diary_nav #}
 {#{% block diary_nav %}#}

@@ -52,6 +52,10 @@ urlpatterns = [
         views.entry,
         name='entry_new'
     ),
+    url(r'^entry/(?P<pk>\d+)/(?P<customer_pk>\d+)$', 
+        views.entry, 
+        name='entry_new_customer',
+    ),
     url(r'^entry/(?P<pk>\d+)/$', views.entry, name='entry',),
     url(r'^entry/$', 
         views.entry, 
@@ -66,6 +70,25 @@ urlpatterns = [
 
     # ajax dynamic modals
     url(r'^entry_modal/(?P<pk>\d+)/$', views.entry_modal, name='entry_modal',),
+
+
+    # customer administration - overrides admin pages to control redirection
+    url(r'^customer_add/(?P<entry_pk>\d+)/$', 
+        views.customer_add, 
+        name='customer_add',
+    ),
+    url(r'^customer_add/$', 
+        views.customer_add, 
+        name='customer_add_no_entry',
+    ),
+#    url(r'^customer_change/(?P<pk>\d+)/(?P<entry_pk>\d+)/$', 
+#        views.customer_change, 
+#        name='customer_change',
+#    ),
+#    url(r'^customer_change/(?P<pk>\d+)/$', 
+#        views.customer_change, 
+#        name='customer_change_no_entry',
+#    ),
 
 
     # the following are redundant and not maintained

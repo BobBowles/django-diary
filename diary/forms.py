@@ -1,9 +1,11 @@
 from django import forms
-from .models import Entry
+from .models import Entry, Customer
 from datetimewidget.widgets import (
     TimeWidget,
     DateWidget,
 )
+from .widgets import RelatedFieldWidgetCanAdd
+
 
 
 TIME_FORMATS = ['%H:%M', '%I:%M%p', '%I:%M %p',]
@@ -24,6 +26,7 @@ DURATION_WIDGET_OPTIONS = {
 }
 
 
+
 class EntryForm(forms.ModelForm):
 
 
@@ -35,6 +38,15 @@ class EntryForm(forms.ModelForm):
         super(EntryForm, self).__init__(*args, **kwargs)
         if exclude_customer:
             del self.fields['customer']
+        else:           # add real widget attributes AFTER it is instantiated
+            self.fields['customer'].widget.related_url = (
+                'diary:customer_add' if self.instance
+                else "diary:customer_add_no_entry"
+            )
+            self.fields['customer'].widget.related_kwargs = (
+                {'entry_pk': self.instance.pk} if self.instance
+                else None
+            )
 
 
     class Meta:
@@ -49,6 +61,7 @@ class EntryForm(forms.ModelForm):
             'notes',
         )
         widgets = {
+            'customer': RelatedFieldWidgetCanAdd(Customer), # use defaults here
             'date': DateWidget(
                 bootstrap_version=3,
                 options=DATE_WIDGET_OPTIONS,
