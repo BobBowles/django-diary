@@ -454,8 +454,9 @@ def entry(request, pk=None, slug=None, customer_pk=None):
                 else None
             ),
         )
-        # save the entry now so we can redirect to it
-        entry.save()
+        # make sure entry has a database existence so we can redirect to it
+        if not entry.pk:
+            entry.save()
 
     # if a customer pk is specified set it as the customer
     if customer_pk:
@@ -489,17 +490,6 @@ def entry(request, pk=None, slug=None, customer_pk=None):
     }
     context.update(csrf(request))
     return render_to_response('diary/entry.html', context)
-
-#    return render(
-#        request, 
-#        'diary/entry.html', 
-#        {
-#            'form': form,
-#            'date': entry.date,
-#            'nav_slug': entry.date.strftime(DATE_SLUG_FORMAT),
-#            'reminders': reminders(request),
-#        },
-#    )
 
 
 @login_required
