@@ -6,7 +6,8 @@
     {{ form.media }}
 {% endblock diary_head_extra %}
 
-
+{# parameterise the button so we can override the name and type#}
+{% with button_type='submit' button_label='Save' %}
 {% block diary_content %}
 
 {% for hidden in form.hidden_fields %}
@@ -18,7 +19,6 @@
             <div class="col-md-12">
                 <form class="post-form" method="POST">
                     {% csrf_token %}
-                    {#{ form.as_p }#}
                     <div class="row">
                         <div class="col-md-12">
                             {{ form.non_field_errors }}
@@ -42,9 +42,9 @@
                         <div class="col-md-12">
                             <button 
                                 class="save btn btn-default diarybutton" 
-                                type="submit"
+                                type="{{ button_type }}"
                                 >
-                                Save
+                                {{ button_label }}
                             </button>
                         </div>
                     </div>
@@ -55,4 +55,5 @@
 
 
 {% endblock diary_content %}
+{% endwith %}
 
