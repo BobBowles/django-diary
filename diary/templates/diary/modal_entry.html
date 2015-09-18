@@ -18,15 +18,32 @@
             </h4>
         </div>
         <div class="modal-body">
-            <p>
-                Treatment: {{ entry.treatment }}
-            </p>
-            <p>
-                Resource: {{ entry.resource }}
-            </p>
-            <textarea disabled rows="20" cols="60">
-                {{ entry.notes }}
-            </textarea>
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-2">
+                        Treatment: 
+                    </div>
+                    <div class="col-xs-10">
+                        {{ entry.treatment }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-2">
+                        Resource: 
+                    </div>
+                    <div class="col-xs-10">
+                        {{ entry.resource }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-2">
+                        Notes:
+                    </div>
+                    <div class="col-xs-10">
+                        <textarea disabled rows="5">{{ entry.notes }}</textarea>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="modal-footer">
             <button 
