@@ -38,6 +38,11 @@
 }
 
 .new {
+    padding: 0;
+    color: #555555;
+}
+.new[disabled] {
+    color: #cccccc;
 }
 
 

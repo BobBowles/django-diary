@@ -63,10 +63,14 @@
                                 ondragend="dragend(event);"
                                 >
                 {% url 'diary:entry_new' slug=datetime_slug as new_entry %}
-                                <a href="{{ new_entry }}">
-                                    <span class="glyphicon glyphicon-plus new">
+                                <button 
+                                    class="btn btn-link new" 
+                                    type="button" 
+                                    onclick="location.href='{{ new_entry }}'"
+                                    >
+                                    <span class="glyphicon glyphicon-plus">
                                     </span>
-                                </a>
+                                </button>
                                 {% for entry in entries %}
                                     <div 
                                         class="entry"
