@@ -3,7 +3,6 @@
 
 
 {% block diary_head_extra %}
-    {{ csrf_token }}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <script src="{% static 'js.cookie.js' %}"></script>
@@ -147,11 +146,15 @@ function dragend(ev) {
 }
 
     </script>
+
 {% endblock diary_head_extra %}
 
 
 {% block diary_content %} {# invoke this as super from child template #}
-<input type="hidden" id="next_url"> <!-- storage for modal redirect trigger -->
+<div style="display:none">
+    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+    <input type="hidden" id="next_url"> <!-- modal redirect trigger -->
+</div>
 {# attachment point for ajax modal body - empty #}
 <div class="modal fade" id="ajaxModal" role="dialog"></div>
 

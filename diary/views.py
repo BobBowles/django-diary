@@ -15,6 +15,7 @@ from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.forms import ValidationError
 from django.template.loader import render_to_string
+from django.template import RequestContext
 
 
 # Create your views here.
@@ -79,6 +80,7 @@ def reminders(request):
     """
     Data for the reminder sidebar.
     """
+
     today = timezone.localtime(timezone.now()).date()
     tomorrow = today + datetime.timedelta(days=1)
 
@@ -125,13 +127,17 @@ def year(request, year=None):
                 })
         years.append((yr, months))
 
-    return render_to_response('diary/year.html', {
-        'years': years,
-        'user': request.user,
-        'prev_year': year - 3,
-        'next_year': year + 3,
-        'reminders': reminders(request),
-        })
+    return render_to_response(
+        'diary/year.html', 
+        {
+            'years': years,
+            'user': request.user,
+            'prev_year': year - 3,
+            'next_year': year + 3,
+            'reminders': reminders(request),
+        }, 
+        context_instance=RequestContext(request),
+    )
 
 
 @login_required
@@ -139,6 +145,7 @@ def month(request, year=None, month=None, change=None):
     """
     Display the days in the specified month.
     """
+
     # default to this month
     today = timezone.localtime(timezone.now()).date()
     if not year:
@@ -186,7 +193,8 @@ def month(request, year=None, month=None, change=None):
             'month_name': MONTH_NAMES[date.month-1],
             'day_names': DAY_NAMES,
             'reminders': reminders(request),
-        },
+        }, 
+        context_instance=RequestContext(request),
     )
 
 
@@ -194,6 +202,7 @@ def getDate(year, month, day, change):
     """
     Helper function to obtain the date from kwargs.
     """
+
     # default to today
     print('DEPRECATED:  Getting kwargs date...')
     today = timezone.localtime(timezone.now()).date()
@@ -216,6 +225,7 @@ def getDateFromSlug(slug, change):
     """
     Helper to derive a date from an iso format slug.
     """
+
     # default to today
     print('Getting slug date...')
     today = timezone.localtime(timezone.now()).date()
@@ -238,6 +248,7 @@ def getDatetimeFromSlug(slug):
     """
     Helper method to derive a date and time from a datetime slug.
     """
+
     date_time = datetime.datetime.strptime(slug, DATETIME_SLUG_FORMAT)
     return date_time.date(), date_time.time()
 
@@ -248,6 +259,7 @@ def multi_day(request, slug=None, change=None):
     """
     Display entries in a calendar-style 4-day layout.
     """
+
     today = timezone.localtime(timezone.now()).date()
     now = timezone.localtime(timezone.now()).time()
     date = (getDateFromSlug(slug, change) if slug
@@ -318,7 +330,8 @@ def multi_day(request, slug=None, change=None):
             'time_slots': time_slots,
             'date_slots': date_slots,
             'reminders': reminders(request),
-        },
+        }, 
+        context_instance=RequestContext(request),
     )
 
 
@@ -327,6 +340,7 @@ def day(request, slug=None, change=None):
     """
     Display entries in a particular day in a calendar-style day view.
     """
+
     today = timezone.localtime(timezone.now()).date()
     now = timezone.localtime(timezone.now()).time()
     date = (getDateFromSlug(slug, change) if slug
@@ -368,7 +382,8 @@ def day(request, slug=None, change=None):
             'month_name': MONTH_NAMES[date.month-1],
             'time_slots': time_slots,
             'reminders': reminders(request),
-        },
+        }, 
+        context_instance=RequestContext(request),
     )
 
 
@@ -424,8 +439,11 @@ def day_list(request, year=None, month=None, day=None, change=None):
         'user': request.user,
         'reminders': reminders(request),
     }
-    context.update(csrf(request))
-    return render_to_response('diary/day_list.html', context)
+    return render_to_response(
+        'diary/day_list.html', 
+        context, 
+        context_instance=RequestContext(request),
+    )
 
 
 @login_required
@@ -433,6 +451,7 @@ def entry(request, pk=None, slug=None, customer_pk=None):
     """
     Edit/create an entry for the diary.
     """
+
     # defaults are here and now if no date/time is provided
     date = timezone.now().date()
     time = timezone.now().time()
@@ -488,8 +507,11 @@ def entry(request, pk=None, slug=None, customer_pk=None):
         'nav_slug': entry.date.strftime(DATE_SLUG_FORMAT),
         'reminders': reminders(request),
     }
-    context.update(csrf(request))
-    return render_to_response('diary/entry.html', context)
+    return render_to_response(
+        'diary/entry.html', 
+        context, 
+        context_instance=RequestContext(request),
+    )
 
 
 @login_required
@@ -498,6 +520,7 @@ def entry_update(request):
     Update an entry's details via ajax. 
     At present only the date and time can be changed this way.
     """
+
     pk = request.POST['pk']
     print('pk is {0}'.format(pk))
     entry = get_object_or_404(Entry, pk=pk)
@@ -544,6 +567,7 @@ def entry_modal(request, pk):
     Prepare and send an html snippet to display an entry in a modal dialog via
     ajax - but using html.
     """
+
     entry = get_object_or_404(Entry, pk=pk)
     html = render_to_string(
         'diary/modal_entry.html',
@@ -561,6 +585,7 @@ def entry_delete(request, pk):
     """
     Remove a diary entry.
     """
+
     entry = get_object_or_404(Entry, pk=pk)
     date = entry.date
     entry.delete()
@@ -578,6 +603,7 @@ def customer_add(request, entry_pk=None):
     The entry_pk gives a way to redirect to the entry form where this method 
     was invoked.
     """
+
     if request.method == 'POST':
         form = CustomerCreationForm(request.POST)
         if form.is_valid():
@@ -604,17 +630,48 @@ def customer_add(request, entry_pk=None):
         'entry_pk': entry_pk,
         'reminders': reminders(request),
     }
-    context.update(csrf(request))
-    return render_to_response('diary/customer_add.html', context)
+    return render_to_response(
+        'diary/customer_add.html', 
+        context, 
+        context_instance=RequestContext(request),
+    )
 
 
-#@permission_required('customer_can_change_customer')
-#def customer_change(request, pk=None, entry_pk=None):
-#    """
-#    Change a customer's details.
-#    
-#    The entry_pk gives a way to redirect to the entry form where this method 
-#    was invoked.
-#    """
-#    print('Hello Customer Change World')
-#    pass
+@login_required
+def customer_change(request):
+    """
+    Change the logged-in customer's details.
+    
+    The entry_pk gives a way to redirect to the entry form where this method 
+    was invoked.
+    """
+
+    # try to work out where to redirect to when finished. fallback to diary home
+    print('customer_change:    request.path={0}'.format(request.path))
+    redirect_url = reverse('diary:home')
+    print('Home redirect is: {0}'.format(redirect_url))
+    if 'next' in request.GET:
+        print('Trying redirect_url from request.GET: {0}'.format(request.GET['next']))
+        redirect_url = request.GET['next']
+    print('Redirect url is: {0}'.format(redirect_url))
+
+    if request.method == 'POST':
+        form = CustomerChangeForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect(redirect_url)
+    else:
+        form = CustomerChangeForm(instance=request.user)
+
+    context = {
+        'form': form,
+        'next': redirect_url,
+        'customer': request.user,
+        'reminders': reminders(request),
+    }
+    return render_to_response(
+        'diary/customer_change.html', 
+        context, 
+        context_instance=RequestContext(request),
+    )
+

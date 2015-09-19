@@ -81,14 +81,10 @@ urlpatterns = [
         views.customer_add, 
         name='customer_add_no_entry',
     ),
-#    url(r'^customer_change/(?P<pk>\d+)/(?P<entry_pk>\d+)/$', 
-#        views.customer_change, 
-#        name='customer_change',
-#    ),
-#    url(r'^customer_change/(?P<pk>\d+)/$', 
-#        views.customer_change, 
-#        name='customer_change_no_entry',
-#    ),
+    url(r'^customer_change/$', 
+        views.customer_change, 
+        name='customer_change',
+    ),
 
 
     # the following are redundant and not maintained

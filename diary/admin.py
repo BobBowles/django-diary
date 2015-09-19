@@ -71,17 +71,17 @@ class CustomerCreationForm(forms.ModelForm):
 
 
 class CustomerChangeForm(forms.ModelForm):
-    """A form for updating Customers. Includes all the fields on
-    the user, but replaces the password field with admin's
-    password hash display field.
     """
-    password = ReadOnlyPasswordHashField()
+    A form for updating Customers. 
+    
+    Customers can change their non-security-related information using this form.
+    Excludes security-sensitive information like password and priviledges.
+    """
 
     class Meta:
         model = Customer
         fields = (
             'username',
-            'password', 
             'first_name',
             'last_name',
             'email', 
@@ -89,7 +89,6 @@ class CustomerChangeForm(forms.ModelForm):
             'date_of_birth', 
             'gender',
             'notes',
-            'is_active', 
         )
         widgets = {
             'date_of_birth': DateWidget(
@@ -98,18 +97,12 @@ class CustomerChangeForm(forms.ModelForm):
             ),
         }
         exclude = (
+            'password',
             'staff_status',
             'superuser_status',
+            'is_active',
         )
 
-
-    def clean_password(self):
-        """
-        Regardless of what the user provides, return the initial value.
-        This is done here, rather than on the field, because the field does not 
-        have access to the initial value.
-        """
-        return self.initial["password"]
 
 
 class CustomerAdmin(UserAdmin):

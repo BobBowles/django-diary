@@ -1,0 +1,15 @@
+{% extends 'diary/form_base.html' %}
+
+
+{% block diary_nav %}
+    {% with diary_nav_prev='' diary_nav_next='' diary_nav_up=next %}
+    {{ block.super }}
+    {% endwith %}
+{% endblock diary_nav %}
+
+
+{% block diary_title %}
+    Change Details for: {{ customer.first_name }} {{ customer.last_name }}
+{% endblock diary_title %}
+
+

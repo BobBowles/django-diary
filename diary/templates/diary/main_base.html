@@ -85,6 +85,17 @@ ul.nav {
                             </span>
                         </a>
                     {% endblock links %}
+                    <a 
+                        class="top-menu"
+                        {% if user.is_superuser %}
+                            href="{% url 'admin:index' %}"
+                        {% else %}
+href="{% url 'diary:customer_change' %}?next={{ request.path|urlencode|default:'/' }}"
+                        {% endif %}
+                        >
+                        <span class="glyphicon glyphicon-user">
+                        </span>
+                    </a>
                 {% else %}
                     <a 
                         class="top-menu" 
