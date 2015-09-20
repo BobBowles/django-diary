@@ -387,65 +387,6 @@ def day(request, slug=None, change=None):
 
 
 @login_required
-def day_list(request, year=None, month=None, day=None, change=None):
-    """
-    Display entries in a particular day in an editable list.
-    """
-    print('DEPRECATION WARNING: day_list is not maintained')
-    date = getDate(year, month, day, change)
-
-    # create a form for entry of new entries (sic)
-    EntriesFormset = formset_factory(
-        EntryForm, 
-        extra=1, 
-        exclude=('creator', 'date'),
-        can_delete=True,
-    )
-
-    # save the changes if this is a post request
-    if request.method == 'POST':
-        formset = EntriesFormset(request.POST)
-
-        if formset.is_valid():
-            entries = formset.save(commit=False)
-
-            # really delete forms marked for removal
-            for entry in formset.deleted_objects:
-                entry.delete()
-
-            # add the current date and user, and really save it
-            for entry in entries:
-                entry.creator = request.user
-                entry.date = date
-                entry.save()
-            return HttpResponseRedirect(reverse(
-                    'diary.views.month', 
-                    args=(year, month)
-            ))
-
-    # unposted form
-    else:
-        formset = EntriesFormset(
-            queryset=Entry.objects\
-                .filter(date=date, creator=request.user)\
-                    .order_by('time')
-        )
-
-    context = {
-        'entries': formset,
-        'date': date,
-        'month_name': MONTH_NAMES[date.month-1],
-        'user': request.user,
-        'reminders': reminders(request),
-    }
-    return render_to_response(
-        'diary/day_list.html', 
-        context, 
-        context_instance=RequestContext(request),
-    )
-
-
-@login_required
 def entry(request, pk=None, slug=None, customer_pk=None):
     """
     Edit/create an entry for the diary.
@@ -472,15 +413,6 @@ def entry(request, pk=None, slug=None, customer_pk=None):
                 else None
             ),
         )
-#        # make sure entry has a database existence so we can redirect to it
-#        # only relevant for staff when adding a new customer
-#        if (
-#            request.user.is_staff and 
-#            not entry.customer and 
-#            not entry.pk and
-#            not request.method == 'POST'
-#        ):
-#            entry.save()
 
     # if a customer pk is specified set it as the customer
     if customer_pk:
@@ -678,7 +610,6 @@ def customer_change(request):
     """
 
     # try to work out where to redirect to when finished. fallback to diary home
-    print('customer_change:    request.path={0}'.format(request.path))
     redirect_url = reverse('diary:home')
     print('Home redirect is: {0}'.format(redirect_url))
     if 'next' in request.GET:

@@ -94,16 +94,4 @@ urlpatterns = [
         name='customer_change',
     ),
 
-
-    # the following are redundant and not maintained
-    url(
-r'^day_list/(?P<year>\d+)/(?P<month>\d+)/(?P<day>\d+)/(?P<change>prev|next)/$',
-views.day_list,
-    ),
-    url(
-        r'^day_list/(?P<year>\d+)/(?P<month>\d+)/(?P<day>\d+)/$', 
-        views.day_list
-    ),
-    url(r'^day_list/$', views.day_list),            # default day is today
-
 ]
