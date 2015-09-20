@@ -3,7 +3,13 @@
 
 {% block diary_nav %}
     {% with diary_nav_prev='' diary_nav_next='' %}
-    {% url 'diary:entry' pk=entry_pk as diary_nav_up %}
+    {% if entry_pk %}
+        {% url 'diary:entry' pk=entry_pk as diary_nav_up %}
+    {% elif entry_slug %}
+        {% url 'diary:entry_new' slug=entry_slug as diary_nav_up %}
+    {% else %}
+        {% url 'diary:entry' as diary_nav_up %}
+    {% endif %}
     {{ block.super }}
     {% endwith %}
 {% endblock diary_nav %}

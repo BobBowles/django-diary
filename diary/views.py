@@ -227,7 +227,6 @@ def getDateFromSlug(slug, change):
     """
 
     # default to today
-    print('Getting slug date...')
     today = timezone.localtime(timezone.now()).date()
     date = None
     if not slug:
@@ -473,9 +472,15 @@ def entry(request, pk=None, slug=None, customer_pk=None):
                 else None
             ),
         )
-        # make sure entry has a database existence so we can redirect to it
-        if not entry.pk:
-            entry.save()
+#        # make sure entry has a database existence so we can redirect to it
+#        # only relevant for staff when adding a new customer
+#        if (
+#            request.user.is_staff and 
+#            not entry.customer and 
+#            not entry.pk and
+#            not request.method == 'POST'
+#        ):
+#            entry.save()
 
     # if a customer pk is specified set it as the customer
     if customer_pk:
@@ -500,6 +505,24 @@ def entry(request, pk=None, slug=None, customer_pk=None):
             )
     else:
         form = EntryForm(instance=entry, exclude_customer=exclude_customer)
+
+        # have to set up the customer widget after form creation
+        if not exclude_customer:
+            related_url = related_kwargs = None
+            if pk:
+                related_url = 'diary:customer_add_entry_pk'
+                related_kwargs = {
+                    'entry_pk': pk,
+                }
+            elif slug:
+                related_url = 'diary:customer_add_entry_slug'
+                related_kwargs = {
+                    'entry_slug': slug,
+                }
+            else:
+                related_url = 'diary:customer_add'
+            form.fields['customer'].widget.related_url = related_url
+            form.fields['customer'].widget.related_kwargs = related_kwargs
 
     context = {
         'form': form,
@@ -596,12 +619,12 @@ def entry_delete(request, pk):
 
 
 @permission_required('customer.can_add_customer')
-def customer_add(request, entry_pk=None):
+def customer_add(request, entry_pk=None, entry_slug=None):
     """
     Customer creation.
     
-    The entry_pk gives a way to redirect to the entry form where this method 
-    was invoked.
+    The entry_pk and entry_slug give a way to redirect to the entry form where
+    this method was invoked.
     """
 
     if request.method == 'POST':
@@ -611,11 +634,21 @@ def customer_add(request, entry_pk=None):
             if entry_pk:
                 return HttpResponseRedirect(
                     reverse(
-                        'diary:entry_new_customer', 
+                        'diary:entry_customer', 
                         kwargs={
                             'pk': entry_pk,
                             'customer_pk': form.instance.pk,
                         },
+                    )
+                )
+            elif entry_slug:
+                return HttpResponseRedirect(
+                    reverse(
+                        'diary:entry_new_customer',
+                        kwargs={
+                            'slug': entry_slug,
+                            'customer_pk': form.instance.pk,
+                        }
                     )
                 )
             else:
@@ -628,6 +661,7 @@ def customer_add(request, entry_pk=None):
     context = {
         'form': form,
         'entry_pk': entry_pk,
+        'entry_slug': entry_slug,
         'reminders': reminders(request),
     }
     return render_to_response(
@@ -640,10 +674,7 @@ def customer_add(request, entry_pk=None):
 @login_required
 def customer_change(request):
     """
-    Change the logged-in customer's details.
-    
-    The entry_pk gives a way to redirect to the entry form where this method 
-    was invoked.
+    Change the logged-in customer's personal details.
     """
 
     # try to work out where to redirect to when finished. fallback to diary home

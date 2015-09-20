@@ -52,9 +52,13 @@ urlpatterns = [
         views.entry,
         name='entry_new'
     ),
+    url(r'^entry/(?P<slug>\d{4}-\d\d-\d\d_\d\d-\d\d)/(?P<customer_pk>\d+)/$', 
+        views.entry,
+        name='entry_new_customer'
+    ),
     url(r'^entry/(?P<pk>\d+)/(?P<customer_pk>\d+)$', 
         views.entry, 
-        name='entry_new_customer',
+        name='entry_customer',
     ),
     url(r'^entry/(?P<pk>\d+)/$', views.entry, name='entry',),
     url(r'^entry/$', 
@@ -75,11 +79,15 @@ urlpatterns = [
     # customer administration - overrides admin pages to control redirection
     url(r'^customer_add/(?P<entry_pk>\d+)/$', 
         views.customer_add, 
-        name='customer_add',
+        name='customer_add_entry_pk',               # existing entry pk
+    ),
+    url(r'^customer_add/(?P<entry_slug>\d{4}-\d\d-\d\d_\d\d-\d\d)/$', 
+        views.customer_add, 
+        name='customer_add_entry_slug',             # new entry slug
     ),
     url(r'^customer_add/$', 
         views.customer_add, 
-        name='customer_add_no_entry',
+        name='customer_add',                        # default has no entry
     ),
     url(r'^customer_change/$', 
         views.customer_change, 
