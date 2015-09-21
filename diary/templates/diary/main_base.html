@@ -70,10 +70,7 @@ ul.nav {
                 {% if user.is_authenticated %}
                     <p class="top-menu">
                         Hello {{ user.username }}
-                        (
-                            <a href="{% url 'django.contrib.auth.views.logout' %}">
-                                Logout
-                            </a>)
+                        
                         
                     </p>
                     {% block links %}
@@ -81,10 +78,15 @@ ul.nav {
                             class="top-menu" 
                             href="{% url 'diary:multi_day_now' %}"
                             >
-                            <span class="glyphicon glyphicon-calendar">
-                            </span>
+                            <span class="glyphicon glyphicon-calendar"></span>
                         </a>
                     {% endblock links %}
+                    <a
+                        class="top-menu"
+                        href="{% url 'password_reset' %}"
+                        >
+                        <span class="glyphicon glyphicon-lock"></span>
+                    </a>
                     <a 
                         class="top-menu"
                         {% if user.is_superuser %}
@@ -93,15 +95,20 @@ ul.nav {
 href="{% url 'diary:customer_change' %}?next={{ request.path|urlencode|default:'/' }}"
                         {% endif %}
                         >
-                        <span class="glyphicon glyphicon-user">
-                        </span>
+                        <span class="glyphicon glyphicon-user"></span>
+                    </a>
+                    <a 
+                        class="top-menu"
+                        href="{% url 'django.contrib.auth.views.logout' %}"
+                        >
+                        <span class="glyphicon glyphicon-logout"></span>
                     </a>
                 {% else %}
                     <a 
                         class="top-menu" 
                         href="{% url "django.contrib.auth.views.login" %}"
                         >
-                        <span class="glyphicon glyphicon-lock">
+                        <span class="glyphicon glyphicon-login">
                         </span>
                     </a>
                 {% endif %}

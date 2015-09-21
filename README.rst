@@ -27,15 +27,15 @@ In the interests of confidentiality, customers may only see and alter their own 
 Installation
 ------------
 
-1.  Install `django-diary` [TODO: from Pypi] and its dependencies.
-2.  Add `diary` and `datetimewidget` to your `INSTALLED_APPS` in `settings.py`:
+1.  Install ``django-diary`` [TODO: from Pypi] and its dependencies.
+2.  Add ``diary`` and ``datetimewidget`` to your ``INSTALLED_APPS`` in ``settings.py``:
 
 ::
 
     'diary',
     'datetimewidget',
 
-3.  Also in `settings.py` configure meridian time displays [TODO: if you are using them - need configuration option]:
+3.  Also in ``settings.py`` configure meridian time displays [TODO: if you are using them - need configuration option]:
 
 ::
 
@@ -50,7 +50,7 @@ Installation
     )
 
 
-4.  Add the following to `settings.py` to enable the use of the `Customer` subclass of `User`:
+4.  Add the following to ``settings.py`` to enable the use of the ``Customer`` subclass of ``User``:
 
 ::
 
@@ -62,7 +62,7 @@ Installation
         'diary.backends.CustomUserModelBackend',
     )
 
-5.  Override `templates/diary/main_base.html` to customise layout and styling for your site. `main_base.html` (and/or its parents) need to provide the following five blocks:
+5.  Override ``templates/diary/main_base.html`` to customise layout and styling for your site. ``main_base.html`` (and/or its parents) need to provide the following five blocks:
 
 ==================== ===========================================================
 Block                Description
@@ -78,7 +78,7 @@ Block                Description
                      required.
 ==================== ===========================================================
 
-6.  Configure the customisable parameters in `settings.py`:
+6.  Configure the customisable parameters in ``settings.py``:
 
 ::
 
@@ -91,6 +91,49 @@ Block                Description
 ::
 
     ./manage.py migrate
+
+8.  Set up the ``diary`` app's urls, and (if you want to use the customer administration) the administration urls. In your root ``urls.py`` you need the following ``urlpatterns``:
+
+::
+
+    url(r'^admin/', include(admin.site.urls)),
+    url(r'^accounts/login/$', 'django.contrib.auth.views.login'),
+    url(r'^accounts/logout/$', 
+        'django.contrib.auth.views.logout', 
+        {'next_page': '/'}),
+    url(r'^accounts/password/reset/$', 
+        'django.contrib.auth.views.password_reset', 
+        {'post_reset_redirect' : '/user/password/reset/done/'},
+        name="password_reset"),
+    url(r'^accounts/password/reset/done/$',
+        'django.contrib.auth.views.password_reset_done'),
+    url(r'^accounts/password/reset/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$', 
+        'django.contrib.auth.views.password_reset_confirm', 
+        {'post_reset_redirect' : '/user/password/done/'},
+        name='password_reset_confirm'),
+    url(r'^accounts/password/done/$', 
+        'django.contrib.auth.views.password_reset_complete'),
+    url(r'^diary/', include('diary.urls', namespace='diary')),
+
+9a. For the password administration you need to set up an email service. For testing purposes, you can use Python's built-in dummy server. This just prints out the result of email requests on the console. From the command line:
+
+::
+
+python -m smtpd -n -c DebuggingServer localhost:1025
+
+
+9b. In your ``settings.py`` add your email server's details. For testing, the following snippet is sufficient to link to the test email server described above:
+
+::
+
+# test email server setup
+if DEBUG:
+    EMAIL_HOST = 'localhost'
+    EMAIL_PORT = 1025
+    EMAIL_HOST_USER = ''
+    EMAIL_HOST_PASSWORD = ''
+    EMAIL_USE_TLS = False
+    DEFAULT_FROM_EMAIL = 'testing@example.com'
 
 
 
