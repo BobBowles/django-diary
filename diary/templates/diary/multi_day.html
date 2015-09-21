@@ -66,7 +66,7 @@
                                 <button 
                                     class="btn btn-link new" 
                                     type="button" 
-                                    onclick="location.href='{{ new_entry }}'"
+onclick="location.href='{{ new_entry }}?next={{ request.path }}'"
                                     >
                                     <span class="glyphicon glyphicon-plus">
                                     </span>

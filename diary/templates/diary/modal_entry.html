@@ -56,7 +56,7 @@
             <button 
                 type="button" 
                 class="btn btn-default" 
-                onclick="next_url('{% url 'diary:entry' pk=entry.pk %}');"
+onclick="next_url('{% url 'diary:entry' pk=entry.pk %}?next={{ redirect_url }}');"
                 >
                 Edit
             </button>

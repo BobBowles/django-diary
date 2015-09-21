@@ -11,9 +11,11 @@
     {# define variables used by the following js scripts #}
     <script> 
 var entry_dnd_url = "{% url 'diary:entry_dnd' %}";
-console.log('entry_dnd_url is '+entry_dnd_url)
+console.log('entry_dnd_url is '+entry_dnd_url);
 var enable_new_buttons_disable = ('{{ request.user.is_staff }}'=='False');
-console.log('enable_new_buttons_disable is '+enable_new_buttons_disable)
+console.log('enable_new_buttons_disable is '+enable_new_buttons_disable);
+var redirect_url = "{{ request.path }}";
+console.log('redirect_url is '+redirect_url);
     </script>
 
     {# ajax modal scripts #}

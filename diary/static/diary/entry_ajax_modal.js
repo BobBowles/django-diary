@@ -19,7 +19,7 @@ $(document).on('show.bs.modal', function (event) {
     $.ajax({
         url: href,
         type: "get",
-        data: {},
+        data: {redirect_url: redirect_url},
         datatype: "html",
         success: function(result) {
             /* if the get succeeds add the results into the modal */

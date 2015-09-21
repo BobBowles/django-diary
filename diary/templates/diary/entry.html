@@ -2,10 +2,13 @@
 
 
 {% block diary_nav %}
-    {% url 'diary:day_nav' slug=nav_slug change='next' as diary_nav_next %}
-    {% url 'diary:day_nav' slug=nav_slug change='prev' as diary_nav_prev %}
-    {% url 'diary:day' slug=nav_slug as diary_nav_up %}
-    {{ block.super }}
+    {% with diary_nav_up=return_nav %}
+        {% with diary_nav_prev=return_nav_prev %}
+            {% with diary_nav_next=return_nav_next %}
+                {{ block.super }}
+            {% endwith %}
+        {% endwith %}
+    {% endwith %}
 {% endblock diary_nav %}
 
 

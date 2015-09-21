@@ -386,6 +386,39 @@ def day(request, slug=None, change=None):
     )
 
 
+def get_redirect_url(request, default):
+    """
+    Utility to derive the correct url for redirections.
+    
+    The url to be used is obtained from the request's GET dict, which gets it 
+    from the clicked template link via the '?next=' parameter.
+    
+    A default url must be specified for use in the event of failure.
+    """
+
+    next_url_bits = request.GET.get(
+        'next',                             # use specified redirect if exists
+        default,                            # 'safe' fallback
+    ).split('/')
+    date_index = next_url_bits.index('diary') + 2
+
+    if not next_url_bits[date_index]:       # no date so give today as slug
+        slug = datetime.datetime.today().strftime(DATE_SLUG_FORMAT)
+        return '/'.join(x for x in next_url_bits) + slug + '/'
+
+    if not next_url_bits[date_index+1]:     # no change component
+        return '/'.join(x for x in next_url_bits)
+
+    # deal with change component by re-calculating the date slug
+    slug = getDateFromSlug(
+        next_url_bits[date_index], 
+        next_url_bits[date_index+1],
+    ).strftime(DATE_SLUG_FORMAT)
+
+    # return the unchanged prefix plus the new date slug
+    return '/'.join(x for x in next_url_bits[:date_index]) + '/' + slug + '/'
+
+
 @login_required
 def entry(request, pk=None, slug=None, customer_pk=None):
     """
@@ -396,6 +429,10 @@ def entry(request, pk=None, slug=None, customer_pk=None):
     date = timezone.now().date()
     time = timezone.now().time()
     entry = None
+
+    # determine the navigation context for redirection
+    next_url = get_redirect_url(request, reverse('diary:home'))
+    print('Entry: next_url is {0}'.format(next_url))
 
     # decide whether we are creating a new entry or editing a new one
     if pk:                              # edit existing entry
@@ -429,12 +466,8 @@ def entry(request, pk=None, slug=None, customer_pk=None):
         if form.is_valid():
             entry = form.save(commit=False)
             entry.save()
+            return redirect(next_url)
 
-            # in case the date has been edited re-calculate the navigation slug
-            return redirect(
-                'diary:day', 
-                slug=entry.date.strftime(DATE_SLUG_FORMAT),
-            )
     else:
         form = EntryForm(instance=entry, exclude_customer=exclude_customer)
 
@@ -459,7 +492,9 @@ def entry(request, pk=None, slug=None, customer_pk=None):
     context = {
         'form': form,
         'date': entry.date,
-        'nav_slug': entry.date.strftime(DATE_SLUG_FORMAT),
+        'return_nav': next_url,
+        'return_nav_prev': next_url+'prev/',
+        'return_nav_next': next_url+'next/',
         'reminders': reminders(request),
     }
     return render_to_response(
@@ -523,11 +558,15 @@ def entry_modal(request, pk):
     ajax - but using html.
     """
 
+    # obtain redirection information from the request
+    redirect_url = request.GET.get('redirect_url', reverse('diary:home'))
+
     entry = get_object_or_404(Entry, pk=pk)
     html = render_to_string(
         'diary/modal_entry.html',
         context={
             'entry': entry,
+            'redirect_url': redirect_url,
         },
         request=request,
     )
