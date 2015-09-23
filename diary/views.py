@@ -589,7 +589,6 @@ def entry_delete(request, pk):
     )
 
 
-@permission_required('customer.can_add_customer')
 def customer_add(request, entry_pk=None, entry_slug=None):
     """
     Customer creation.
@@ -621,6 +620,10 @@ def customer_add(request, entry_pk=None, entry_slug=None):
                             'customer_pk': form.instance.pk,
                         }
                     )
+                )
+            elif not request.user.is_authenticated():
+                return HttpResponseRedirect(
+                    reverse('django.contrib.auth.views.login')
                 )
             else:
                 return HttpResponseRedirect(

@@ -101,15 +101,20 @@ href="{% url 'diary:customer_change' %}?next={{ request.path|urlencode|default:'
                         class="top-menu"
                         href="{% url 'django.contrib.auth.views.logout' %}"
                         >
-                        <span class="glyphicon glyphicon-logout"></span>
+                        <span class="glyphicon glyphicon-log-out"></span>
                     </a>
                 {% else %}
                     <a 
                         class="top-menu" 
                         href="{% url "django.contrib.auth.views.login" %}"
                         >
-                        <span class="glyphicon glyphicon-login">
-                        </span>
+                        <span class="glyphicon glyphicon-log-in"></span>
+                    </a>
+                    <a 
+                        class="top-menu" 
+                        href="{% url "diary:customer_add" %}"
+                        >
+                        <span class="glyphicon glyphicon-plus"></span>
                     </a>
                 {% endif %}
                 
