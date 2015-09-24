@@ -30,6 +30,12 @@ class CustomerCreationForm(forms.ModelForm):
         label='Password confirmation', widget=forms.PasswordInput)
 
 
+    def __init__(self, *args, **kwargs):
+        super(CustomerCreationForm, self).__init__(*args, **kwargs)
+        self.fields['email'].help_text = \
+            'Email is used for password reset. Use a valid email.'
+
+
     class Meta:
         model = Customer
         fields = (
@@ -52,6 +58,7 @@ class CustomerCreationForm(forms.ModelForm):
             'staff_status',
             'superuser_status',
         )
+
 
     def clean_password2(self):
         # Check that the two password entries match
