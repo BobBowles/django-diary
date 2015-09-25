@@ -6,6 +6,7 @@ db.*
 # setup.py files
 build/**/*.*
 dist/*.*
+django_diary.egg-info/
 django_diary.egg-info/*.*
 MANIFEST
 
