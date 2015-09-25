@@ -2,3 +2,10 @@
 __pycache__
 db.*
 .DS_Store
+
+# setup.py files
+build/**/*.*
+dist/*.*
+django_diary.egg-info/*.*
+MANIFEST
+
