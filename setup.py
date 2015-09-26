@@ -17,7 +17,9 @@
 try:
     from setuptools import setup
 except ImportError:
-    from distutils.core import setup
+    import ez_setup
+    ez_setup.use_setuptools()
+    from setuptools import setup
 
 import os
 
@@ -34,7 +36,7 @@ dataFiles = []
 
 
 # sort out package data (e.g. gifs etc used in the app)
-fileList = []
+packageFiles = []
 packageDir = '.'
 packageRoot = os.path.join(packageDir, 'diary')
 
@@ -45,15 +47,23 @@ sys.path.insert(0, packageDir)
 from diary import __version__
 
 
-# this template is for non-python files. we don't need it atm because this
-# is done in MANIFEST.in via recursive-include
-#imageRoot = 'images'
-#for file in os.listdir(os.path.join(packageRoot, imageRoot)):
-#    fileList.append(os.path.join(imageRoot, file))
-#fileList.sort()
+def collectPackageData(packageRoot, subdirectory):
+    """
+    Helper to recursively collect up the package data files.
+    """
+    root = os.getcwd()
+    os.chdir(packageRoot)
+    for dirpath, dirnames, filenames in os.walk(subdirectory):
+        for filename in filenames:
+            packageFiles.append(os.path.join(dirpath, filename))
+    os.chdir(root)
 
 
-packageData = {'diary': fileList}
+# gather up the non-python package files
+collectPackageData(packageRoot, 'static')
+collectPackageData(packageRoot, 'templates')
+packageFiles.sort()
+packageData = {'diary': packageFiles}
 
 
 # now run setup
@@ -93,6 +103,7 @@ setup(
     ],
     package_data=packageData,
     data_files=dataFiles,
+    zip_safe=False,
 )
 
 

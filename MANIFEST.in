@@ -1,7 +1,6 @@
 include CHANGES.txt
 include LICENSE.txt
 include README.rst
-recursive-include diary/static *
-recursive-include diary/templates *
 recursive-include docs *
+include ez_setup.py
 

@@ -27,11 +27,14 @@ In the interests of confidentiality, customers may only see and alter their own 
 Installation
 ------------
 
+A complete sample project is available on `GitHub <https://github.com/BobBowles/django-diary>`_ for forking or clone/download, but for use as a standalone app install from `PyPi <https://pypi.python.org/pypi/django-diary/>`_ using ``pip``.
+
 1.  Install ``django-diary`` and its dependencies using ``pip``::
 
         pip install django-diary
 
-2.  Add ``diary`` and ``datetimewidget`` to your ``INSTALLED_APPS`` in ``settings.py``:
+
+#.  Add ``diary`` and ``datetimewidget`` to your ``INSTALLED_APPS`` in ``settings.py``:
 
     ::
 
@@ -40,7 +43,14 @@ Installation
             'datetimewidget',
         ...
 
-3.  Also in ``settings.py`` configure meridian time displays [TODO: if you are using them - need configuration option]:
+#.  Run the migrations:
+
+    ::
+
+        ./manage.py migrate
+
+
+#.  Also in ``settings.py`` configure meridian time displays [TODO: if you are using them - need configuration option]:
 
     ::
 
@@ -55,7 +65,7 @@ Installation
         )
 
 
-4.  Add the following to ``settings.py`` to enable the use of the ``Customer`` subclass of ``User``:
+#.  Add the following to ``settings.py`` to enable the use of the ``Customer`` subclass of ``User``:
 
     ::
 
@@ -67,7 +77,7 @@ Installation
             'diary.backends.CustomUserModelBackend',
         )
 
-5.  Override ``templates/diary/main_base.html`` to customise layout and styling for your site. ``main_base.html`` (and/or its parents) need to provide the following five blocks:
+#.  Override ``templates/diary/main_base.html`` to customise layout and styling for your site. ``main_base.html`` (and/or its parents) need to provide the following five blocks:
 
     ==================== =======================================================
     Block                Description
@@ -84,7 +94,7 @@ Installation
                          information if required.
     ==================== =======================================================
 
-6.  Configure the customisable parameters in ``settings.py``:
+#.  Optionally configure the customisable parameters in ``settings.py``:
 
     ::
 
@@ -92,13 +102,7 @@ Installation
         DIARY_MULTI_DAY_NUMBER      # default=3 (show 3 days on multi-day page)
         DIARY_XXXXX                 # TODO: some documentation would be nice :)
 
-7.  Run the migrations:
-
-    ::
-
-        ./manage.py migrate
-
-8.  Set up the ``diary`` app's urls, and (if you want to use the customer administration) the administration urls. In your root ``urls.py`` you need the following ``urlpatterns``:
+#.  Set up the ``diary`` app's urls, and (if you want to use the customer administration) the administration urls. In your root ``urls.py`` you need the following ``urlpatterns``:
 
     ::
 
@@ -121,14 +125,14 @@ Installation
             'django.contrib.auth.views.password_reset_complete'),
         url(r'^diary/', include('diary.urls', namespace='diary')),
 
-9.  For the password administration you need to set up an email service. For testing purposes, you can use Python's built-in dummy server. This just prints out the result of email requests on the console. From the command line:
+#.  For the password administration you need to set up an email service. For testing purposes, you can use Python's built-in dummy server. This just prints out the result of email requests on the console. From the command line:
 
     ::
 
         python -m smtpd -n -c DebuggingServer localhost:1025
 
 
-10. In your ``settings.py`` add your email server's details. For testing, the following snippet is sufficient to link to the test email server described above:
+#.  In your ``settings.py`` add your email server's details. For testing, the following snippet is sufficient to link to the test email server described above:
 
     ::
 
@@ -216,14 +220,13 @@ History
 
 This started out as a series of experimental projects built on top of Django tutorials, and explorations of existing Django calendar apps and other Django snippets:
 
-1. Django Project Tutorial <https://docs.djangoproject.com/en/1.8/intro/tutorial01/>
+1. `Django Project Tutorial <https://docs.djangoproject.com/en/1.8/intro/tutorial01/>`_
 
-2. Django Girls <https://djangogirls.org/>
+2. `Django Girls <https://djangogirls.org/>`_
 
-3. LightBird Calendar Tutorial <http://lightbird.net/dbe/cal1.html>
+3. `LightBird Calendar Tutorial <http://lightbird.net/dbe/cal1.html>`_
 
-4. Django Scheduler <https://github.com/llazzaro/django-scheduler>
+4. `Django Scheduler <https://github.com/llazzaro/django-scheduler>`_
 
-5. Django Calendarium <https://github.com/bitmazk/django-calendarium>
-
+5. `Django Calendarium <https://github.com/bitmazk/django-calendarium>`_
 
