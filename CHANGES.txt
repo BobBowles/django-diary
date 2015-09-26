@@ -1,1 +1,2 @@
 v0.1        2015-09-24      Initial package release.
+v0.1.1      2015-09-26      Bugfix packaging and deployment.
