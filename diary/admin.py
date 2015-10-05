@@ -82,7 +82,7 @@ class CustomerChangeForm(forms.ModelForm):
     A form for updating Customers. 
     
     Customers can change their non-security-related information using this form.
-    Excludes security-sensitive information like password and priviledges.
+    Excludes security-sensitive information like password and privileges.
     """
 
     class Meta:
@@ -124,15 +124,22 @@ class CustomerAdmin(UserAdmin):
 #    list_filter = ('is_admin',)
     list_filter = ()
     fieldsets = (
-        (None, {'fields': ('username', 'password')}),
-        ('Personal info', {'fields': (
-                                'first_name',
-                                'last_name',
-                                'phone',
-                                'date_of_birth',
-                                'gender',
-                                'notes',
-                                )}),
+        (None, {
+            'fields': (
+                'username', 
+                #'password', # excluded from change form so excluded here too
+            )
+        }),
+        ('Personal info', {
+            'fields': (
+                'first_name',
+                'last_name',
+                'phone',
+                'date_of_birth',
+                'gender',
+                'notes',
+            )
+        }),
 #        ('Permissions', {'fields': ('is_admin',)}),
     )
 #    # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
@@ -144,7 +151,7 @@ class CustomerAdmin(UserAdmin):
 #        ),
 #    )
     search_fields = ('username',)
-    ordering = ('last_name', 'first_name',)
+    ordering = ('first_name', 'last_name', )
     filter_horizontal = ()
 
 
