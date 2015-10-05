@@ -197,8 +197,9 @@ Reusability
 At this early stage reusability is an aspiration rather than a reality. To achieve this the following considerations have been/need to be made:
 
 *  Overriding of templates and styles. A main_base.html template has been constructed that forms the basis of a working example of the app, and at the same time provides a starting point for overriding. Attention also needs to be given to navigation hooks.
-*  Configuration. While wanting the diary app to be configurable for different scenarios, it is also important to keep focused on core function and _not_ provide too many hooks. A settings.py file exists in the diary which provides default values for a few parameters that can be overridden in the project's settings file. For easy discrimination, all configurable parameters have names of the form DIARY_XXXXX. The parameter names will be chosen to be reasonably self-explanatory, and (eventually) will be documented somewhere.
+*  Configuration. While wanting the diary app to be configurable for different scenarios, it is also important to keep focused on core function and _not_ provide too many hooks. A ``settings.py`` file exists in the diary which provides default values for a few parameters that can be overridden in the project's settings file. For easy discrimination, all configurable parameters have names of the form ``DIARY_XXXXX``. The parameter names will be chosen to be reasonably self-explanatory, and (eventually) will be documented somewhere.
 *  Dependencies. Kept to a minimum. They will be documented (promise!).
+*  Debate about using a subclass of ``User`` for ``Customer``. This may adversely affect reusability, but may have been mitigated by ``django-model-utils`` for subclass manipulation.
 
 
 Design Considerations
@@ -213,6 +214,8 @@ The decision for web deployment, coupled with a preference for Python as the mai
 Django-Calendarium was initially chosen as the calendar/diary engine after some consideration of the options available. However, although hooks are available, they were not located in what I regarded as convenient places to do what I wanted to do. I tentatively played with some other calendar/scheduling apps, and reluncantly decided I needed to brew my own to get what I wanted.
 
 I found a tutorial by LightBird. Although the code was terrible and outdated, it gave me a model workflow to follow as I both developed a calendar app and learned Django, JavaScript, CSS, HTML5, and other necessary technologies.
+
+I eventually decided to subclass ``User`` to make a custom user class called ``Customer``. I did that to enable a tight relationship between customers as users and diary entries in the simplest possible way. Other options seemed to involve jumping through too many database join hoops. This may work against reusability of this app, but I think the tweaks I have put into the admin backend may mitigate this. In principle the admin backend in this app should be able to accommodate other custom users, but I may not have given enough attention to that possibility in my own code. It will be interesting to get feedback about that from devs, so keep me posted! 
 
 
 History
