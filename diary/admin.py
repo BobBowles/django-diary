@@ -14,6 +14,7 @@ from .models import Customer, Treatment, Resource, Entry
 DATE_WIDGET_OPTIONS = {
     'minView': 2,
     'maxView': 4,
+    'startView': 4,
 }
 
 
@@ -30,19 +31,13 @@ class CustomerCreationForm(forms.ModelForm):
         label='Password confirmation', widget=forms.PasswordInput)
 
 
-    def __init__(self, *args, **kwargs):
-        super(CustomerCreationForm, self).__init__(*args, **kwargs)
-        self.fields['email'].help_text = \
-            'Email is used for password reset. Use a valid email.'
-
-
     class Meta:
         model = Customer
         fields = (
             'username', 
-            'email', 
             'first_name', 
             'last_name', 
+            'email', 
             'phone', 
             'date_of_birth',
             'gender',
@@ -68,6 +63,7 @@ class CustomerCreationForm(forms.ModelForm):
             raise forms.ValidationError("Passwords don't match")
         return password2
 
+
     def save(self, commit=True):
         # Save the provided password in hashed format
         user = super(CustomerCreationForm, self).save(commit=False)
@@ -77,13 +73,18 @@ class CustomerCreationForm(forms.ModelForm):
         return user
 
 
+
 class CustomerChangeForm(forms.ModelForm):
     """
     A form for updating Customers. 
     
     Customers can change their non-security-related information using this form.
-    Excludes security-sensitive information like password and privileges.
+    
+    Excludes security-sensitive information like password and privileges, which 
+    are changed by other means (needs staff privilege except for self password 
+    change).
     """
+
 
     class Meta:
         model = Customer
@@ -127,14 +128,19 @@ class CustomerAdmin(UserAdmin):
         (None, {
             'fields': (
                 'username', 
+                'first_name',
+                'last_name',
                 #'password', # excluded from change form so excluded here too
+            )
+        }),
+        ('Contact info', {
+            'fields': (
+                'email',
+                'phone',
             )
         }),
         ('Personal info', {
             'fields': (
-                'first_name',
-                'last_name',
-                'phone',
                 'date_of_birth',
                 'gender',
                 'notes',
