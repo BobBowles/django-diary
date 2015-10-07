@@ -457,37 +457,33 @@ def entry(request, pk=None, slug=None, customer_pk=None):
         entry.customer = customer
 
     exclude_customer = not request.user.is_staff
-    if request.method == 'POST':
-        form = EntryForm(
-            request.POST, 
-            instance=entry, 
-            exclude_customer=exclude_customer
-        )
-        if form.is_valid():
-            entry = form.save(commit=False)
-            entry.save()
-            return redirect(next_url)
+    form = EntryForm(
+        request.POST or None, 
+        instance=entry, 
+        exclude_customer=exclude_customer
+    )
+    if form.is_valid():
+        entry = form.save(commit=False)
+        entry.save()
+        return redirect(next_url)
 
-    else:
-        form = EntryForm(instance=entry, exclude_customer=exclude_customer)
-
-        # have to set up the customer widget after form creation
-        if not exclude_customer:
-            related_url = related_kwargs = None
-            if pk:
-                related_url = 'diary:customer_add_entry_pk'
-                related_kwargs = {
-                    'entry_pk': pk,
-                }
-            elif slug:
-                related_url = 'diary:customer_add_entry_slug'
-                related_kwargs = {
-                    'entry_slug': slug,
-                }
-            else:
-                related_url = 'diary:customer_add'
-            form.fields['customer'].widget.related_url = related_url
-            form.fields['customer'].widget.related_kwargs = related_kwargs
+    # have to set up the customer widget after form creation
+    if not exclude_customer:
+        related_url = related_kwargs = None
+        if pk:
+            related_url = 'diary:customer_add_entry_pk'
+            related_kwargs = {
+                'entry_pk': pk,
+            }
+        elif slug:
+            related_url = 'diary:customer_add_entry_slug'
+            related_kwargs = {
+                'entry_slug': slug,
+            }
+        else:
+            related_url = 'diary:customer_add'
+        form.fields['customer'].widget.related_url = related_url
+        form.fields['customer'].widget.related_kwargs = related_kwargs
 
     context = {
         'form': form,
@@ -597,40 +593,37 @@ def customer_add(request, entry_pk=None, entry_slug=None):
     this method was invoked.
     """
 
-    if request.method == 'POST':
-        form = CustomerCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            if entry_pk:
-                return HttpResponseRedirect(
-                    reverse(
-                        'diary:entry_customer', 
-                        kwargs={
-                            'pk': entry_pk,
-                            'customer_pk': form.instance.pk,
-                        },
-                    )
+    form = CustomerCreationForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        if entry_pk:
+            return HttpResponseRedirect(
+                reverse(
+                    'diary:entry_customer', 
+                    kwargs={
+                        'pk': entry_pk,
+                        'customer_pk': form.instance.pk,
+                    },
                 )
-            elif entry_slug:
-                return HttpResponseRedirect(
-                    reverse(
-                        'diary:entry_new_customer',
-                        kwargs={
-                            'slug': entry_slug,
-                            'customer_pk': form.instance.pk,
-                        }
-                    )
+            )
+        elif entry_slug:
+            return HttpResponseRedirect(
+                reverse(
+                    'diary:entry_new_customer',
+                    kwargs={
+                        'slug': entry_slug,
+                        'customer_pk': form.instance.pk,
+                    }
                 )
-            elif not request.user.is_authenticated():
-                return HttpResponseRedirect(
-                    reverse('django.contrib.auth.views.login')
-                )
-            else:
-                return HttpResponseRedirect(
-                    reverse('diary:entry')
-                )
-    else:
-        form = CustomerCreationForm()
+            )
+        elif not request.user.is_authenticated():
+            return HttpResponseRedirect(
+                reverse('django.contrib.auth.views.login')
+            )
+        else:
+            return HttpResponseRedirect(
+                reverse('diary:entry')
+            )
 
     context = {
         'form': form,
@@ -653,19 +646,13 @@ def customer_change(request):
 
     # try to work out where to redirect to when finished. fallback to diary home
     redirect_url = reverse('diary:home')
-    print('Home redirect is: {0}'.format(redirect_url))
     if 'next' in request.GET:
-        print('Trying redirect_url from request.GET: {0}'.format(request.GET['next']))
         redirect_url = request.GET['next']
-    print('Redirect url is: {0}'.format(redirect_url))
 
-    if request.method == 'POST':
-        form = CustomerChangeForm(request.POST, instance=request.user)
-        if form.is_valid():
-            form.save()
-            return redirect(redirect_url)
-    else:
-        form = CustomerChangeForm(instance=request.user)
+    form = CustomerChangeForm(request.POST or None, instance=request.user)
+    if form.is_valid():
+        form.save()
+        return redirect(redirect_url)
 
     context = {
         'form': form,

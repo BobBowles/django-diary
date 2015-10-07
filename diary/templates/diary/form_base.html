@@ -38,8 +38,14 @@
                                     {{ field }}
                                 </div>
                                 <div class="col-md-4">
-                                    {{ field.help_text }}
-                                    {{ field.errors }}
+                                    {% if field.help_text %}
+                                        <p>{{ field.help_text }}</p>
+                                    {% endif %}
+                                    {% if field.errors %}
+                                        <p class="errorlist">
+                                            {{ field.errors }}
+                                        </p>
+                                    {% endif %}
                                 </div>
                             </div>
                         {% endfor %}
