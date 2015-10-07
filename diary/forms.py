@@ -38,6 +38,13 @@ class EntryForm(forms.ModelForm):
         super(EntryForm, self).__init__(*args, **kwargs)
         if exclude_customer:
             del self.fields['customer']
+        else:
+            # make sure the customer selection popup has some sort of sane order
+            self.fields['customer'].queryset = Customer.objects.all().order_by(
+                'first_name', 
+                'last_name',
+            )
+
 
 
     class Meta:
