@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+import datetime
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -109,6 +110,22 @@ TIME_INPUT_FORMATS = (
 )
 
 DIARY_MULTI_DAY_NUMBER = 5
+
+#DIARY_SHOW_MERIDIAN = True
+
+#DIARY_MIN_TIME = datetime.time(hour=6)
+#DIARY_MAX_TIME = datetime.time(hour=20)
+
+#week_opening_time = datetime.time(hour=9)
+#sunday_opening_time = datetime.time(hour=10, minute=30)
+#DIARY_OPENING_TIMES = {n: week_opening_time for n in range(0, 6)}
+#DIARY_OPENING_TIMES[6] = sunday_opening_time
+
+#week_closing_time = datetime.time(hour=18)
+#sunday_closing_time = datetime.time(hour=16, minute=30)
+#DIARY_CLOSING_TIMES = {n: week_closing_time for n in range(0, 6)}
+#DIARY_CLOSING_TIMES[6] = sunday_closing_time
+
 
 # User customisation
 # NOTE: use of InheritanceQuerySet in the backend dispenses with the need for 
