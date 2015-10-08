@@ -31,6 +31,10 @@ DIARY_MIN_TIME = get('DIARY_MIN_TIME', DEFAULT_MIN_TIME)
 DEFAULT_MAX_TIME = datetime.time(hour=18)
 DIARY_MAX_TIME = get('DIARY_MAX_TIME', DEFAULT_MAX_TIME)
 
+# time slot increment for day and multi_day views defaults to 00:30
+DEFAULT_TIME_INC = datetime.timedelta(minutes=30)
+DIARY_TIME_INC = get('DIARY_TIME_INC', DEFAULT_TIME_INC)
+
 # opening times keyed by weekday number
 DEFAULT_OPENING_TIME = datetime.time(hour=9)
 DEFAULT_OPENING_TIMES = {n: DEFAULT_OPENING_TIME for n in range(0, 7)}

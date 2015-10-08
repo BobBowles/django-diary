@@ -115,6 +115,7 @@ DIARY_MULTI_DAY_NUMBER = 5
 
 #DIARY_MIN_TIME = datetime.time(hour=6)
 #DIARY_MAX_TIME = datetime.time(hour=20)
+#DIARY_TIME_INC = datetime.timedelta(minutes=15)
 
 #week_opening_time = datetime.time(hour=9)
 #sunday_opening_time = datetime.time(hour=10, minute=30)

@@ -145,39 +145,52 @@ After installation you should have 'something-that-works' but it will look ugly 
 
 #.  Optionally configure the customisable diary parameters in ``settings.py``:
 
-    =========================== =========== ====================================
-    Parameter                   Default     Description
-    =========================== =========== ====================================
-    ``DIARY_FIRST_DAY_OF_WEEK`` ``0``       The first day of the week for 
-                                            month views and calendar widgets
-                                            (``0='Monday'``.
-                                            For Sunday as first day set to
-                                            ``6``).
-    ``DIARY_MULTI_DAY_NUMBER``  ``3``       The number of days to show in the
-                                            multi-day view. ``3`` is a 
-                                            minimum.
-                                            The practical maximum is ``7``.
-    ``DIARY_SHOW_MERIDIAN``     ``False``   Enable display of times in 
-                                            meridian format. 
-                                            **NB**: If ``True`` some
-                                            additional configuration is needed
-                                            to enable *input* of meridian 
-                                            times (see below). **TODO**
-    ``DIARY_MIN_TIME``          ``08:00``   The earliest time to display in
-                                            ``day`` and ``multi_day`` views.
-                                            **TODO**
-    ``DIARY_MAX_TIME``          ``18:00``   The latest time to display in
-                                            ``day`` and ``multi_day`` views.
-                                            **TODO**
-    ``DIARY_OPENING_TIMES``     ``{dict}``  Dictionary of opening times keyed on
-                                            weekday number. Default is 09:00 all
-                                            week. **TODO**
-    ``DIARY_CLOSING_TIMES``     ``{dict}``  Dictionary of closing times keyed on
-                                            weekday number. Default is 17:00 all
-                                            week. **TODO**
-    ``DIARY_XXXXX``             ``xx``      **TODO**: Dummy entry for
-                                            ``DIARY_XXXXX``.
-    =========================== =========== ====================================
+    =========================== =========== =========== ========================
+    Parameter                   Default     Type        Description
+    =========================== =========== =========== ========================
+    ``DIARY_FIRST_DAY_OF_WEEK`` ``0``       int         The first day of the
+                                                        week for month views and
+                                                        calendar widgets
+                                                        (``0='Monday'``.
+                                                        For Sunday as first day
+                                                        set to ``6``).
+    ``DIARY_MULTI_DAY_NUMBER``  ``3``       int         The number of days to
+                                                        show in the multi-day
+                                                        view. ``3`` is a 
+                                                        minimum.
+                                                        The practical maximum is
+                                                        ``7``.
+    ``DIARY_SHOW_MERIDIAN``     ``False``   bool        Enable display of times
+                                                        in meridian format. 
+                                                        **NB**: If ``True`` some
+                                                        additional configuration
+                                                        is needed to enable
+                                                        *input* of meridian
+                                                        times (see below).
+                                                        **TODO**
+    ``DIARY_MIN_TIME``          ``08:00``   time        The earliest time to
+                                                        display in ``day`` and
+                                                        ``multi_day`` views.
+                                                        **TODO**
+    ``DIARY_MAX_TIME``          ``18:00``   time        The latest time to
+                                                        display in ``day`` and
+                                                        ``multi_day`` views.
+                                                        **TODO**
+    ``DIARY_TIME_INC``          ``00:30``   duration    The size of time slots
+                                                        for ``day`` and
+                                                        ``multi_day`` views.
+                                                        **TODO**
+    ``DIARY_OPENING_TIMES``                 dict        Dictionary of opening
+                                                        times keyed on weekday
+                                                        number. Default is 09:00
+                                                        all week. **TODO**
+    ``DIARY_CLOSING_TIMES``                 dict        Dictionary of closing
+                                                        times keyed on weekday
+                                                        number. Default is 17:00
+                                                        all week. **TODO**
+    ``DIARY_XXXXX``             ``xx``      xx          **TODO**: Dummy entry
+                                                        for ``DIARY_XXXXX``.
+    =========================== =========== =========== ========================
 
 #.  Also in ``settings.py`` configure meridian time displays if required (see above). The default Django ``TIME_INPUT_FORMATS`` do not include meridian formats:
 
