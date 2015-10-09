@@ -39,7 +39,8 @@ DAY_NAMES = (
 
 
 DATE_SLUG_FORMAT = '%Y-%m-%d'
-TIME_FORMAT = '%H:%M'
+# choose 12-hour or 24-hour time display format from meridian settings
+TIME_FORMAT = '%I:%M' if settings.DIARY_SHOW_MERIDIAN else '%H:%M'
 TIME_SLUG_FORMAT = '%H-%M'
 DATETIME_SLUG_FORMAT = '%Y-%m-%d_%H-%M'
 

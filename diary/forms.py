@@ -4,6 +4,7 @@ from datetimewidget.widgets import (
     TimeWidget,
     DateWidget,
 )
+from . import settings
 from .widgets import RelatedFieldWidgetCanAdd
 
 
@@ -16,8 +17,8 @@ DATE_WIDGET_OPTIONS = {
     'maxView': 3,
 }
 TIME_WIDGET_OPTIONS = {
-    'format': 'HH:ii P',
-    'showMeridian': True,
+    'format': 'HH:ii P' if settings.DIARY_SHOW_MERIDIAN else 'hh:ii',
+    'showMeridian': settings.DIARY_SHOW_MERIDIAN,
     'minuteStep': 15,
 }
 DURATION_WIDGET_OPTIONS = {
