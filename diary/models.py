@@ -357,7 +357,7 @@ class Entry(models.Model):
         rules. Customers may only book entries consistent with opening hours.
         """
         if not self.creator.is_staff:
-            dow = self.date.strftime('%w')
+            dow = self.date.weekday()
             if not (
                 self.time >= settings.DIARY_OPENING_TIMES[dow] and 
                 self.time_end() <= settings.DIARY_CLOSING_TIMES[dow]

@@ -595,7 +595,7 @@ class EntryModelTests(TestCase):
 
         dateDelta = datetime.timedelta(days=0)
         date = datetime.datetime.today().date()
-        openingTime = settings.DIARY_OPENING_TIMES[date.strftime('%w')]
+        openingTime = settings.DIARY_OPENING_TIMES[date.weekday()]
         time1 = change_time(date, openingTime, datetime.timedelta(hours=1))
         duration = datetime.timedelta(hours=1)
         entry = create_entry(
@@ -633,7 +633,7 @@ class EntryModelTests(TestCase):
         """
         dateDelta = datetime.timedelta(days=0)
         date = datetime.datetime.today().date()
-        openingTime = settings.DIARY_OPENING_TIMES[date.strftime('%w')]
+        openingTime = settings.DIARY_OPENING_TIMES[date.weekday()]
         time1 = change_time(date, openingTime, datetime.timedelta(hours=-1))
         duration = datetime.timedelta(hours=1)
         entry = create_entry(
