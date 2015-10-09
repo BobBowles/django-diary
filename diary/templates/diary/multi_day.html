@@ -51,11 +51,13 @@
                 </div>
                 <div class="col-md-11">
                     <div class="row cols-{{ n_cols }}">
-                        {% for datetime_slug, entries, current in day_entries %}
+                        {% for datetime_slug, entries, current, trading in day_entries %}
                             <div 
                                 id="{{ datetime_slug }}"
                                 class=
-                "col-md-1 droptarget{% if current %} current{% endif %}"
+"col-md-1 droptarget
+{% if current %} current{% endif %}
+{% if trading %} trading{% else %} admin{% endif %}"
                                 ondragenter="dragenter(event);"
                                 ondragleave="dragleave(event);"
                                 ondragover="dragover(event);"

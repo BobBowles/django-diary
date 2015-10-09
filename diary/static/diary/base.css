@@ -45,6 +45,12 @@
     color: #cccccc;
 }
 
+/* admin and trading are opposites */
+.admin {
+    background-color: #888888;
+}
+.trading {
+}
 
 /* kludgy workaround for silly date in the TimeWidget popout header */
 .datetimepicker-hours th {

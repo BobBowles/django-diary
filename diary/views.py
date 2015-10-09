@@ -291,6 +291,7 @@ def multi_day(request, slug=None, change=None):
         day_entries = []
         currentTime = (now >= startTime and now < endTime)
         for day, dayHeader, date_slug in date_slots:
+            dayKey = int(day.strftime('%w'))
             entries = (
                 Entry.objects.filter(
                     date=day, 
@@ -303,12 +304,15 @@ def multi_day(request, slug=None, change=None):
                     time__lt=endTime, 
                     customer=request.user,
                 )
-            
             ).order_by('time')
             day_entries.append((
                 '_'.join((date_slug, time_slug)), 
                 entries,
-                (currentTime and day == today),
+                (currentTime and day == today), # now
+                (
+                    startTime >= settings.DIARY_OPENING_TIMES[dayKey] and
+                    endTime <= settings.DIARY_CLOSING_TIMES[dayKey]
+                ), # trading time
             ))
         time_slots.append((
             timeLabel, 
@@ -349,6 +353,9 @@ def day(request, slug=None, change=None):
     date_slug = date.strftime(DATE_SLUG_FORMAT)
 
     # obtain the day's entries divided into time slots
+    dayKey = int(date.strftime('%w'))
+    openingTime = settings.DIARY_OPENING_TIMES[dayKey]
+    closingTime = settings.DIARY_CLOSING_TIMES[dayKey]
     time_slots = []
     for timeLabel, time_slug, startTime, endTime in TIME_SLOTS:
         entries = (
@@ -369,7 +376,8 @@ def day(request, slug=None, change=None):
             '_'.join((date_slug, time_slug)),
             startTime,
             entries,
-            (currentDate and (now >= startTime and now < endTime)),
+            (currentDate and (now >= startTime and now < endTime)), # flag now
+            (startTime >= openingTime and endTime <= closingTime), # trading 
         ))
 
     return render_to_response(
@@ -518,7 +526,6 @@ def entry_update(request):
     # try updating the entry
     entry.date = date
     entry.time = time
-    print('Trying save with date={0}, time={1}'.format(date, time))
     try:
         entry.save()
     except ValidationError as ve:
@@ -537,8 +544,6 @@ def entry_update(request):
             raise ve
         # try adding after the other entry
         entry.time = otherEntry.time_end()
-        print('Re-trying save with date={0}, time={1}'
-            .format(entry.date, entry.time))
         entry.save()
 
     message = 'Date / time changed to {0}, {1}'.format(entry.date, entry.time)
@@ -589,7 +594,7 @@ def customer_add(request, entry_pk=None, entry_slug=None):
     """
     Customer creation.
     
-    The entry_pk and entry_slug give a way to redirect to the entry form where
+    The entry_pk and entry_slug give ways to redirect to the entry form where
     this method was invoked.
     """
 
