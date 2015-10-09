@@ -291,7 +291,7 @@ def multi_day(request, slug=None, change=None):
         day_entries = []
         currentTime = (now >= startTime and now < endTime)
         for day, dayHeader, date_slug in date_slots:
-            dayKey = int(day.strftime('%w'))
+            dow = day.strftime('%w')
             entries = (
                 Entry.objects.filter(
                     date=day, 
@@ -310,8 +310,8 @@ def multi_day(request, slug=None, change=None):
                 entries,
                 (currentTime and day == today), # now
                 (
-                    startTime >= settings.DIARY_OPENING_TIMES[dayKey] and
-                    endTime <= settings.DIARY_CLOSING_TIMES[dayKey]
+                    startTime >= settings.DIARY_OPENING_TIMES[dow] and
+                    endTime <= settings.DIARY_CLOSING_TIMES[dow]
                 ), # trading time
             ))
         time_slots.append((
@@ -353,9 +353,9 @@ def day(request, slug=None, change=None):
     date_slug = date.strftime(DATE_SLUG_FORMAT)
 
     # obtain the day's entries divided into time slots
-    dayKey = int(date.strftime('%w'))
-    openingTime = settings.DIARY_OPENING_TIMES[dayKey]
-    closingTime = settings.DIARY_CLOSING_TIMES[dayKey]
+    dow = date.strftime('%w')
+    openingTime = settings.DIARY_OPENING_TIMES[dow]
+    closingTime = settings.DIARY_CLOSING_TIMES[dow]
     time_slots = []
     for timeLabel, time_slug, startTime, endTime in TIME_SLOTS:
         entries = (

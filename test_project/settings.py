@@ -119,13 +119,13 @@ DIARY_TIME_INC = datetime.timedelta(minutes=15)
 
 week_opening_time = datetime.time(hour=9)
 sunday_opening_time = datetime.time(hour=10, minute=30)
-DIARY_OPENING_TIMES = {n: week_opening_time for n in range(0, 6)}
-DIARY_OPENING_TIMES[6] = sunday_opening_time
+DIARY_OPENING_TIMES = {str(n): week_opening_time for n in range(0, 6)}
+DIARY_OPENING_TIMES['6'] = sunday_opening_time
 
 week_closing_time = datetime.time(hour=18)
 sunday_closing_time = datetime.time(hour=16, minute=30)
-DIARY_CLOSING_TIMES = {n: week_closing_time for n in range(0, 6)}
-DIARY_CLOSING_TIMES[6] = sunday_closing_time
+DIARY_CLOSING_TIMES = {str(n): week_closing_time for n in range(0, 6)}
+DIARY_CLOSING_TIMES['6'] = sunday_closing_time
 
 
 # User customisation

@@ -5,6 +5,7 @@ from django.utils import timezone
 from django.core.validators import RegexValidator
 from django.contrib.auth.models import User, UserManager
 from django.forms import ValidationError
+from . import settings
 
 
 # Create your models here.
@@ -348,14 +349,35 @@ class Entry(models.Model):
                         )
 
 
+    def validateTradingHours(self):
+        """
+        Context validation of trading times.
+        
+        Staff members may book an entry at any time subject to other business
+        rules. Customers may only book entries consistent with opening hours.
+        """
+        if not self.creator.is_staff:
+            dow = self.date.strftime('%w')
+            if not (
+                self.time >= settings.DIARY_OPENING_TIMES[dow] and 
+                self.time_end() <= settings.DIARY_CLOSING_TIMES[dow]
+            ):
+                raise ValidationError(
+                    'Sorry, the store is closed then. Try changing the time.'
+                )
+
+
     def clean(self, *args, **kwargs):
         """
         Override Model method to validate the content in context. 
+        
+        This applies the business rules of the Entry validateX methods.
         """
         self.validateResourceRequirement()
         self.validateDuration()
         self.validateNoResourceConflicts()
         self.validateCustomerNotDoubleBooked()
+        self.validateTradingHours()
 
         # now do the standard field validation
         super(Entry, self).clean(*args, **kwargs)

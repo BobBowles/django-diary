@@ -37,12 +37,12 @@ DIARY_TIME_INC = get('DIARY_TIME_INC', DEFAULT_TIME_INC)
 
 # opening times keyed by weekday number
 DEFAULT_OPENING_TIME = datetime.time(hour=9)
-DEFAULT_OPENING_TIMES = {n: DEFAULT_OPENING_TIME for n in range(0, 7)}
+DEFAULT_OPENING_TIMES = {str(n): DEFAULT_OPENING_TIME for n in range(0, 7)}
 DIARY_OPENING_TIMES = get('DIARY_OPENING_TIMES', DEFAULT_OPENING_TIMES)
 
 # closing times keyed by weekday number
 DEFAULT_CLOSING_TIME = datetime.time(hour=17)
-DEFAULT_CLOSING_TIMES = {n: DEFAULT_CLOSING_TIME for n in range(0, 7)}
+DEFAULT_CLOSING_TIMES = {str(n): DEFAULT_CLOSING_TIME for n in range(0, 7)}
 DIARY_CLOSING_TIMES = get('DIARY_CLOSING_TIMES', DEFAULT_CLOSING_TIMES)
 
 

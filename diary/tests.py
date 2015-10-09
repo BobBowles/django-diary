@@ -42,15 +42,6 @@ def yearsago(years, from_date=None):
 class CustomerTests(TestCase):
 
 
-# don't need this
-#    def test_anonymous_customer_exists(self):
-#        """
-#        Check that there is an anonymous customer for use by the diary app.
-#        """
-#        anonymousCustomer = Customer.objects.get(username='anon')
-#        self.assertIsNotNone(anonymousCustomer)
-
-
     def test_customer_age(self):
         """
         Make sure the customer age calculation works correctly and as expected.
@@ -95,6 +86,21 @@ def create_customer(username):
     return customer
 
 
+def obtain_superuser():
+    """
+    Utility to create a power user in the test database
+    """
+    superuser = User.objects.filter(is_superuser=True).first()
+    if not superuser:
+        superuser = User.objects.create_superuser(
+            'admin', 
+            'admin@example.com', 
+            'password'
+        )
+        superuser.save()
+    return superuser
+
+
 def create_treatment(name, min_duration, resource_required):
     """
     Utility to create a treatment.
@@ -120,22 +126,30 @@ def create_resource(name, description):
     return resource
 
 
+def change_time(date, time, delta):
+    """
+    Utility to change a time by a preset amount described by a delta.
+    The date is just a tool.
+    """
+    return (datetime.datetime.combine(date, time) + delta).time()
+
+
 def create_entry(dateDelta, time, duration, notes):
     """
     Utility to create an entry for testing.
     Updated to use timefield for duration.
+    Updated to add a power user as default creator.
     """
     date = timezone.datetime.today() + dateDelta
-    duration_as_time = (
-        datetime.datetime.combine(date, TIME_ZERO) + duration
-    ).time()
-    return Entry(
+    duration_as_time = change_time(date, TIME_ZERO, duration)
+    entry = Entry(
         notes=notes,
         date=date,
         time=time,
         duration=duration_as_time, # duration in the database is really a time
     )
-
+    entry.creator = obtain_superuser()
+    return entry
 
 
 class EntryModelTests(TestCase):
@@ -571,6 +585,74 @@ class EntryModelTests(TestCase):
             'Double booking is not allowed. Please choose another time.',
             entry2.clean,
         )
+
+
+    def test_entry_customer_out_of_hours(self):
+        """
+        Make sure customers cannot book outside trading hours.
+        """
+        customer = create_customer('test')
+
+        dateDelta = datetime.timedelta(days=0)
+        date = datetime.datetime.today().date()
+        openingTime = settings.DIARY_OPENING_TIMES[date.strftime('%w')]
+        time1 = change_time(date, openingTime, datetime.timedelta(hours=1))
+        duration = datetime.timedelta(hours=1)
+        entry = create_entry(
+            dateDelta,
+            time1,
+            duration,
+            'trading hours test 1',
+        )
+        entry.creator = customer
+
+        # make sure an exception is NOT raised
+        try:
+            entry.clean()
+            self.assertTrue(entry == entry)
+        except Exception as e:
+            traceback.print_exc()
+            self.fail(
+                'Cleaning an entry with no conflicts \n'\
+                'raised an unexpected exception: \n{0}'.format(e)
+            )
+
+        # now try again out of hours
+        time2 = change_time(date, openingTime, datetime.timedelta(hours=-1))
+        entry.time = time2
+        self.assertRaisesMessage(
+            ValidationError, 
+            'Sorry, the store is closed then. Try changing the time.',
+            entry.clean,
+        )
+
+
+    def test_entry_staff_out_of_hours(self):
+        """
+        Make sure staff are able to book any time.
+        """
+        dateDelta = datetime.timedelta(days=0)
+        date = datetime.datetime.today().date()
+        openingTime = settings.DIARY_OPENING_TIMES[date.strftime('%w')]
+        time1 = change_time(date, openingTime, datetime.timedelta(hours=-1))
+        duration = datetime.timedelta(hours=1)
+        entry = create_entry(
+            dateDelta,
+            time1,
+            duration,
+            'trading hours test 2',
+        )
+
+        # make sure an exception is NOT raised
+        try:
+            entry.clean()
+            self.assertTrue(entry == entry)
+        except Exception as e:
+            traceback.print_exc()
+            self.fail(
+                'Cleaning an entry with no conflicts \n'\
+                'raised an unexpected exception: \n{0}'.format(e)
+            )
 
 
 
