@@ -38,17 +38,22 @@ DAY_NAMES = (
 )
 
 
+# format definitions for the date and time slugs
 DATE_SLUG_FORMAT = '%Y-%m-%d'
-# choose 12-hour or 24-hour time display format from meridian settings
-TIME_FORMAT = '%I:%M' if settings.DIARY_SHOW_MERIDIAN else '%H:%M'
 TIME_SLUG_FORMAT = '%H-%M'
 DATETIME_SLUG_FORMAT = '%Y-%m-%d_%H-%M'
 
+# choose 12-hour or 24-hour time display format from meridian settings
+TIME_FORMAT = '%I:%M' if settings.DIARY_SHOW_MERIDIAN else '%H:%M'
 
-# Constants for constructing the time slots
+
+# constants for constructing the time slots
 TIME_START = datetime.time(hour=6)
 TIME_FINISH = datetime.time(hour=20)
 TIME_INC = datetime.timedelta(minutes=30)
+
+# entry title date format
+ENTRY_DATE_FORMAT = '%a %d %b %Y'
 
 
 def evaluateTimeSlots():
@@ -488,7 +493,7 @@ def entry(request, pk=None, slug=None, customer_pk=None):
 
     context = {
         'form': form,
-        'date': entry.date,
+        'date': entry.date.strftime(ENTRY_DATE_FORMAT),
         'return_nav': next_url,
         'return_nav_prev': next_url+'prev/',
         'return_nav_next': next_url+'next/',
