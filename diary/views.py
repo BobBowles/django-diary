@@ -46,12 +46,6 @@ DATETIME_SLUG_FORMAT = '%Y-%m-%d_%H-%M'
 # choose 12-hour or 24-hour time display format from meridian settings
 TIME_FORMAT = '%I:%M' if settings.DIARY_SHOW_MERIDIAN else '%H:%M'
 
-
-# constants for constructing the time slots
-TIME_START = datetime.time(hour=6)
-TIME_FINISH = datetime.time(hour=20)
-TIME_INC = datetime.timedelta(minutes=30)
-
 # entry title date format
 ENTRY_DATE_FORMAT = '%a %d %b %Y'
 
@@ -63,12 +57,12 @@ def evaluateTimeSlots():
     """
     DUMMY_DAY = timezone.localtime(timezone.now()).date()
 
-    time = datetime.datetime.combine(DUMMY_DAY, TIME_START)
-    finish = datetime.datetime.combine(DUMMY_DAY, TIME_FINISH)
+    time = datetime.datetime.combine(DUMMY_DAY, settings.DIARY_MIN_TIME)
+    finish = datetime.datetime.combine(DUMMY_DAY, settings.DIARY_MAX_TIME)
     timeSlots = []
     while (time <= finish):
         thisTime = time.time()
-        time += TIME_INC
+        time += settings.DIARY_TIME_INC
         timeSlots.append((
             thisTime.strftime(TIME_FORMAT), 
             thisTime.strftime(TIME_SLUG_FORMAT),
