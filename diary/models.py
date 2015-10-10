@@ -366,10 +366,11 @@ class Entry(models.Model):
         """
         Context validation of trading times.
         
-        Staff members may book an entry at any time subject to other business
-        rules. Customers may only book entries consistent with opening hours.
+        Staff members may add/edit an entry at any time subject to other 
+        business rules. Customers may only add/edit entries consistent with
+        opening hours.
         """
-        if not self.creator.is_staff:
+        if not self.editor.is_staff:
             dow = self.date.weekday()
             if not (
                 self.time >= settings.DIARY_OPENING_TIMES[dow] and 

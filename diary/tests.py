@@ -139,6 +139,7 @@ def create_entry(dateDelta, time, duration, notes):
     Utility to create an entry for testing.
     Updated to use timefield for duration.
     Updated to add a power user as default creator.
+    Updated to add a power user as default editor.
     """
     date = timezone.datetime.today() + dateDelta
     duration_as_time = change_time(date, TIME_ZERO, duration)
@@ -149,6 +150,7 @@ def create_entry(dateDelta, time, duration, notes):
         duration=duration_as_time, # duration in the database is really a time
     )
     entry.creator = obtain_superuser()
+    entry.editor = obtain_superuser()
     return entry
 
 
@@ -604,7 +606,7 @@ class EntryModelTests(TestCase):
             duration,
             'trading hours test 1',
         )
-        entry.creator = customer
+        entry.editor = customer
 
         # make sure an exception is NOT raised
         try:
