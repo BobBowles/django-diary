@@ -10,3 +10,5 @@ django_diary.egg-info/
 django_diary.egg-info/*.*
 MANIFEST
 
+# local files
+ISSUES.txt

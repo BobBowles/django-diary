@@ -29,11 +29,13 @@
 "col-md-11 droptarget
 {% if current %} current{% endif %}
 {% if trading %} trading{% else %} admin{% endif %}"
-                    ondragenter="dragenter(event);"
-                    ondragleave="dragleave(event);"
-                    ondragover="dragover(event);"
-                    ondrop="drop(event);"
-                    ondragend="dragend(event);"
+                    {% if request.user.is_staff or trading %}
+                        ondragenter="dragenter(event);"
+                        ondragleave="dragleave(event);"
+                        ondragover="dragover(event);"
+                        ondrop="drop(event);"
+                        ondragend="dragend(event);"
+                    {% endif %}
                     >
                 {% url 'diary:entry_new' slug=datetime_slug as new_entry %}
                     <button 

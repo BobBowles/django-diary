@@ -54,15 +54,16 @@
                         {% for datetime_slug, entries, current, trading in day_entries %}
                             <div 
                                 id="{{ datetime_slug }}"
-                                class=
-"col-md-1 droptarget
+                                class="col-md-1 droptarget
 {% if current %} current{% endif %}
 {% if trading %} trading{% else %} admin{% endif %}"
-                                ondragenter="dragenter(event);"
-                                ondragleave="dragleave(event);"
-                                ondragover="dragover(event);"
-                                ondrop="drop(event);"
-                                ondragend="dragend(event);"
+                                {% if request.user.is_staff or trading %}
+                                    ondragenter="dragenter(event);"
+                                    ondragleave="dragleave(event);"
+                                    ondragover="dragover(event);"
+                                    ondrop="drop(event);"
+                                    ondragend="dragend(event);"
+                                {% endif %}
                                 >
                 {% url 'diary:entry_new' slug=datetime_slug as new_entry %}
                                 <button 
