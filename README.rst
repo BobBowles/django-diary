@@ -167,28 +167,24 @@ After installation you should have 'something-that-works' but it will look ugly 
                                                         is needed to enable
                                                         *input* of meridian
                                                         times (see below).
-                                                        **TODO**
     ``DIARY_MIN_TIME``          ``08:00``   time        The earliest time to
                                                         display in ``day`` and
                                                         ``multi_day`` views.
-                                                        **TODO**
     ``DIARY_MAX_TIME``          ``18:00``   time        The latest time to
                                                         display in ``day`` and
                                                         ``multi_day`` views.
-                                                        **TODO**
     ``DIARY_TIME_INC``          ``00:30``   duration    The size of time slots
                                                         for ``day`` and
                                                         ``multi_day`` views.
-                                                        **TODO**
     ``DIARY_OPENING_TIMES``                 dict        Dictionary of opening
                                                         times keyed on weekday
                                                         number. Default is 09:00
-                                                        all week. **TODO**
+                                                        all week.
     ``DIARY_CLOSING_TIMES``                 dict        Dictionary of closing
                                                         times keyed on weekday
                                                         number. Default is 17:00
-                                                        all week. **TODO**
-    ``DIARY_XXXXX``             ``xx``      xx          **TODO**: Dummy entry
+                                                        all week.
+    ``DIARY_XXXXX``             ``xx``      xx          **TODO**: Template
                                                         for ``DIARY_XXXXX``.
     =========================== =========== =========== ========================
 
