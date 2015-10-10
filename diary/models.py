@@ -199,6 +199,14 @@ class Entry(models.Model):
     )
     created = models.DateTimeField(auto_now_add=True)
 
+    editor = models.ForeignKey(
+        User, 
+        blank=True, 
+        null=True, 
+        related_name='edited_entries'
+    )
+    edited = models.DateTimeField(auto_now=True)
+
     customer = models.ForeignKey(
         Customer, 
         blank=True, 
@@ -210,16 +218,21 @@ class Entry(models.Model):
 
 
     def __str__(self):
-        if self.customer:
-            return self.customer.username + ' - ' + self.treatment.name
-        else:
-            return self.creator.username + ' - ' + self.treatment.name
+        name = '{0}'.format(
+            self.customer if self.customer 
+            else self.creator
+        )
+        return ' - '.join(
+            [name, ('{0}'.format(self.treatment) if self.treatment else '')]
+        )
 
 
     def short(self):
-        return '{0}'.format(
-            self.resource if self.resource
-            else self.notes
+        return ' - '.join([
+                ('{0}'.format(self.resource) if self.resource else ''),
+                ('{0}'.format(self.treatment) if self.treatment else ''),
+                (self.notes if self.notes else ''),
+            ]
         )
 
 
