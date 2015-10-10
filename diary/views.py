@@ -456,6 +456,7 @@ def entry(request, pk=None, slug=None, customer_pk=None):
                 else None
             ),
         )
+    entry.editor = request.user
 
     # if a customer pk is specified set it as the customer
     if customer_pk:
@@ -516,6 +517,7 @@ def entry_update(request):
     pk = request.POST['pk']
     print('pk is {0}'.format(pk))
     entry = get_object_or_404(Entry, pk=pk)
+    entry.editor = request.user
 
     datetime_slug = request.POST['slug']
     print('datetime_slug is {0}'.format(datetime_slug))
