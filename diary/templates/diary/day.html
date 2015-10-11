@@ -18,7 +18,7 @@
     {{ block.super }}
 
     <div class="container-fluid">
-        {% for label, datetime_slug, start_time, entries, current, trading in time_slots %}
+        {% for label, datetime_slug, start_time, entries, current, trading, historic in time_slots %}
             <div class="row">
                 <div class="col-md-1">
                     <b>{{ label }}</b>
@@ -28,7 +28,9 @@
                     class=
 "col-md-11 droptarget
 {% if current %} current{% endif %}
-{% if trading %} trading{% else %} admin{% endif %}"
+{% if trading %}{% if historic %} historic{% else %} trading{% endif %}
+{% else %} admin{% endif %}
+"
                     {% if request.user.is_staff or trading %}
                         ondragenter="dragenter(event);"
                         ondragleave="dragleave(event);"

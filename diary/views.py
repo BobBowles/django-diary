@@ -82,16 +82,17 @@ def reminders(request):
     """
 
     today = timezone.localtime(timezone.now()).date()
+    now = timezone.localtime(timezone.now()).time()
     tomorrow = today + datetime.timedelta(days=1)
 
     user = request.user
     queryset = (                            # customers see their own entries
         Entry.objects.filter(
-            Q(date=today)|Q(date=tomorrow), 
+            Q(date=today, time__gte=now)|Q(date=tomorrow), 
             customer=user, 
         ) if isinstance(user, Customer)
         else Entry.objects.filter(          # admin/staff users see everything
-            Q(date=today)|Q(date=tomorrow), 
+            Q(date=today, time__gte=now)|Q(date=tomorrow), 
         )
     )
     return queryset.order_by('date', 'time')
@@ -305,13 +306,16 @@ def multi_day(request, slug=None, change=None):
                 )
             ).order_by('time')
             day_entries.append((
-                '_'.join((date_slug, time_slug)), 
-                entries,
+                '_'.join((date_slug, time_slug)), # date-time slug
+                entries, # the entries
                 (currentTime and day == today), # now
                 (
                     startTime >= settings.DIARY_OPENING_TIMES[day.weekday()] and
                     endTime <= settings.DIARY_CLOSING_TIMES[day.weekday()]
                 ), # trading time
+                (
+                    day < today or (day == today and endTime < now)
+                ), # historic data
             ))
         time_slots.append((
             timeLabel, 
@@ -376,6 +380,7 @@ def day(request, slug=None, change=None):
             entries,
             (currentDate and (now >= startTime and now < endTime)), # flag now
             (startTime >= openingTime and endTime <= closingTime), # trading 
+            (date < today or (date == today and now > endTime)), # historic data
         ))
 
     return render_to_response(

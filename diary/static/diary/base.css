@@ -45,11 +45,15 @@
     color: #cccccc;
 }
 
-/* admin and trading are opposites */
+/* admin and trading are opposites. historic is the same as trading but in the 
+past */
 .admin {
     background-color: #aaaaaa;
 }
 .trading {
+}
+.historic {
+    background-color: #cccccc;
 }
 
 /* kludgy workaround for silly date in the TimeWidget popout header */

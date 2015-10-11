@@ -51,12 +51,14 @@
                 </div>
                 <div class="col-md-11">
                     <div class="row cols-{{ n_cols }}">
-                        {% for datetime_slug, entries, current, trading in day_entries %}
+                        {% for datetime_slug, entries, current, trading, historic in day_entries %}
                             <div 
                                 id="{{ datetime_slug }}"
                                 class="col-md-1 droptarget
 {% if current %} current{% endif %}
-{% if trading %} trading{% else %} admin{% endif %}"
+{% if trading %}{% if historic %} historic{% else %} trading{% endif %}
+{% else %} admin{% endif %}
+"
                                 {% if request.user.is_staff or trading %}
                                     ondragenter="dragenter(event);"
                                     ondragleave="dragleave(event);"
