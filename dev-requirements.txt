@@ -1,0 +1,7 @@
+Django==1.8.3
+django-datetime-widget==0.9.3
+django-model-utils==2.3.1
+freezegun==0.3.5
+python-dateutil==2.4.2
+pytz==2015.4
+six==1.9.0

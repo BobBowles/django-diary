@@ -265,6 +265,14 @@ I found a tutorial by ``LightBird``. Although the code was terrible and outdated
 I eventually decided to subclass ``User`` to make a custom user class called ``Customer``. I did that to enable a tight relationship between customers as users and diary entries in the simplest possible way. Other options seemed to involve jumping through too many database join hoops. This may work against reusability of this app, but I think the tweaks I have put into the admin backend may mitigate this. In principle the admin backend in this app should be able to accommodate other custom users, but I may not have given enough attention to that possibility in my own code. It will be interesting to get feedback about that from devs, so keep me posted! 
 
 
+Testing
+-------
+
+To avoid complications with constantly changing dates and times during tests some of the tests of the ``Entry`` functionality make use of ``freezegun``, so that tests that depend on time of day, etc, can be performed reliably and repeatably. After struggling with the Python built-in ``unittest.mock`` suite I found ``freezegun`` super-easy to use (like, one-line-of-code easy) and I recommend it to anyone who needs to test any code that uses or manipulates time-dependent phenomena.
+
+``Freezegun`` introduces some additional dependencies above those needed to run ``django-diary``. These are recorded in ``dev-requirements.txt`` which should be used in place of ``requirements.txt`` for setting up testing and development environments.
+
+
 History
 -------
 
@@ -281,4 +289,6 @@ This started out as a series of experimental projects built on top of Django tut
 #. `Django Calendarium <https://github.com/bitmazk/django-calendarium>`_
 
 #. `Django User Customisation <http://scottbarnham.com/blog/2008/08/21/extending-the-django-user-model-with-inheritance/>`_
+
+#. `Freezegun <https://github.com/spulec/freezegun/>`_
 

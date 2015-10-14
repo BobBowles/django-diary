@@ -6,11 +6,13 @@ from django.forms import ValidationError
 import traceback
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
-#from . import settings
 from django.conf import settings as main_settings
 from . import settings
 from . import views
 import importlib as imp         # since Python 3.4
+#from unittest.mock import patch
+from freezegun import freeze_time
+
 
 # Create your tests here.
 
@@ -589,13 +591,17 @@ class EntryModelTests(TestCase):
         )
 
 
+    @freeze_time('2015-10-12 12:00:00')
     def test_entry_customer_out_of_hours(self):
         """
         Make sure customers cannot book outside trading hours.
+        
+        This test is patched to avoid complications with changing times.
         """
+
         customer = create_customer('test')
 
-        dateDelta = datetime.timedelta(days=0)
+        dateDelta = datetime.timedelta(days=14)
         date = datetime.datetime.today().date()
         openingTime = settings.DIARY_OPENING_TIMES[date.weekday()]
         time1 = change_time(date, openingTime, datetime.timedelta(hours=1))
@@ -629,11 +635,15 @@ class EntryModelTests(TestCase):
         )
 
 
+    @freeze_time('2015-10-12 12:00:00')
     def test_entry_staff_out_of_hours(self):
         """
         Make sure staff are able to book any time.
+        
+        This test is patched to avoid complications with changing times.
         """
-        dateDelta = datetime.timedelta(days=0)
+
+        dateDelta = datetime.timedelta(days=14)
         date = datetime.datetime.today().date()
         openingTime = settings.DIARY_OPENING_TIMES[date.weekday()]
         time1 = change_time(date, openingTime, datetime.timedelta(hours=-1))
@@ -655,6 +665,36 @@ class EntryModelTests(TestCase):
                 'Cleaning an entry with no conflicts \n'\
                 'raised an unexpected exception: \n{0}'.format(e)
             )
+
+
+    @freeze_time('2015-10-12 12:00:00')
+    def test_entry_customer_in_past(self):
+        """
+        Make sure customers cannot book in the past.
+        
+        This test is patched to provide a constant value of 'now'
+        """
+
+        customer = create_customer('test')
+        dateDelta = datetime.timedelta(days=0)
+        date = timezone.localtime(timezone.now()).date()
+        now = timezone.localtime(timezone.now()).time()
+        openingTime = settings.DIARY_OPENING_TIMES[date.weekday()]
+        time = change_time(date, now, datetime.timedelta(hours=-1))
+        duration = datetime.timedelta(hours=1)
+        entry = create_entry(
+            dateDelta,
+            time,
+            duration,
+            'past test 1',
+        )
+        entry.editor = customer
+
+        self.assertRaisesMessage(
+            ValidationError, 
+            'Please book a date/time in the future.',
+            entry.clean,
+        )
 
 
 

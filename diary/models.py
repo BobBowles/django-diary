@@ -381,6 +381,26 @@ class Entry(models.Model):
                 )
 
 
+    def validateFuture(self):
+        """
+        Ensure customers cannot book times in the past.
+        
+        Staff can book entries whenever they like, but customers can only book
+        times in the future.
+        """
+        if not self.editor.is_staff:
+            tz_now = timezone.localtime(timezone.now())
+            now = datetime.datetime(
+                tz_now.year, tz_now.month, tz_now.day,
+                tz_now.hour, tz_now.minute, tz_now.second,
+            )
+            bookedTime = datetime.datetime.combine(self.date, self.time)
+            if bookedTime < now:
+                raise ValidationError(
+                    'Please book a date/time in the future.'
+                )
+
+
     def clean(self, *args, **kwargs):
         """
         Override Model method to validate the content in context. 
@@ -392,6 +412,7 @@ class Entry(models.Model):
         self.validateNoResourceConflicts()
         self.validateCustomerNotDoubleBooked()
         self.validateTradingHours()
+        self.validateFuture()
 
         # now do the standard field validation
         super(Entry, self).clean(*args, **kwargs)
