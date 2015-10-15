@@ -679,7 +679,6 @@ class EntryModelTests(TestCase):
         dateDelta = datetime.timedelta(days=0)
         date = timezone.localtime(timezone.now()).date()
         now = timezone.localtime(timezone.now()).time()
-        openingTime = settings.DIARY_OPENING_TIMES[date.weekday()]
         time = change_time(date, now, datetime.timedelta(hours=-1))
         duration = datetime.timedelta(hours=1)
         entry = create_entry(
@@ -695,6 +694,45 @@ class EntryModelTests(TestCase):
             'Please book a date/time in the future.',
             entry.clean,
         )
+
+
+    @freeze_time('2015-10-12 12:00:00')
+    def test_entry_customer_advance_limit(self):
+        """
+        Make sure customers cannot book before the advance limit. (Time in
+        future but before the advance booking limit).
+        
+        This test is patched to provide a constant value of 'now'
+        """
+
+        # set up the min_booking time
+        min_booking_orig = settings.DIARY_MIN_BOOKING
+        setattr(main_settings, 'DIARY_MIN_BOOKING', 1)
+        imp.reload(settings)
+
+        customer = create_customer('test')
+        dateDelta = datetime.timedelta(days=0)
+        date = timezone.localtime(timezone.now()).date()
+        now = timezone.localtime(timezone.now()).time()
+        time = change_time(date, now, datetime.timedelta(hours=1))
+        duration = datetime.timedelta(hours=1)
+        entry = create_entry(
+            dateDelta,
+            time,
+            duration,
+            'advance test',
+        )
+        entry.editor = customer
+
+        self.assertRaisesMessage(
+            ValidationError, 
+            'Need to book ahead.',
+            entry.clean,
+        )
+
+        # reset the settings
+        setattr(main_settings, 'DIARY_MIN_BOOKING', min_booking_orig)
+        imp.reload(settings)
 
 
 
@@ -740,6 +778,7 @@ class ViewTests(TestCase):
         Make sure the custom setting for day of week works.
         """
         self.setup()
+        first_day_of_week_orig = settings.DIARY_FIRST_DAY_OF_WEEK
         setattr(main_settings, 'DIARY_FIRST_DAY_OF_WEEK', 6)
 
         # test for sunday
@@ -749,7 +788,7 @@ class ViewTests(TestCase):
         self.assertEqual(response.context['day_names'][0], 'Sunday')
 
         # tidy up the mess (make sure default is restored)
-        setattr(main_settings, 'DIARY_FIRST_DAY_OF_WEEK', 0)
+        setattr(main_settings, 'DIARY_FIRST_DAY_OF_WEEK', first_day_of_week_orig)
         imp.reload(settings)
         imp.reload(views)
         response = self.client.get(reverse('diary:month_now'))

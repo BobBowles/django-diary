@@ -46,20 +46,22 @@
             </div>
         </div>
         <div class="modal-footer">
-            <button 
-                type="button" 
-                class="btn btn-danger" 
-                onclick="next_url('{% url 'diary:entry_delete' pk=entry.pk %}');"
-                >
-                Delete
-            </button>
-            <button 
-                type="button" 
-                class="btn btn-default" 
+            {% if enable_edit_buttons %}
+                <button 
+                    type="button" 
+                    class="btn btn-danger" 
+onclick="next_url('{% url 'diary:entry_delete' pk=entry.pk %}');"
+                    >
+                    Delete
+                </button>
+                <button 
+                    type="button" 
+                    class="btn btn-default" 
 onclick="next_url('{% url 'diary:entry' pk=entry.pk %}?next={{ redirect_url }}');"
-                >
-                Edit
-            </button>
+                    >
+                    Edit
+                </button>
+            {% endif %}
             <button 
                 type="button" 
                 class="btn btn-default" 

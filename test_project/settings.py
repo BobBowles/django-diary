@@ -127,6 +127,7 @@ sunday_closing_time = datetime.time(hour=16, minute=30)
 DIARY_CLOSING_TIMES = {n: week_closing_time for n in range(0, 6)}
 DIARY_CLOSING_TIMES[6] = sunday_closing_time
 
+DIARY_MIN_BOOKING = 1
 
 # User customisation
 # NOTE: use of InheritanceQuerySet in the backend dispenses with the need for 

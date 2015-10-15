@@ -184,6 +184,10 @@ After installation you should have 'something-that-works' but it will look ugly 
                                                         times keyed on weekday
                                                         number. Default is 17:00
                                                         all week.
+    ``DIARY_MIN_BOOKING``       ``0``       int         Minimum advance booking
+                                                        time for customers in 
+                                                        days. ``0`` means there
+                                                        is no minimum period.
     ``DIARY_XXXXX``             ``xx``      xx          **TODO**: Template
                                                         for ``DIARY_XXXXX``.
     =========================== =========== =========== ========================

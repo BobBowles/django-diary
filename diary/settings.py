@@ -10,7 +10,7 @@ def get(key, default):
     Obtain any user-supplied values set in the main settings.py.
     """
     value = getattr(settings, key, default)
-    print('Setting {0} set to: {1}'.format(key, value))
+    #print('Setting {0} set to: {1}'.format(key, value))
     return value
 
 
@@ -45,4 +45,6 @@ DEFAULT_CLOSING_TIME = datetime.time(hour=17)
 DEFAULT_CLOSING_TIMES = {n: DEFAULT_CLOSING_TIME for n in range(0, 7)}
 DIARY_CLOSING_TIMES = get('DIARY_CLOSING_TIMES', DEFAULT_CLOSING_TIMES)
 
+# minimum advance booking time for customers in days
+DIARY_MIN_BOOKING = get('DIARY_MIN_BOOKING', 0)
 

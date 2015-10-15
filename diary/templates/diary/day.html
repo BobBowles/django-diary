@@ -18,7 +18,7 @@
     {{ block.super }}
 
     <div class="container-fluid">
-        {% for label, datetime_slug, start_time, entries, current, trading, historic in time_slots %}
+        {% for label, datetime_slug, start_time, entries, current, trading, historic, advance, allow_dnd in time_slots %}
             <div class="row">
                 <div class="col-md-1">
                     <b>{{ label }}</b>
@@ -28,10 +28,10 @@
                     class=
 "col-md-11 droptarget
 {% if current %} current{% endif %}
-{% if trading %}{% if historic %} historic{% else %} trading{% endif %}
-{% else %} admin{% endif %}
-"
-                    {% if request.user.is_staff or trading %}
+{% if trading %}
+{% if historic %} historic{% elif advance%} advance{% else %} trading{% endif %}
+{% else %} admin{% endif %}"
+                    {% if request.user.is_staff or allow_dnd %}
                         ondragenter="dragenter(event);"
                         ondragleave="dragleave(event);"
                         ondragover="dragover(event);"
@@ -52,8 +52,10 @@ onclick="location.href='{{ new_entry }}?next={{ request.path }}'"
                         <div 
                             class="entry"
                             id="{{ entry.pk }}"
-                            draggable="true"
-                            ondragstart="drag(event);"
+                            {% if request.user.is_staff or allow_dnd %}
+                                draggable="true"
+                                ondragstart="drag(event);"
+                            {% endif %}
                             >
                             <div 
                                 data-href=

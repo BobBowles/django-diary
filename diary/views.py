@@ -233,7 +233,7 @@ def getDateFromSlug(slug, change):
     if not slug:
         date = today
     else:
-        date = datetime.datetime.strptime(slug, DATE_SLUG_FORMAT)
+        date = datetime.datetime.strptime(slug, DATE_SLUG_FORMAT).date()
 
     # handle day change with year and month rollover
     if change:
@@ -241,7 +241,7 @@ def getDateFromSlug(slug, change):
         if change == 'prev':
             dayDelta = datetime.timedelta(days=-1)
         date = date + dayDelta
-    return date.date()
+    return date
 
 
 def getDatetimeFromSlug(slug):
@@ -253,6 +253,28 @@ def getDatetimeFromSlug(slug):
     return date_time.date(), date_time.time()
 
 
+def evaluateBusinessLogic(day, startTime, endTime):
+    """
+    Evaluate the booleans that control the display business logic for day and 
+    multi-day views.
+    """
+    today = timezone.localtime(timezone.now()).date()
+    now = timezone.localtime(timezone.now()).time()
+    current = ((now >= startTime and now < endTime) and day == today)
+    trading = (
+        startTime >= settings.DIARY_OPENING_TIMES[day.weekday()] and
+        endTime <= settings.DIARY_CLOSING_TIMES[day.weekday()]
+    ) # trading time
+    historic = (
+        day < today or (day == today and endTime < now)
+    ) # historic data
+    booking_allowed_date = (today + 
+        datetime.timedelta(days=settings.DIARY_MIN_BOOKING)
+    )
+    before_advance = day < booking_allowed_date
+    allow_dnd = trading and not (historic or before_advance)
+    return current, trading, historic, before_advance, allow_dnd
+
 
 @login_required
 def multi_day(request, slug=None, change=None):
@@ -260,11 +282,7 @@ def multi_day(request, slug=None, change=None):
     Display entries in a calendar-style 4-day layout.
     """
 
-    today = timezone.localtime(timezone.now()).date()
-    now = timezone.localtime(timezone.now()).time()
-    date = (getDateFromSlug(slug, change) if slug
-        else today
-    )
+    date = getDateFromSlug(slug, change)
 
     # get date information etc for the days to display
     date_slots = []
@@ -290,7 +308,6 @@ def multi_day(request, slug=None, change=None):
     for timeLabel, time_slug, startTime, endTime in TIME_SLOTS:
         # cols represent days...
         day_entries = []
-        currentTime = (now >= startTime and now < endTime)
         for day, dayHeader, date_slug in date_slots:
             entries = (
                 Entry.objects.filter(
@@ -305,17 +322,19 @@ def multi_day(request, slug=None, change=None):
                     customer=request.user,
                 )
             ).order_by('time')
+
+            # evaluate the business rules for entry booking
+            current, trading_time, historic, before_advance, allow_dnd =\
+                evaluateBusinessLogic(day, startTime, endTime)
+
             day_entries.append((
                 '_'.join((date_slug, time_slug)), # date-time slug
                 entries, # the entries
-                (currentTime and day == today), # now
-                (
-                    startTime >= settings.DIARY_OPENING_TIMES[day.weekday()] and
-                    endTime <= settings.DIARY_CLOSING_TIMES[day.weekday()]
-                ), # trading time
-                (
-                    day < today or (day == today and endTime < now)
-                ), # historic data
+                current, # now
+                trading_time, # trading time
+                historic, # historic data
+                before_advance, # before advance booking threshold
+                allow_dnd, # allow drag-n-drop
             ))
         time_slots.append((
             timeLabel, 
@@ -347,40 +366,40 @@ def day(request, slug=None, change=None):
     Display entries in a particular day in a calendar-style day view.
     """
 
-    today = timezone.localtime(timezone.now()).date()
-    now = timezone.localtime(timezone.now()).time()
-    date = (getDateFromSlug(slug, change) if slug
-        else today
-    )
-    currentDate = (date == today)
+    date = getDateFromSlug(slug, change)
     date_slug = date.strftime(DATE_SLUG_FORMAT)
 
     # obtain the day's entries divided into time slots
-    openingTime = settings.DIARY_OPENING_TIMES[date.weekday()]
-    closingTime = settings.DIARY_CLOSING_TIMES[date.weekday()]
     time_slots = []
     for timeLabel, time_slug, startTime, endTime in TIME_SLOTS:
         entries = (
             Entry.objects.filter(
-                    date=date, 
-                    time__gte=startTime, 
-                    time__lt=endTime,
+                date=date, 
+                time__gte=startTime, 
+                time__lt=endTime,
             ) if request.user.is_staff
             else Entry.objects.filter(
-                    date=date, 
-                    time__gte=startTime, 
-                    time__lt=endTime, 
-                    customer=request.user,
+                date=date, 
+                time__gte=startTime, 
+                time__lt=endTime, 
+                customer=request.user,
             )
         ).order_by('time')
+
+        # evaluate the business rules for entry booking
+        current, trading_time, historic, before_advance, allow_dnd =\
+            evaluateBusinessLogic(date, startTime, endTime)
+
         time_slots.append((
             timeLabel, 
             '_'.join((date_slug, time_slug)),
             startTime,
             entries,
-            (currentDate and (now >= startTime and now < endTime)), # flag now
-            (startTime >= openingTime and endTime <= closingTime), # trading 
-            (date < today or (date == today and now > endTime)), # historic data
+            current, # flag now
+            trading_time, # trading 
+            historic, # historic data
+            before_advance, # advance booking prohibited
+            allow_dnd,
         ))
 
     return render_to_response(
@@ -437,8 +456,8 @@ def entry(request, pk=None, slug=None, customer_pk=None):
     """
 
     # defaults are here and now if no date/time is provided
-    date = timezone.now().date()
-    time = timezone.now().time()
+    today = timezone.localtime(timezone.now()).date()
+    now = timezone.localtime(timezone.now()).time()
     entry = None
 
     # determine the navigation context for redirection
@@ -568,11 +587,32 @@ def entry_modal(request, pk):
     redirect_url = request.GET.get('redirect_url', reverse('diary:home'))
 
     entry = get_object_or_404(Entry, pk=pk)
+
+    # decide if the modal's delete/edit buttons should be enabled/visible
+    enable_edit_buttons = False
+    if request.user.is_staff:
+        enable_edit_buttons = True
+    else:
+        today = timezone.localtime(timezone.now()).date()
+        now = timezone.localtime(timezone.now()).time()
+        booking_threshold = (
+            today + datetime.timedelta(days=settings.DIARY_MIN_BOOKING)
+        )
+        if (
+            entry.date == today and 
+            booking_threshold == today and 
+            entry.time > now
+        ):
+            enable_edit_buttons = True
+        elif booking_threshold > today and entry.date >= booking_threshold:
+            enable_edit_buttons = True
+
     html = render_to_string(
         'diary/modal_entry.html',
         context={
             'entry': entry,
             'redirect_url': redirect_url,
+            'enable_edit_buttons': enable_edit_buttons,
         },
         request=request,
     )

@@ -1,7 +1,7 @@
 /* css for diary page(s) */
 
 .current {
-    background-color: #f57900;
+    background-color: #f57900 !important;
 }
 
 .hasentry {
@@ -39,21 +39,24 @@
 
 .new {
     padding: 0;
-    color: #555555;
+    color: #222222;
 }
 .new[disabled] {
-    color: #cccccc;
+    color: #eeeeee;
 }
 
 /* admin and trading are opposites. historic is the same as trading but in the 
 past */
 .admin {
-    background-color: #aaaaaa;
+    background-color: #999999;
 }
 .trading {
 }
 .historic {
-    background-color: #cccccc;
+    background-color: #bbbbbb;
+}
+.advance {
+    background-color: #dddddd;
 }
 
 /* kludgy workaround for silly date in the TimeWidget popout header */
@@ -69,7 +72,7 @@ past */
 
 .droptarget {
     height: 25px;
-    outline: 1px solid #cccccc;
+    outline: 1px solid #eeeeee;
     outline-offset: -1px;
 }
 

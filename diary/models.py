@@ -383,7 +383,8 @@ class Entry(models.Model):
 
     def validateFuture(self):
         """
-        Ensure customers cannot book times in the past.
+        Ensure customers cannot book times in the past or in the advance booking
+        period.
         
         Staff can book entries whenever they like, but customers can only book
         times in the future.
@@ -394,10 +395,20 @@ class Entry(models.Model):
                 tz_now.year, tz_now.month, tz_now.day,
                 tz_now.hour, tz_now.minute, tz_now.second,
             )
+            advance_booking_date = (
+                datetime.datetime(
+                    tz_now.year, tz_now.month, tz_now.day, 0, 0, 0,
+                ) + 
+                datetime.timedelta(days=settings.DIARY_MIN_BOOKING)
+            )
             bookedTime = datetime.datetime.combine(self.date, self.time)
             if bookedTime < now:
                 raise ValidationError(
                     'Please book a date/time in the future.'
+                )
+            if bookedTime < advance_booking_date:
+                raise ValidationError(
+                    'Need to book ahead.'
                 )
 
 

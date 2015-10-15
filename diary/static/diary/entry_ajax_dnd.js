@@ -15,7 +15,10 @@ function updateNewButtons() {
             // find any siblings of the button that are entry elements
             var parent = btn.parentElement;
             btnList[i].disabled = 
-                $(parent).find('.entry').length || $(parent).hasClass('admin');
+                $(parent).find('.entry').length || 
+                $(parent).hasClass('admin') ||
+                $(parent).hasClass('historic') ||
+                $(parent).hasClass('advance');
             if (btnList[i].disabled) {
                 console.log('Disabled one!');
             };

@@ -51,15 +51,15 @@
                 </div>
                 <div class="col-md-11">
                     <div class="row cols-{{ n_cols }}">
-                        {% for datetime_slug, entries, current, trading, historic in day_entries %}
+                        {% for datetime_slug, entries, current, trading, historic, advance, allow_dnd in day_entries %}
                             <div 
                                 id="{{ datetime_slug }}"
-                                class="col-md-1 droptarget
+class="col-md-1 droptarget
 {% if current %} current{% endif %}
-{% if trading %}{% if historic %} historic{% else %} trading{% endif %}
-{% else %} admin{% endif %}
-"
-                                {% if request.user.is_staff or trading %}
+{% if trading %}
+{% if historic %} historic{% elif advance%} advance{% else %} trading{% endif %}
+{% else %} admin{% endif %}"
+                                {% if request.user.is_staff or allow_dnd %}
                                     ondragenter="dragenter(event);"
                                     ondragleave="dragleave(event);"
                                     ondragover="dragover(event);"
@@ -80,8 +80,10 @@ onclick="location.href='{{ new_entry }}?next={{ request.path }}'"
                                     <div 
                                         class="entry"
                                         id="{{ entry.pk }}"
-                                        draggable="True"
-                                        ondragstart="drag(event);"
+                                    {% if request.user.is_staff or allow_dnd %}
+                                            draggable="true"
+                                            ondragstart="drag(event);"
+                                    {% endif %}
                                         >
                                         <div 
                     data-href="{% url 'diary:entry_modal' pk=entry.pk %}"
