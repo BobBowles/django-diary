@@ -584,7 +584,7 @@ def entry_modal(request, pk):
     """
 
     # obtain redirection information from the request
-    redirect_url = request.GET.get('redirect_url', reverse('diary:home'))
+    redirect_url = request.GET.get('redirect_url', reverse('diary:day_now'))
 
     entry = get_object_or_404(Entry, pk=pk)
 
@@ -626,11 +626,13 @@ def entry_delete(request, pk):
     Remove a diary entry.
     """
 
+    redirect_url = get_redirect_url(request, reverse('diary:day_now'))
+
     entry = get_object_or_404(Entry, pk=pk)
     date = entry.date
     entry.delete()
     return redirect(
-        'diary:day', 
+        redirect_url, 
         slug=date.strftime(DATE_SLUG_FORMAT),
     )
 

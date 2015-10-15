@@ -50,7 +50,7 @@
                 <button 
                     type="button" 
                     class="btn btn-danger" 
-onclick="next_url('{% url 'diary:entry_delete' pk=entry.pk %}');"
+onclick="next_url('{% url 'diary:entry_delete' pk=entry.pk %}?next={{ redirect_url }}');"
                     >
                     Delete
                 </button>
