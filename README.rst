@@ -274,7 +274,7 @@ Testing
 
 To avoid complications with constantly changing dates and times during tests some of the tests of the ``Entry`` functionality make use of ``freezegun``, so that tests that depend on time of day, etc, can be performed reliably and repeatably. After struggling with the Python built-in ``unittest.mock`` suite I found ``freezegun`` super-easy to use (like, one-line-of-code easy) and I recommend it to anyone who needs to test any code that uses or manipulates time-dependent phenomena.
 
-``Freezegun`` introduces some additional dependencies above those needed to run ``django-diary``. These are recorded in ``dev-requirements.txt`` which should be used in place of ``requirements.txt`` for setting up testing and development environments.
+``Freezegun`` introduces some additional dependencies above those needed to run ``django-diary``. These are recorded in ``dev-requirements.txt`` which should be used in place of ``requirements.txt`` for setting up testing and development environments from git clones.
 
 
 History
