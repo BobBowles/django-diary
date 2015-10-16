@@ -14,5 +14,6 @@ v0.2.1      2015-10-16      *   Add business rules for manipulation of historic
                             *   Several new ``settings`` options.
                             *   Several bugfixes and refactorings.
                             *   Add ``freezegun`` as dependency for dev/testing.
+v0.3        2015-10-xx      *   Add administration fields to Entry model.
 ========    ============    ====================================================
 
