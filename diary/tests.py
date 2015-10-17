@@ -633,6 +633,45 @@ class EntryModelTests(TestCase):
         )
 
 
+    def test_cancelled_entry_customer_double_booked(self):
+        """
+        Make sure customer can double-book when one of the bookings is cancelled.
+        """
+        customer = create_customer('test')
+
+        dateDelta1 = datetime.timedelta(days=0)
+        time1 = datetime.time(hour=12)
+        duration1 = datetime.timedelta(hours=1)
+        entry1 = create_entry(
+            dateDelta1, 
+            time1,
+            duration1,
+            'double-book test 1',
+        )
+        entry1.customer = customer
+        entry1.cancelled = True
+        entry1.save()
+
+        entry2 = create_entry(
+            dateDelta1,
+            time1,
+            duration1,
+            'double-book test 2',
+        )
+        entry2.customer = customer
+
+        # make sure an exception is NOT raised
+        try:
+            entry2.clean()
+            self.assertTrue(entry1 == entry2)
+        except Exception as e:
+            traceback.print_exc()
+            self.fail(
+                'Cleaning a cancelled entry with double booking \n'\
+                'raised an unexpected exception: \n{0}'.format(e)
+            )
+
+
     @freeze_time('2015-10-12 12:00:00')
     def test_entry_customer_out_of_hours(self):
         """
