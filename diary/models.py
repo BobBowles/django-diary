@@ -241,7 +241,8 @@ class Entry(models.Model):
     )
     treatment = models.ForeignKey(Treatment, blank=True, null=True)
     resource = models.ForeignKey(Resource, blank=True, null=True)
-    # new fields go here...
+    cancelled = models.BooleanField(default=False)
+    no_show = models.BooleanField(default=False)
 
 
     def __str__(self):

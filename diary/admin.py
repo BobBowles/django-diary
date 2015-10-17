@@ -178,15 +178,35 @@ class EntryAdmin(admin.ModelAdmin):
         'date',
         'time',
         'customer',
-        'treatment',
-        'resource',
-        'duration',
-        'notes',
     ]
     list_filter = [
         'creator',
         'customer',
         'date',
     ]
-    
+    fieldsets = (
+        (None, {
+            'fields': (
+                'creator',
+                'date',
+                'time',
+                'customer',
+             )
+       }),
+       ('Details', {
+            'fields': (
+                'treatment',
+                'resource',
+                'duration',
+                'notes',
+            )
+       }),
+       ('Administration', {
+            'fields': (
+                'cancelled',
+                'no_show',
+            )
+       }),
+    )
+    ordering = ('date', 'time', )
 
