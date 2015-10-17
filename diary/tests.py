@@ -10,7 +10,6 @@ from django.conf import settings as main_settings
 from . import settings
 from . import views
 import importlib as imp         # since Python 3.4
-#from unittest.mock import patch
 from freezegun import freeze_time
 
 
@@ -441,6 +440,49 @@ class EntryModelTests(TestCase):
             'Resource clash with another Entry. Please change resource or time.',
             entry2.clean,
         )
+
+
+    def test_cancelled_entry_resource_clash_clean_no_exception(self):
+        """
+        Make sure cleaning the data raises no Exception when the entry is
+        cancelled even with a resource clash.
+        """
+        resource = create_resource('resource', 'resource')
+
+        dateDelta1 = datetime.timedelta(days=0)
+        time1 = datetime.time(hour=12)
+        duration1 = datetime.timedelta(hours=1)
+        entry1 = create_entry(
+            dateDelta1, 
+            time1,
+            duration1,
+            'time calc test 1',
+        )
+        entry1.resource = resource
+        entry1.save()
+
+        dateDelta2 = datetime.timedelta(days=0)
+        time2 = datetime.time(hour=12)
+        duration2 = datetime.timedelta(hours=1)
+        entry2 = create_entry(
+            dateDelta2, 
+            time2,
+            duration2,
+            'time calc test 1',
+        )
+        entry2.resource = resource
+        entry2.cancelled = True
+
+        # make sure an exception is NOT raised
+        try:
+            entry2.clean()
+            self.assertTrue(entry1 == entry2)
+        except Exception as e:
+            traceback.print_exc()
+            self.fail(
+                'Cleaning a cancelled entry with \n'\
+                'a time clash raised an unexpected exception: \n{0}'.format(e)
+            )
 
 
     def test_entry_no_resource_clash_no_exception(self):

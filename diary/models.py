@@ -345,14 +345,18 @@ class Entry(models.Model):
         Context validation of date, time, duration and resource.
         
         The entry is invalid if it clashes in time and resource with
-        a pre-existing entry.
+        a pre-existing entry. Cancelled entries don't count.
         """
+        if self.cancelled:
+            return
+
         if self.resource:
 
-            # get the day's existing entries sharing the same resource
+            # get the day's uncancelled entries sharing the same resource
             savedEntries = Entry.objects.filter(
                 date=self.date, 
                 resource=self.resource,
+                cancelled=False,
             )
 
             # ensure no time clashes
@@ -370,14 +374,18 @@ class Entry(models.Model):
         Context validation of customer.
         
         A named customer cannot have two entries at the same time, irrespective
-        of other resource criteria.
+        of other resource criteria. Cancelled entries don't count.
         """
+        if self.cancelled:
+            return
+
         if self.customer:
 
-            # get any existing entries for the same customer on the same day
+            # get any uncancelled entries for the same customer on the same day
             savedEntries = Entry.objects.filter(
                 date=self.date, 
                 customer=self.customer,
+                cancelled=False,
             )
 
             # ensure no time clashes
