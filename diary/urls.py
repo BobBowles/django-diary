@@ -69,7 +69,6 @@ urlpatterns = [
         views.entry_admin, 
         name='entry_admin',
     ),
-#    url(r'^entry_delete/(?P<pk>\d+)/$', views.entry_delete, name='entry_delete'),
 
 
     # for drag-and-drop with ajax
