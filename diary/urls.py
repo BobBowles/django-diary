@@ -65,7 +65,11 @@ urlpatterns = [
         views.entry, 
         name='entry_empty',
     ),                                              # default is create new
-    url(r'^entry_delete/(?P<pk>\d+)/$', views.entry_delete, name='entry_delete'),
+    url(r'^entry_admin/(?P<pk>\d+)/(?P<action>cancel|no_show|delete)/$',
+        views.entry_admin, 
+        name='entry_admin',
+    ),
+#    url(r'^entry_delete/(?P<pk>\d+)/$', views.entry_delete, name='entry_delete'),
 
 
     # for drag-and-drop with ajax

@@ -550,6 +550,11 @@ def entry_update(request):
     # try updating the entry
     entry.date = date
     entry.time = time
+
+    # clear admin status flags if set
+    entry.no_show = False
+    entry.cancelled = False
+
     try:
         entry.save()
     except ValidationError as ve:
@@ -589,12 +594,17 @@ def entry_modal(request, pk):
     entry = get_object_or_404(Entry, pk=pk)
 
     # decide if the modal's delete/edit buttons should be enabled/visible
+    today = timezone.localtime(timezone.now()).date()
+    now = timezone.localtime(timezone.now()).time()
     enable_edit_buttons = False
+    enable_no_show_button = False
     if request.user.is_staff:
         enable_edit_buttons = True
+        enable_no_show_button = (
+            not entry.no_show and
+            (entry.date < today or (entry.date == today and entry.time < now))
+        )
     else:
-        today = timezone.localtime(timezone.now()).date()
-        now = timezone.localtime(timezone.now()).time()
         booking_threshold = (
             today + datetime.timedelta(days=settings.DIARY_MIN_BOOKING)
         )
@@ -613,6 +623,7 @@ def entry_modal(request, pk):
             'entry': entry,
             'redirect_url': redirect_url,
             'enable_edit_buttons': enable_edit_buttons,
+            'enable_no_show_button': enable_no_show_button,
         },
         request=request,
     )
@@ -621,16 +632,28 @@ def entry_modal(request, pk):
 
 
 @login_required
-def entry_delete(request, pk):
+def entry_admin(request, pk, action):
     """
-    Remove a diary entry.
+    Deal with a diary entry's administrative status.
+    
+    action is one of:
+    delete          delete the entry - remove it from the database
+    cancel          mark the entry as cancelled
+    no_show         mark the entry as a no-show
     """
 
     redirect_url = get_redirect_url(request, reverse('diary:day_now'))
-
     entry = get_object_or_404(Entry, pk=pk)
     date = entry.date
-    entry.delete()
+
+    if action == 'delete':
+        entry.delete()
+    else:
+        entry.cancelled = (action == 'cancel')
+        entry.no_show = (action == 'no_show')
+        entry.editor = request.user
+        entry.save()
+
     return redirect(
         redirect_url, 
         slug=date.strftime(DATE_SLUG_FORMAT),

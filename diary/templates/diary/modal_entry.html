@@ -46,13 +46,31 @@
             </div>
         </div>
         <div class="modal-footer">
-            {% if enable_edit_buttons %}
+            {% if request.user.is_staff %}
                 <button 
                     type="button" 
                     class="btn btn-danger" 
-onclick="next_url('{% url 'diary:entry_delete' pk=entry.pk %}?next={{ redirect_url }}');"
+onclick="next_url('{% url 'diary:entry_admin' pk=entry.pk action='delete' %}?next={{ redirect_url }}');"
                     >
                     Delete
+                </button>
+            {% endif %}
+            {% if enable_no_show_button %}
+                <button 
+                    type="button" 
+                    class="btn btn-warning" 
+onclick="next_url('{% url 'diary:entry_admin' pk=entry.pk action='no_show' %}?next={{ redirect_url }}');"
+                    >
+                    No-Show
+                </button>
+            {% endif %}
+            {% if enable_edit_buttons %}
+                <button 
+                    type="button" 
+                    class="btn btn-warning" 
+onclick="next_url('{% url 'diary:entry_admin' pk=entry.pk action='cancel' %}?next={{ redirect_url }}');"
+                    >
+                    Cancel
                 </button>
                 <button 
                     type="button" 
