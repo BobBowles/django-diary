@@ -65,11 +65,31 @@ class CustomerManager(UserManager):
 class Customer(User):
     """ Customer/Client/Patient details. 
     """
+
+    # gender options
     MALE = 'M'
     FEMALE = 'F'
     GENDER_CHOICES = (
         (MALE, 'Male'),
         (FEMALE, 'Female'),
+    )
+
+    # title options
+    MR = 'MR'
+    MRS = 'MRS'
+    MISS = 'MISS'
+    MS = 'MS'
+    DR = 'DR'
+    PROF = 'PROF'
+    REV = 'REV'
+    TITLE_CHOICES = (
+        (MR, 'Mr'),
+        (MRS, 'Mrs'),
+        (MISS, 'Miss'),
+        (MS, 'Ms'),
+        (DR, 'Dr'),
+        (PROF, 'Prof'),
+        (REV, 'Rev'),
     )
 
 
@@ -95,6 +115,11 @@ class Customer(User):
 
     objects = CustomerManager()
 
+    title = models.CharField(
+        max_length=4,
+        choices=TITLE_CHOICES,
+        default=MRS,
+    )
     phone = models.CharField(
         max_length=20, 
         validators=[phoneValidator], 
@@ -178,6 +203,7 @@ class Entry(models.Model):
     Entries need to be able to compare times and do basic temporal arithmetic.
     To do this (I think) we need to implement rich comparator methods so one
     entry knows how to compare itself with another.
+    
     One possible (potentially undesirable) side-effect is that entries may
     consider each other 'equal' when they have neither the same start time
     nor the same duration. They will nevertheless be 'equivalent' in sharing
@@ -215,6 +241,7 @@ class Entry(models.Model):
     )
     treatment = models.ForeignKey(Treatment, blank=True, null=True)
     resource = models.ForeignKey(Resource, blank=True, null=True)
+    # new fields go here...
 
 
     def __str__(self):

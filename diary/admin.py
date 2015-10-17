@@ -34,11 +34,12 @@ class CustomerCreationForm(forms.ModelForm):
     class Meta:
         model = Customer
         fields = (
-            'username', 
-            'first_name', 
-            'last_name', 
-            'email', 
-            'phone', 
+            'username',
+            'title',
+            'first_name',
+            'last_name',
+            'email',
+            'phone',
             'date_of_birth',
             'gender',
             'notes',
@@ -90,6 +91,7 @@ class CustomerChangeForm(forms.ModelForm):
         model = Customer
         fields = (
             'username',
+            'title',
             'first_name',
             'last_name',
             'email', 
@@ -141,6 +143,7 @@ class CustomerAdmin(UserAdmin):
         }),
         ('Personal info', {
             'fields': (
+                'title',
                 'date_of_birth',
                 'gender',
                 'notes',
