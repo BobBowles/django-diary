@@ -53,7 +53,13 @@
                                 <br />
                                 <b>
                                 {% for entry in entries %}
-                                    {{ entry.customer }}
+                                    {% if entry.cancelled %}
+                                        <span class="cancelled">
+                                        {{ entry.customer }}
+                                        </span>
+                                    {% else %}
+                                        {{ entry.customer }}
+                                    {% endif %}
                                 {% endfor %}
                                 </b>
                             {% endif %}

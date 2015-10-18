@@ -50,7 +50,7 @@ onclick="location.href='{{ new_entry }}?next={{ request.path }}'"
                     </button>
                     {% for entry in entries %}
                         <div 
-                            class="entry"
+class="entry{% if entry.cancelled %} cancelled{% endif %}{% if entry.no_show %} no_show{% endif %}"
                             id="{{ entry.pk }}"
                             {% if request.user.is_staff or allow_dnd %}
                                 draggable="true"

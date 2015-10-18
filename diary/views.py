@@ -90,6 +90,7 @@ def reminders(request):
         Entry.objects.filter(
             Q(date=today, time__gte=now)|Q(date=tomorrow), 
             customer=user, 
+            cancelled=False,
         ) if isinstance(user, Customer)
         else Entry.objects.filter(          # admin/staff users see everything
             Q(date=today, time__gte=now)|Q(date=tomorrow), 
@@ -176,7 +177,11 @@ def month(request, year=None, month=None, change=None):
             dayDate = datetime.date(year=date.year, month=date.month, day=day)
             entries = (
                 Entry.objects.filter(date=dayDate) if request.user.is_staff
-                else Entry.objects.filter(date=dayDate, customer=request.user)
+                else Entry.objects.filter(
+                    date=dayDate, 
+                    customer=request.user,
+                    cancelled=False,
+                )
             )
             nav_slug = dayDate.strftime(DATE_SLUG_FORMAT)
             current = (dayDate == today)
@@ -320,6 +325,7 @@ def multi_day(request, slug=None, change=None):
                     time__gte=startTime, 
                     time__lt=endTime, 
                     customer=request.user,
+                    cancelled=False,
                 )
             ).order_by('time')
 
@@ -383,6 +389,7 @@ def day(request, slug=None, change=None):
                 time__gte=startTime, 
                 time__lt=endTime, 
                 customer=request.user,
+                cancelled=False,
             )
         ).order_by('time')
 

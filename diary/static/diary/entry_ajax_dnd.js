@@ -66,7 +66,10 @@ function drop(ev) {
         data: {pk: pk, slug: slug},
         success: function(result) {
             /* if the post succeeds continue with the drop */
-            ev.target.appendChild(document.getElementById(pk));
+            dragElement = document.getElementById(pk);
+            ev.target.appendChild(dragElement);
+            dragElement.classList.remove('cancelled');
+            dragElement.classList.remove('no_show');
             //console.log('Dropped target in ['+ev.target.id+']');
             updateNewButtons(); // because the async call is last to complete
         },

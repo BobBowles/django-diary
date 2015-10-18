@@ -59,6 +59,17 @@ past */
     background-color: #dddddd;
 }
 
+/* highlight cancelled (admin only) or no_show entries */
+.cancelled {
+    background-color: #ff0000 !important;
+    color: #00ff00 !important;
+}
+.no_show {
+    background-color: #00ff00 !important;
+    color: #ff0000 !important;
+    text-decoration: underline !important;
+}
+
 /* kludgy workaround for silly date in the TimeWidget popout header */
 .datetimepicker-hours th {
     visibility: hidden !important;
