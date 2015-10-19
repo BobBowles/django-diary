@@ -18,11 +18,13 @@ The core concept is a diary ``Entry``, which records the date and time of an app
 
 There are no repeating entries; while it is expected that customers will make repeat bookings, it is assumed the repeat bookings will *not* follow any simple rule. So, to avoid complexity that will not actually be useful, all diary entries are considered as unique and unrelated occurrences. This is in stark contrast to popular (and very fine) calendar/scheduling apps like ``django-schedule`` and ``django-calendarium``.
 
-Entries are allowed to overlap in time, provided there are no resource conflicts. If a resource is assigned to an entry, no other entry can use the same resource at the same time.
+Entries are allowed to overlap in time, provided there are no resource conflicts. If a resource is assigned to an entry, no other entry can use the same resource at the same time. Entries that have been cancelled do not count when evaluating resource conflicts.
 
-Customers are ``Users`` of the system, but they have additional attributes. In keeping with the health clinic paradigm, they have demographic and health-related information associated with them, contact details, and of course their treatment history, which can be derived from their historical record of appointments.
+There are two categories of ``User``. The standard admin ``Users`` are retained for administrative functions, and typically have at least ``is_staff`` privilege.
 
-In the interests of confidentiality, customers may only see and alter their own details and appointments. Staff members are able to see and alter the details of all entries.
+Customers are also ``Users`` of the system (they are in fact a subclass of ``User``). While they have no administrative privileges, they have additional attributes. In keeping with the health clinic paradigm, they have demographic and health-related information associated with them, contact details, and of course their treatment history, which can be derived from their historical record of appointments.
+
+In the interests of confidentiality, ``Customers`` may only see and alter their own details and appointments. Staff ``Users`` are able to see and alter the details of all entries.
 
 
 Installation
@@ -266,7 +268,7 @@ The decision for web deployment, coupled with a preference for Python as the mai
 
 I found a tutorial by ``LightBird``. Although the code was terrible and outdated, it gave me a model workflow to follow as I both developed a calendar app and learned Django, JavaScript, CSS, HTML5, and other necessary technologies.
 
-I eventually decided to subclass ``User`` to make a custom user class called ``Customer``. I did that to enable a tight relationship between customers as users and diary entries in the simplest possible way. Other options seemed to involve jumping through too many database join hoops. This may work against reusability of this app, but I think the tweaks I have put into the admin backend may mitigate this. In principle the admin backend in this app should be able to accommodate other custom users, but I may not have given enough attention to that possibility in my own code. It will be interesting to get feedback about that from devs, so keep me posted! 
+I eventually decided to subclass ``User`` to make a custom user class called ``Customer``. I did that to enable a tight relationship between customers as users and diary entries in the simplest possible way. Other options seemed to involve jumping through too many database join hoops. This may work against reusability of this app, but I think the tweaks I have put into the admin backend (thanks to ``django-model-utils``) may mitigate this. In principle the admin backend in this app should be able to accommodate other custom users, but I may not have given enough attention to that possibility in my own code. It will be interesting to get feedback about that from devs, so keep me posted! 
 
 
 Testing
@@ -277,10 +279,10 @@ To avoid complications with constantly changing dates and times during tests som
 ``Freezegun`` introduces some additional dependencies above those needed to run ``django-diary``. These are recorded in ``dev-requirements.txt`` which should be used in place of ``requirements.txt`` for setting up testing and development environments from git clones.
 
 
-History
--------
+History And References
+----------------------
 
-This started out as a series of experimental projects built on top of Django tutorials, and explorations of existing Django calendar apps and other Django snippets:
+This started out as a series of experimental projects built on top of Django tutorials, and explorations of existing Django calendar apps, Django snippets and other Django projects on Github:
 
 1. `Django Project Tutorial <https://docs.djangoproject.com/en/1.8/intro/tutorial01/>`_
 
@@ -295,4 +297,6 @@ This started out as a series of experimental projects built on top of Django tut
 #. `Django User Customisation <http://scottbarnham.com/blog/2008/08/21/extending-the-django-user-model-with-inheritance/>`_
 
 #. `Freezegun <https://github.com/spulec/freezegun/>`_
+
+#. `Django Model Utilities <https://github.com/carljm/django-model-utils>`_
 
