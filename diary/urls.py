@@ -92,9 +92,25 @@ urlpatterns = [
         views.customer_add, 
         name='customer_add',                        # default has no entry
     ),
+
+    # edit customer
+    url(r'^customer_change/(?P<pk>\d+)/$', 
+        views.customer_change, 
+        name='customer_edit',                       # edit customer
+    ),
     url(r'^customer_change/$', 
         views.customer_change, 
-        name='customer_change',
+        name='customer_change',                     # default is current user
+    ),
+
+    # customer history
+    url(r'^history/(?P<pk>\d+)/$', 
+        views.history, 
+        name='history',                             # review treatment history
+    ),
+    url(r'^history/$', 
+        views.history, 
+        name='history_default',                     # default is current user
     ),
 
 ]

@@ -8,6 +8,8 @@ Description
 
 Django-Diary is a project to create an easy-to-use desk diary and scheduling tool for use in a fast-paced retail environment. The aim is to be able to schedule and manage client bookings with available resources as quickly and easily as possible with no fuss.
 
+While the data model is very simple, some effort has been put into making the UI slick and intuitive, with ``ajax`` enabling drag-and-drop and updates of modal displays on the diary grid, and ``Bootstrap``-compatible widgets used on the forms.
+
 
 The Models
 ----------
@@ -269,6 +271,8 @@ The decision for web deployment, coupled with a preference for Python as the mai
 I found a tutorial by ``LightBird``. Although the code was terrible and outdated, it gave me a model workflow to follow as I both developed a calendar app and learned Django, JavaScript, CSS, HTML5, and other necessary technologies.
 
 I eventually decided to subclass ``User`` to make a custom user class called ``Customer``. I did that to enable a tight relationship between customers as users and diary entries in the simplest possible way. Other options seemed to involve jumping through too many database join hoops. This may work against reusability of this app, but I think the tweaks I have put into the admin backend (thanks to ``django-model-utils``) may mitigate this. In principle the admin backend in this app should be able to accommodate other custom users, but I may not have given enough attention to that possibility in my own code. It will be interesting to get feedback about that from devs, so keep me posted! 
+
+To make the UI fast and intuitive to use, some effort has been put into applying drag-and-drop and modal displays of selected data using ``ajax``. However, most features that involve changes to database content continue to be displayed and updated via conventional ``GET`` and ``POST`` of forms. In this way, an ``Entry`` can be quickly updated with a new time or date by simply dragging it to an appropriate place on the diary grid. Where time is less critical the more robust approach of conventional Django forms takes over.
 
 
 Testing

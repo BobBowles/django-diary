@@ -75,14 +75,22 @@ def evaluateTimeSlots():
 TIME_SLOTS = evaluateTimeSlots()
 
 
+def get_today_now():
+    """
+    Obtain the current date and time as separate entities.
+    """
+    today = timezone.localtime(timezone.now()).date()
+    now = timezone.localtime(timezone.now()).time()
+    return today, now
+
+
 
 def reminders(request):
     """
     Data for the reminder sidebar.
     """
 
-    today = timezone.localtime(timezone.now()).date()
-    now = timezone.localtime(timezone.now()).time()
+    today, now = get_today_now()
     tomorrow = today + datetime.timedelta(days=1)
 
     user = request.user
@@ -149,7 +157,7 @@ def month(request, year=None, month=None, change=None):
     """
 
     # default to this month
-    today = timezone.localtime(timezone.now()).date()
+    today, now = get_today_now()
     if not year:
         year, month = today.year, today.month
     else:
@@ -211,7 +219,7 @@ def getDate(year, month, day, change):
 
     # default to today
     print('DEPRECATED:  Getting kwargs date...')
-    today = timezone.localtime(timezone.now()).date()
+    today, now = get_today_now()
     if not year:
         year, month, day = today.year, today.month, today.day
     else:
@@ -233,7 +241,7 @@ def getDateFromSlug(slug, change):
     """
 
     # default to today
-    today = timezone.localtime(timezone.now()).date()
+    today, now = get_today_now()
     date = None
     if not slug:
         date = today
@@ -263,8 +271,7 @@ def evaluateBusinessLogic(day, startTime, endTime):
     Evaluate the booleans that control the display business logic for day and 
     multi-day views.
     """
-    today = timezone.localtime(timezone.now()).date()
-    now = timezone.localtime(timezone.now()).time()
+    today, now = get_today_now()
     current = ((now >= startTime and now < endTime) and day == today)
     trading = (
         startTime >= settings.DIARY_OPENING_TIMES[day.weekday()] and
@@ -463,8 +470,7 @@ def entry(request, pk=None, slug=None, customer_pk=None):
     """
 
     # defaults are here and now if no date/time is provided
-    today = timezone.localtime(timezone.now()).date()
-    now = timezone.localtime(timezone.now()).time()
+    today, now = get_today_now()
     entry = None
 
     # determine the navigation context for redirection
@@ -601,8 +607,7 @@ def entry_modal(request, pk):
     entry = get_object_or_404(Entry, pk=pk)
 
     # decide if the modal's delete/edit buttons should be enabled/visible
-    today = timezone.localtime(timezone.now()).date()
-    now = timezone.localtime(timezone.now()).time()
+    today, now = get_today_now()
     enable_edit_buttons = False
     enable_no_show_button = False
     if request.user.is_staff:
@@ -720,18 +725,34 @@ def customer_add(request, entry_pk=None, entry_slug=None):
     )
 
 
+def get_customer_and_redirect(request, pk):
+    """
+    Utility to derive the customer and redirect url to use.
+    
+    If no pk is specified the current logged-on user is assumed.
+    If no url is found diary:home is used as default/fallback.
+    """
+
+    customer = Customer.objects.get(pk=pk) if pk else request.user
+
+    redirect_url = (
+        request.GET['next'] if 'next' in request.GET 
+        else reverse('diary:home')
+    )
+
+    return customer, redirect_url
+
+
+
 @login_required
-def customer_change(request):
+def customer_change(request, pk):
     """
-    Change the logged-in customer's personal details.
+    Change the specified customer's personal details.
     """
 
-    # try to work out where to redirect to when finished. fallback to diary home
-    redirect_url = reverse('diary:home')
-    if 'next' in request.GET:
-        redirect_url = request.GET['next']
+    customer, redirect_url = get_customer_and_redirect(request, pk)
 
-    form = CustomerChangeForm(request.POST or None, instance=request.user)
+    form = CustomerChangeForm(request.POST or None, instance=customer)
     if form.is_valid():
         form.save()
         return redirect(redirect_url)
@@ -739,11 +760,54 @@ def customer_change(request):
     context = {
         'form': form,
         'next': redirect_url,
-        'customer': request.user,
+        'customer': customer,
         'reminders': reminders(request),
     }
     return render_to_response(
         'diary/customer_change.html', 
+        context, 
+        context_instance=RequestContext(request),
+    )
+
+
+@login_required
+def history(request, pk):
+    """
+    Review a customer's treatment history.
+    """
+
+    customer, redirect_url = get_customer_and_redirect(request, pk)
+
+    # get the relevant entries
+    today, now = get_today_now()
+    entries = list(
+        Entry.objects.filter(
+            customer=customer,
+            date__lte=today,
+        ).order_by('date', 'time')
+    )
+
+    # some arithmetic 
+    total = len(entries)
+    cancelled = 0
+    no_show = 0
+    for entry in entries:
+        if entry.cancelled: cancelled += 1
+        if entry.no_show: no_show += 1
+    attended = total - cancelled - no_show
+
+    context = {
+        'next': redirect_url,
+        'customer': customer,
+        'entries': entries,
+        'total': total,
+        'attended': attended,
+        'cancelled': cancelled,
+        'no_show': no_show,
+        'reminders': reminders(request),
+    }
+    return render_to_response(
+        'diary/history.html', 
         context, 
         context_instance=RequestContext(request),
     )

@@ -17,5 +17,6 @@ v0.2.1      2015-10-16      *   Add business rules for manipulation of historic
 v0.2.2      2015-10-18      *   Add administration fields to Entry model.
                             *   Adapt workflow for cancellations, no-shows,
                             deleting.
+v0.2.3      2015-10-20      *   Customer review added.
 ========    ============    ====================================================
 

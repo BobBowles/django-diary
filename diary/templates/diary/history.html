@@ -1,0 +1,98 @@
+{% extends 'diary/base.html' %}
+
+
+{% block diary_nav %}
+    {% with diary_nav_up=next diary_nav_prev='' diary_nav_next='' %}
+        {{ block.super }}
+    {% endwith %}
+{% endblock diary_nav %}
+
+
+{% block diary_title %}
+    {{ customer }} Treatment History
+{% endblock diary_title %}
+
+
+{% block diary_content %}
+    <div class="row">
+        <div class="col-md-2">
+            <h4>Date</h4>
+        </div>
+        <div class="col-md-2">
+            <h4>Time</h4>
+        </div>
+        <div class="col-md-2">
+            <h4>Treatment</h4>
+        </div>
+        <div class="col-md-4">
+            <h4>Notes</h4>
+        </div>
+        <div class="col-md-1">
+            <h4>Cancel</h4>
+        </div>
+        <div class="col-md-1">
+            <h4>No-Show</h4>
+        </div>
+    </div>
+    {% for entry in entries %}
+        <div class="row">
+            <div class="col-md-2">
+                {{ entry.date }}
+            </div>
+            <div class="col-md-2">
+                {{ entry.time }}
+            </div>
+            <div class="col-md-2">
+                {{ entry.treatment }}
+            </div>
+            <div class="col-md-4">
+                {{ entry.notes }}
+            </div>
+            <div class="col-md-1">
+                {{ entry.cancelled }}
+            </div>
+            <div class="col-md-1">
+                {{ entry.no_show }}
+            </div>
+        </div>
+    {% endfor %}
+    <div class="row">
+        <div class="col-md-12">
+            <hr />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h4>Summary</h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2">
+            <h4>Total:</h4>
+        </div>
+        <div class="col-md-2">
+            <h4>Attended:</h4>
+        </div>
+        <div class="col-md-2">
+            <h4>Cancelled:</h4>
+        </div>
+        <div class="col-md-2">
+            <h4>No-Show:</h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2">
+            {{ total }}
+        </div>
+        <div class="col-md-2">
+            {{ attended }}
+        </div>
+        <div class="col-md-2">
+            {{ cancelled }}
+        </div>
+        <div class="col-md-2">
+            {{ no_show }}
+        </div>
+    </div>
+{% endblock diary_content %}
+
