@@ -18,6 +18,10 @@ DATE_WIDGET_OPTIONS = {
 }
 
 
+CUSTOMER_HELP_TEXTS = {
+    'email': 'Make sure you use a valid email.',
+}
+
 
 
 class CustomerCreationForm(forms.ModelForm):
@@ -54,6 +58,7 @@ class CustomerCreationForm(forms.ModelForm):
             'staff_status',
             'superuser_status',
         )
+        help_texts = CUSTOMER_HELP_TEXTS
 
 
     def clean_password2(self):
@@ -112,6 +117,7 @@ class CustomerChangeForm(forms.ModelForm):
             'superuser_status',
             'is_active',
         )
+        help_texts = CUSTOMER_HELP_TEXTS
 
 
 

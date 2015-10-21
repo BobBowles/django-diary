@@ -93,21 +93,6 @@ class Customer(User):
     )
 
 
-    def __init__(self, *args, **kwargs):
-        """
-        Override base model (User) implementation of help text for email.
-        
-        TODO: This only works in the admin forms. This is because it works on
-        the instance and not on the class. 
-        
-        See below for an ugly hack that works everywhere (including for User...
-        yes, that ugly).
-        """
-        super(Customer, self).__init__(*args, **kwargs)
-        email = self._meta.get_field('email')
-        email.help_text = 'Email is used for password reset. Use a valid email.'
-
-
     class Meta(User.Meta):
         verbose_name = 'Customer'
         verbose_name_plural = 'Customers'
@@ -153,10 +138,6 @@ class Customer(User):
 
     def __str__(self):
         return '{0} {1}'.format(self.first_name, self.last_name)
-
-
-# TODO: Hack Alert: customise class field attributes (also affects User)
-Customer._meta.get_field('email').help_text = "Make sure you use a valid email."
 
 
 
