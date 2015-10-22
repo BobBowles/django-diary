@@ -73,20 +73,22 @@ onclick="next_url('{% url 'diary:entry_admin' pk=entry.pk action='cancel' %}?nex
                     Cancel
                 </button>
             {% endif %}
-            <button 
-                type="button" 
-                class="btn btn-default" 
+            {% if entry.customer %}
+                <button 
+                    type="button" 
+                    class="btn btn-default" 
 onclick="next_url('{% url 'diary:history' pk=entry.customer.pk %}?next={{ redirect_url }}');"
-                >
-                History
-            </button>
-            <button 
-                type="button" 
-                class="btn btn-default" 
+                    >
+                    History
+                </button>
+                <button 
+                    type="button" 
+                    class="btn btn-default" 
 onclick="next_url('{% url 'diary:customer_edit' pk=entry.customer.pk %}?next={{ redirect_url }}');"
-                >
-                Personal
-            </button>
+                    >
+                    Personal
+                </button>
+            {% endif %}
             {% if enable_edit_buttons %}
                 <button 
                     type="button" 
