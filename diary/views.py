@@ -50,6 +50,47 @@ TIME_FORMAT = '%I:%M' if settings.DIARY_SHOW_MERIDIAN else '%H:%M'
 ENTRY_DATE_FORMAT = '%a %d %b %Y'
 
 
+
+class Statistics(object):
+    """
+    Wrapper class for Entry statistics.
+    """
+
+
+    def __init__(self, total, cancelled, no_show):
+        self.total = total
+        self.cancelled = cancelled
+        self.no_show = no_show
+        self.bookings = total - cancelled - no_show
+
+
+    def __str__(self):
+        return (
+            'Bookings: {0}<br />'
+            'Cancelled: {1}<br />'
+            'No-Shows: {2}<br />'
+            'Total: {3}'
+        ).format(self.bookings, self.cancelled, self.no_show, self.total)
+
+
+
+def get_statistics(entries):
+    """
+    Derive the statistics for a queryset or list of entries.
+    """
+    total = len(entries)
+
+    if total:
+        cancelled = no_show = 0
+        for entry in entries:
+            if entry.cancelled: cancelled += 1
+            if entry.no_show: no_show += 1
+        return Statistics(total, cancelled, no_show)
+    else: 
+        return None
+
+
+
 def evaluateTimeSlots():
     """
     Calculate labels and starting times for diary day display.
@@ -179,7 +220,7 @@ def month(request, year=None, month=None, change=None):
 
     # process all the days in the month
     for day in month_days:
-        entries = current = False
+        entry_list = statistics = current = None
         nav_slug = None
         if day:
             dayDate = datetime.date(year=date.year, month=date.month, day=day)
@@ -191,9 +232,14 @@ def month(request, year=None, month=None, change=None):
                     cancelled=False,
                 )
             )
+            if request.user.is_staff:
+                statistics = get_statistics(entries)
+            else:
+                entry_list = list(entries)
+
             nav_slug = dayDate.strftime(DATE_SLUG_FORMAT)
             current = (dayDate == today)
-        weeks[week_no].append((day, nav_slug, entries, current))
+        weeks[week_no].append((day, nav_slug, entry_list, statistics, current))
         if len(weeks[week_no]) == 7:
             weeks.append([])
             week_no += 1
@@ -202,7 +248,6 @@ def month(request, year=None, month=None, change=None):
         'diary/month.html',
         {
             'date': date,
-            'user': request.user,
             'weeks': weeks,
             'month_name': MONTH_NAMES[date.month-1],
             'day_names': DAY_NAMES,
@@ -788,22 +833,13 @@ def history(request, pk):
     )
 
     # some arithmetic 
-    total = len(entries)
-    cancelled = 0
-    no_show = 0
-    for entry in entries:
-        if entry.cancelled: cancelled += 1
-        if entry.no_show: no_show += 1
-    attended = total - cancelled - no_show
+    statistics = get_statistics(entries)
 
     context = {
         'next': redirect_url,
         'customer': customer,
         'entries': entries,
-        'total': total,
-        'attended': attended,
-        'cancelled': cancelled,
-        'no_show': no_show,
+        'statistics': statistics,
         'reminders': reminders(request),
     }
     return render_to_response(

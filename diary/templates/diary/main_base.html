@@ -193,12 +193,18 @@ href="{% url 'diary:customer_change' %}?next={{ request.path|urlencode|default:'
                                     <h1>Alerts</h1>
                                 </div>
                                 {% for reminder in reminders %}
-                                    <p>
-                                        {{ reminder.date }} - 
-                                        {{ reminder.time }}: 
-                                        {{ reminder.customer }}
-                                    </p>
-                                    <p> {{ reminder.short }}</p>
+                                    <span
+                                        {% if reminder.cancelled %}
+                                            class="cancelled"
+                                        {% endif %}
+                                        >
+                                        <p>
+                                            {{ reminder.date }} - 
+                                            {{ reminder.time }}: 
+                                            {{ reminder.customer }}
+                                        </p>
+                                        <p> {{ reminder.short }}</p>
+                                    </span>
                                 {% endfor %}
                             </div>
                             {% endif %}

@@ -61,38 +61,40 @@
             <hr />
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-12">
-            <h4>Summary</h4>
+    {% if statistics %}
+        <div class="row">
+            <div class="col-md-12">
+                <h4>Summary</h4>
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-2">
-            <h4>Total:</h4>
+        <div class="row">
+            <div class="col-md-2">
+                <h4>Total:</h4>
+            </div>
+            <div class="col-md-2">
+                <h4>Attended:</h4>
+            </div>
+            <div class="col-md-2">
+                <h4>Cancelled:</h4>
+            </div>
+            <div class="col-md-2">
+                <h4>No-Show:</h4>
+            </div>
         </div>
-        <div class="col-md-2">
-            <h4>Attended:</h4>
+        <div class="row">
+            <div class="col-md-2">
+                {{ statistics.total }}
+            </div>
+            <div class="col-md-2">
+                {{ statistics.bookings }}
+            </div>
+            <div class="col-md-2">
+                {{ statistics.cancelled }}
+            </div>
+            <div class="col-md-2">
+                {{ statistics.no_show }}
+            </div>
         </div>
-        <div class="col-md-2">
-            <h4>Cancelled:</h4>
-        </div>
-        <div class="col-md-2">
-            <h4>No-Show:</h4>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-2">
-            {{ total }}
-        </div>
-        <div class="col-md-2">
-            {{ attended }}
-        </div>
-        <div class="col-md-2">
-            {{ cancelled }}
-        </div>
-        <div class="col-md-2">
-            {{ no_show }}
-        </div>
-    </div>
+    {% endif %}
 {% endblock diary_content %}
 

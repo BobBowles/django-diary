@@ -36,7 +36,7 @@
         {# one week = seven days per row #}
         {% for week in weeks %}
             <div class="row cols-7">
-                {% for day, nav_slug, entries, current in week %}
+                {% for day, nav_slug, entries, statistics, current in week %}
                     <a href=
                         {% if day != 0 %}
                             "{% url 'diary:multi_day' slug=nav_slug %}"
@@ -52,15 +52,20 @@
                                 {{ day }}
                                 <br />
                                 <b>
-                                {% for entry in entries %}
-                                    {% if entry.cancelled %}
-                                        <span class="cancelled">
-                                        {{ entry.customer }}
-                                        </span>
-                                    {% else %}
-                                        {{ entry.customer }}
-                                    {% endif %}
-                                {% endfor %}
+                                {% if entries %}
+                                    {% for entry in entries %}
+                                        {% if entry.cancelled %}
+                                            <span class="cancelled">
+                                            {{ entry.customer }}
+                                            </span>
+                                        {% else %}
+                                            {{ entry.customer }}
+                                        {% endif %}
+                                        <br />
+                                    {% endfor %}
+                                {% elif statistics %}
+                                    {{ statistics|safe }}
+                                {% endif %}
                                 </b>
                             {% endif %}
                         </div>
