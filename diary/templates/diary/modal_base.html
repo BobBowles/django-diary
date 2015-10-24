@@ -1,0 +1,35 @@
+{% extends 'diary/base.html' %}
+{% load staticfiles %}
+
+
+{% block diary_head_extra %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="{% static 'js.cookie.js' %}"></script>
+    <script src="{% static 'ajax_csrf.js' %}"></script>
+
+    {# define variables used by the following js scripts #}
+    <script> 
+var entry_dnd_url = "{% url 'diary:entry_dnd' %}";
+console.log('entry_dnd_url is '+entry_dnd_url);
+var enable_new_buttons_disable = ('{{ request.user.is_staff }}'=='False');
+console.log('enable_new_buttons_disable is '+enable_new_buttons_disable);
+var redirect_url = "{{ request.path }}";
+console.log('redirect_url is '+redirect_url);
+    </script>
+
+    {# ajax modal scripts #}
+    <script src="{% static 'diary/entry_ajax_modal.js'%}"></script>
+{% endblock diary_head_extra %}
+
+
+{% block diary_content %} {# invoke this as super from child template #}
+<div style="display:none">
+    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+    <input type="hidden" id="next_url"> <!-- modal redirect trigger -->
+</div>
+{# attachment point for ajax modal body - empty #}
+<div class="modal fade" id="ajaxModal" role="dialog"></div>
+
+{% endblock diary_content %}
+
