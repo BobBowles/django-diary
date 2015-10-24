@@ -659,6 +659,13 @@ def entry_modal(request, pk):
     # avoid infinite recursion if this is for a popup on history view.
     enable_history_button = not 'history' in redirect_url
 
+    # book-ahead date hard-coded to midday 7 days in advance of today
+    book_ahead_date = today + datetime.timedelta(days=7)
+    book_ahead_datetime_slug = datetime.datetime.combine(
+        book_ahead_date, 
+        datetime.time(hour=12)
+    ).strftime(DATETIME_SLUG_FORMAT)
+
     if request.user.is_staff:
         enable_edit_buttons = True
         enable_no_show_button = (
@@ -686,6 +693,7 @@ def entry_modal(request, pk):
             'enable_edit_buttons': enable_edit_buttons,
             'enable_no_show_button': enable_no_show_button,
             'enable_history_button': enable_history_button,
+            'book_ahead_datetime_slug': book_ahead_datetime_slug,
         },
         request=request,
     )

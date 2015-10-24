@@ -95,6 +95,14 @@
                     >
                     Personal
                 </button>
+                <button 
+                    type="button" 
+                    class="btn btn-default" 
+                    onclick=
+"next_url('{% url 'diary:entry_new_customer' slug=book_ahead_datetime_slug customer_pk=entry.customer.pk %}?next={{ redirect_url }}');"
+                    >
+                    Book Ahead
+                </button>
             {% endif %}
             {% if enable_edit_buttons %}
                 <button 
