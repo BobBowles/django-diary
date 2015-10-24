@@ -1,8 +1,9 @@
-{% extends 'diary/base.html' %}
+{% extends 'diary/modal_base.html' %}
 {% load staticfiles %}
 
 
 {% block diary_head_extra %}
+    {{ block.super }}
     <link rel="stylesheet" href="{% static 'diary/multi_col.css' %}" />
 {% endblock diary_head_extra %}
 
@@ -21,6 +22,7 @@
 
 
 {% block diary_content %}
+    {{ block.super }}
 
     <div class="container-fluid">
 
@@ -37,37 +39,37 @@
         {% for week in weeks %}
             <div class="row cols-7">
                 {% for day, nav_slug, entries, statistics, current in week %}
-                    <a href=
-                        {% if day != 0 %}
-                            "{% url 'diary:multi_day' slug=nav_slug %}"
-                        {% else %}
-                            ""
-                        {% endif %}
-                        >
-                        <div class="col-md-1 day
+                    <div class=
+"col-md-1 day
 {% if day != 0 %} regular{% endif %}
 {% if current %} current{% endif %}"
-                            >
-                            {% if day != 0 %}
-                                {{ day }}
-                                <br />
-                                {% if entries %}
-                                    {% for entry in entries %}
-                                        <span class=
+                        >
+                        {% if day != 0 %}
+                            <a href="{% url 'diary:multi_day' slug=nav_slug %}">
+                                            {{ day }}
+                                        <br />
+                            </a>
+                            {% if entries %}
+                                {% for entry in entries %}
+                                    <span class=
 "entry{% if entry.cancelled %} cancelled{% endif %}
-{% if entry.no_show %} no_show{% endif %}">
+{% if entry.no_show %} no_show{% endif %}"
+                                    data-href=
+"{% url 'diary:entry_modal' pk=entry.pk %}"
+                                    data-toggle="modal"
+                                    data-target="#ajaxModal"
+                                        >
                                             {{ entry.customer }}
-                                        </span>
-                                       <br />
-                                    {% endfor %}
-                                {% elif statistics %}
-                                    <span class="statistics">
-                                        {{ statistics|safe }}
                                     </span>
-                                {% endif %}
+                                    <br />
+                                {% endfor %}
+                            {% elif statistics %}
+                                <span class="statistics">
+                                    {{ statistics|safe }}
+                                </span>
                             {% endif %}
-                        </div>
-                    </a>
+                        {% endif %}
+                    </div>
                 {% endfor %}
             </div>
         {% endfor %}

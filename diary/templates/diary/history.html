@@ -1,4 +1,4 @@
-{% extends 'diary/base.html' %}
+{% extends 'diary/modal_base.html' %}
 
 
 {% block diary_nav %}
@@ -14,6 +14,7 @@
 
 
 {% block diary_content %}
+    {{ block.super }}
     <div class="row">
         <div class="col-md-2">
             <h4>Date</h4>
@@ -35,24 +36,31 @@
         </div>
     </div>
     {% for entry in entries %}
-        <div class="row">
-            <div class="col-md-2">
-                {{ entry.date }}
-            </div>
-            <div class="col-md-2">
-                {{ entry.time }}
-            </div>
-            <div class="col-md-2">
-                {{ entry.treatment }}
-            </div>
-            <div class="col-md-4">
-                {{ entry.notes }}
-            </div>
-            <div class="col-md-1">
-                {{ entry.cancelled }}
-            </div>
-            <div class="col-md-1">
-                {{ entry.no_show }}
+        <div 
+            data-href=
+        "{% url 'diary:entry_modal' pk=entry.pk %}"
+            data-toggle="modal"
+            data-target="#ajaxModal"
+            >
+            <div class="row">
+                <div class="col-md-2">
+                    {{ entry.date }}
+                </div>
+                <div class="col-md-2">
+                    {{ entry.time }}
+                </div>
+                <div class="col-md-2">
+                    {{ entry.treatment }}
+                </div>
+                <div class="col-md-4">
+                    {{ entry.notes }}
+                </div>
+                <div class="col-md-1">
+                    {{ entry.cancelled }}
+                </div>
+                <div class="col-md-1">
+                    {{ entry.no_show }}
+                </div>
             </div>
         </div>
     {% endfor %}
