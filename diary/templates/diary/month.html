@@ -51,22 +51,20 @@
                             {% if day != 0 %}
                                 {{ day }}
                                 <br />
-                                <b>
                                 {% if entries %}
                                     {% for entry in entries %}
-                                        {% if entry.cancelled %}
-                                            <span class="cancelled">
+                                        <span class=
+"entry{% if entry.cancelled %} cancelled{% endif %}
+{% if entry.no_show %} no_show{% endif %}">
                                             {{ entry.customer }}
-                                            </span>
-                                        {% else %}
-                                            {{ entry.customer }}
-                                        {% endif %}
-                                        <br />
+                                        </span>
+                                       <br />
                                     {% endfor %}
                                 {% elif statistics %}
-                                    {{ statistics|safe }}
+                                    <span class="statistics">
+                                        {{ statistics|safe }}
+                                    </span>
                                 {% endif %}
-                                </b>
                             {% endif %}
                         </div>
                     </a>

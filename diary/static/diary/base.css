@@ -45,6 +45,18 @@
     color: #eeeeee;
 }
 
+.entry {
+    font-style: bold;
+    font-size: small;
+    color: #000000;
+}
+
+.statistics {
+    font-style: bold;
+    font-size: small;
+    color: #000000;
+}
+
 /* admin and trading are opposites. historic is the same as trading but in the 
 past */
 .admin {
