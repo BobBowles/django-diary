@@ -25,7 +25,8 @@ v0.2.5      2015-10-22      *   Bugfix: don't show history or customer buttons
 v0.2.6      TBA             *   Add entry statistics to month view for admin.
                             *   Highlight cancelled and no-show entries in 
                             upcoming list for admin.
-                            *   Incorporate css classes for entry and statistics
-                            for better style control.
+                            *   Better style control for entries.
+                            *   Bugfix: no_show is like cancelled for removing
+                            resource conflicts.
 ========    ============    ====================================================
 

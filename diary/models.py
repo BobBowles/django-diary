@@ -328,7 +328,7 @@ class Entry(models.Model):
         The entry is invalid if it clashes in time and resource with
         a pre-existing entry. Cancelled entries don't count.
         """
-        if self.cancelled:
+        if self.cancelled or self.no_show:
             return
 
         if self.resource:
@@ -357,7 +357,7 @@ class Entry(models.Model):
         A named customer cannot have two entries at the same time, irrespective
         of other resource criteria. Cancelled entries don't count.
         """
-        if self.cancelled:
+        if self.cancelled or self.no_show:
             return
 
         if self.customer:
