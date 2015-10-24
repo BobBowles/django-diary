@@ -39,25 +39,27 @@
         {% for week in weeks %}
             <div class="row cols-7">
                 {% for day, nav_slug, entries, statistics, current in week %}
-                    <div class=
+                    <div 
+                        class=
 "col-md-1 day
 {% if day != 0 %} regular{% endif %}
 {% if current %} current{% endif %}"
                         >
                         {% if day != 0 %}
                             <a href="{% url 'diary:multi_day' slug=nav_slug %}">
-                                            {{ day }}
-                                        <br />
+                                {{ day }}
+                                <br />
                             </a>
                             {% if entries %}
                                 {% for entry in entries %}
-                                    <span class=
+                                    <span 
+                                        class=
 "entry{% if entry.cancelled %} cancelled{% endif %}
 {% if entry.no_show %} no_show{% endif %}"
-                                    data-href=
+                                        data-href=
 "{% url 'diary:entry_modal' pk=entry.pk %}"
-                                    data-toggle="modal"
-                                    data-target="#ajaxModal"
+                                        data-toggle="modal"
+                                        data-target="#ajaxModal"
                                         >
                                             {{ entry.customer }}
                                     </span>

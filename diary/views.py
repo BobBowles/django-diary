@@ -655,6 +655,10 @@ def entry_modal(request, pk):
     today, now = get_today_now()
     enable_edit_buttons = False
     enable_no_show_button = False
+
+    # avoid infinite recursion if this is for a popup on history view.
+    enable_history_button = not 'history' in redirect_url
+
     if request.user.is_staff:
         enable_edit_buttons = True
         enable_no_show_button = (
@@ -681,6 +685,7 @@ def entry_modal(request, pk):
             'redirect_url': redirect_url,
             'enable_edit_buttons': enable_edit_buttons,
             'enable_no_show_button': enable_no_show_button,
+            'enable_history_button': enable_history_button,
         },
         request=request,
     )

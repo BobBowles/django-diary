@@ -50,7 +50,8 @@
                 <button 
                     type="button" 
                     class="btn btn-danger" 
-onclick="next_url('{% url 'diary:entry_admin' pk=entry.pk action='delete' %}?next={{ redirect_url }}');"
+                    onclick=
+"next_url('{% url 'diary:entry_admin' pk=entry.pk action='delete' %}?next={{ redirect_url }}');"
                     >
                     Delete
                 </button>
@@ -59,7 +60,8 @@ onclick="next_url('{% url 'diary:entry_admin' pk=entry.pk action='delete' %}?nex
                 <button 
                     type="button" 
                     class="btn btn-warning" 
-onclick="next_url('{% url 'diary:entry_admin' pk=entry.pk action='no_show' %}?next={{ redirect_url }}');"
+                    onclick=
+"next_url('{% url 'diary:entry_admin' pk=entry.pk action='no_show' %}?next={{ redirect_url }}');"
                     >
                     No-Show
                 </button>
@@ -68,23 +70,28 @@ onclick="next_url('{% url 'diary:entry_admin' pk=entry.pk action='no_show' %}?ne
                 <button 
                     type="button" 
                     class="btn btn-warning" 
-onclick="next_url('{% url 'diary:entry_admin' pk=entry.pk action='cancel' %}?next={{ redirect_url }}');"
+                    onclick=
+"next_url('{% url 'diary:entry_admin' pk=entry.pk action='cancel' %}?next={{ redirect_url }}');"
                     >
                     Cancel
                 </button>
             {% endif %}
             {% if entry.customer %}
+                {% if enable_history_button %}
+                    <button 
+                        type="button" 
+                        class="btn btn-default" 
+                        onclick=
+"next_url('{% url 'diary:history' pk=entry.customer.pk %}?next={{ redirect_url }}');"
+                        >
+                        History
+                    </button>
+                {% endif %}
                 <button 
                     type="button" 
                     class="btn btn-default" 
-onclick="next_url('{% url 'diary:history' pk=entry.customer.pk %}?next={{ redirect_url }}');"
-                    >
-                    History
-                </button>
-                <button 
-                    type="button" 
-                    class="btn btn-default" 
-onclick="next_url('{% url 'diary:customer_edit' pk=entry.customer.pk %}?next={{ redirect_url }}');"
+                    onclick=
+"next_url('{% url 'diary:customer_edit' pk=entry.customer.pk %}?next={{ redirect_url }}');"
                     >
                     Personal
                 </button>
@@ -93,7 +100,8 @@ onclick="next_url('{% url 'diary:customer_edit' pk=entry.customer.pk %}?next={{ 
                 <button 
                     type="button" 
                     class="btn btn-default" 
-onclick="next_url('{% url 'diary:entry' pk=entry.pk %}?next={{ redirect_url }}');"
+                    onclick=
+"next_url('{% url 'diary:entry' pk=entry.pk %}?next={{ redirect_url }}');"
                     >
                     Edit Entry
                 </button>
