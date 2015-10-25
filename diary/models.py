@@ -338,6 +338,7 @@ class Entry(models.Model):
                 date=self.date, 
                 resource=self.resource,
                 cancelled=False,
+                no_show=False,
             )
 
             # ensure no time clashes
@@ -367,6 +368,7 @@ class Entry(models.Model):
                 date=self.date, 
                 customer=self.customer,
                 cancelled=False,
+                no_show=False,
             )
 
             # ensure no time clashes
