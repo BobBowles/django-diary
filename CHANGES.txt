@@ -22,7 +22,7 @@ v0.2.4      2015-10-21      *   Bugfix: back out former fix v0.1.3, apply email
                             help text via forms without bad consequences.
 v0.2.5      2015-10-22      *   Bugfix: don't show history or customer buttons 
                             on modal when there is no customer.
-v0.2.6      TBA             *   Add entry statistics to month view for admin.
+v0.2.6      2015-10-25      *   Add entry statistics to month view for admin.
                             *   Highlight cancelled and no-show entries in 
                             upcoming list for admin.
                             *   Better style control for entries.
