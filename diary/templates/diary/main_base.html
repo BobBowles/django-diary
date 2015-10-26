@@ -193,27 +193,6 @@ href="{% url 'diary:customer_change' %}?next={{ request.path|urlencode|default:'
                         {# diary sidebar reminders go here #}
                         {% block diary_sidebar %} 
                             {% include 'diary/reminders.html' %}
-<!--                            {% if reminders %}-->
-<!--                                <div class="reminders">-->
-<!--                                    <div class="page-head">-->
-<!--                                        <h1>Reminders</h1>-->
-<!--                                    </div>-->
-<!--                                    {% for reminder in reminders %}-->
-<!--                                        <span-->
-<!--                                            {% if reminder.cancelled %}-->
-<!--                                                class="cancelled"-->
-<!--                                            {% endif %}-->
-<!--                                            >-->
-<!--                                            <p>-->
-<!--                                                {{ reminder.date }} - -->
-<!--                                                {{ reminder.time }}: -->
-<!--                                                {{ reminder.customer }}-->
-<!--                                            </p>-->
-<!--                                            <p> {{ reminder.short }}</p>-->
-<!--                                        </span>-->
-<!--                                    {% endfor %}-->
-<!--                                </div>-->
-<!--                            {% endif %}-->
                         {% endblock diary_sidebar %}
                     </div>
                 </div>
