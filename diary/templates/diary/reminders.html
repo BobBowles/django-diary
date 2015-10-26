@@ -1,0 +1,22 @@
+{% if reminders %}
+    <div class="reminders">
+        <div class="page-head">
+            <h2>Reminders</h2>
+        </div>
+        {% for reminder in reminders %}
+            <span
+                {% if reminder.cancelled %}
+                    class="cancelled"
+                {% endif %}
+                >
+                <p>
+                    {{ reminder.date }} - 
+                    {{ reminder.time }}: 
+                    {{ reminder.customer }}
+                </p>
+                <p>{{ reminder.short }}</p>
+            </span>
+        {% endfor %}
+    </div>
+{% endif %}
+

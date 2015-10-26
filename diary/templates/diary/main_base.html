@@ -32,6 +32,11 @@ href="http://fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext" />
     font-size: 36pt;
     text-decoration: none;
 }
+.page-head h2 {
+    color: white;
+    font-size: 18pt;
+    text-decoration: none;
+}
 
 
 h1, h2, h3, h4, p.top-menu {
@@ -187,27 +192,28 @@ href="{% url 'diary:customer_change' %}?next={{ request.path|urlencode|default:'
                     <div class="col-md-2">
                         {# diary sidebar reminders go here #}
                         {% block diary_sidebar %} 
-                            {% if reminders %}
-                            <div class="reminders">
-                                <div class="page-head">
-                                    <h1>Alerts</h1>
-                                </div>
-                                {% for reminder in reminders %}
-                                    <span
-                                        {% if reminder.cancelled %}
-                                            class="cancelled"
-                                        {% endif %}
-                                        >
-                                        <p>
-                                            {{ reminder.date }} - 
-                                            {{ reminder.time }}: 
-                                            {{ reminder.customer }}
-                                        </p>
-                                        <p> {{ reminder.short }}</p>
-                                    </span>
-                                {% endfor %}
-                            </div>
-                            {% endif %}
+                            {% include 'diary/reminders.html' %}
+<!--                            {% if reminders %}-->
+<!--                                <div class="reminders">-->
+<!--                                    <div class="page-head">-->
+<!--                                        <h1>Reminders</h1>-->
+<!--                                    </div>-->
+<!--                                    {% for reminder in reminders %}-->
+<!--                                        <span-->
+<!--                                            {% if reminder.cancelled %}-->
+<!--                                                class="cancelled"-->
+<!--                                            {% endif %}-->
+<!--                                            >-->
+<!--                                            <p>-->
+<!--                                                {{ reminder.date }} - -->
+<!--                                                {{ reminder.time }}: -->
+<!--                                                {{ reminder.customer }}-->
+<!--                                            </p>-->
+<!--                                            <p> {{ reminder.short }}</p>-->
+<!--                                        </span>-->
+<!--                                    {% endfor %}-->
+<!--                                </div>-->
+<!--                            {% endif %}-->
                         {% endblock diary_sidebar %}
                     </div>
                 </div>
