@@ -31,5 +31,7 @@ v0.2.6      2015-10-25      *   Add entry statistics to month view for admin.
                             *   Add modal popup entry to month and history 
                             views.
                             *   Add book-ahead button to modal.
+v0.2.7      2015-10-26      *   Bugfix: Refactor reminders/updates html as an
+                            include file.
 ========    ============    ====================================================
 

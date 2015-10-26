@@ -131,7 +131,9 @@ After installation you should have 'something-that-works' but it will look ugly 
     ``diary_content``   attachment point for the diary content.
     ``diary_title``     attachment point for the page title.
     ``diary_sidebar``   *(Optional)* attachment point for reminders / ticker
-                        information if required.
+                        information if required. This block should include the
+                        html snippet ``diary/reminders.html`` (which may also be
+                        overridden if required).
     =================== ========================================================
 
 #.  For staging and production supply the parameters for your email service in your ``settings.py``. The test email service described in the Installation section above provides a ready-made template for the required parameters. Make sure you connect to your provider's SMTP service port. Below is an example for a Google account:
