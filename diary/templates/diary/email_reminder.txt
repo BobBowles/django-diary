@@ -1,0 +1,9 @@
+Dear {{ entry.customer }},
+
+This is a reminder of your appointment tomorrow:
+
+At {{ entry.time }} on {{ entry.date }}{% if entry.treatment %} for {{ entry.treatment }}{% endif %}.
+
+Kind Regards
+
+{{ site_name }}
