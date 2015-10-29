@@ -10,6 +10,8 @@ Django-Diary is a project to create an easy-to-use desk diary and scheduling too
 
 While the data model is very simple, some effort has been put into making the UI slick and intuitive, with ``ajax`` enabling drag-and-drop and updates of modal displays on the diary grid, and ``Bootstrap``-compatible widgets used on the forms.
 
+An additional management command is included to permit routine administration of email reminders (see `Administration`_).
+
 
 The Models
 ----------
@@ -194,6 +196,8 @@ After installation you should have 'something-that-works' but it will look ugly 
                                                         time for customers in 
                                                         days. ``0`` means there
                                                         is no minimum period.
+    ``DIARY_SITE_NAME``         ``Django-   str         Name of site for use
+                                Diary``                 in emails.
     ``DIARY_XXXXX``             ``xx``      xx          **TODO**: Template
                                                         for ``DIARY_XXXXX``.
     =========================== =========== =========== ========================
@@ -211,6 +215,19 @@ After installation you should have 'something-that-works' but it will look ugly 
             '%H:%M:%S.%f',
         )
 
+
+Administration
+--------------
+
+A custom command has been added to enable easy implementation of the routine task of sending out email reminders. At the moment configuration settings for this are kept to a minimum, requiring only a name for the site, given as ``DIARY_SITE_NAME``, plus the correct configuration of the email facility itself, covered in the `Installation`_ and `Configuration`_ sections. 
+
+The code assumes reminders are required only for those ``Customers`` with emails who have an ``Entry`` in the diary for the following day.
+
+To run the email reminders, the command is::
+
+    ./manage.py email_reminder
+
+The simplest way to set this up for regular use is via a daily ``cron`` job on your server.
 
 
 Dependencies

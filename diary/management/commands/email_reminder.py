@@ -5,7 +5,8 @@ import datetime
 from django.core import mail
 from django.template.loader import render_to_string
 from django.template import Context
-from django.conf import settings
+from django.conf import settings as main_settings
+from diary import settings as settings
 
 
 
@@ -19,50 +20,55 @@ class Command(BaseCommand):
         """
         Handler to prepare and submit the emails.
         """
-        print('email_reminder Hello World!')
 
         # select the entries that qualify for reminders
-        # TODO: parameterize this - time ahead of today - window width
-        print('Select Entries goes here...')
+        # TODO: currently hard-coded to remind the day before
+        print('Selecting Entries ...')
         today, now = get_today_now()
         tomorrow = today + datetime.timedelta(days=1)
         entries = Entry.objects.filter(
             date=tomorrow,
-            customer__email__isnull=False,
+            customer__email__gt='', # test for non-blank (not non-null) email
         )
-        for entry in entries:
-            print('Entry customer {0}, email {1}'.format(
-                entry.customer, 
-                entry.customer.email,
-            ))
+        print('Selected {0} Entries:'.format(entries.count()))
+#        for entry in entries:
+#            print('Customer {0}, email {1}'.format(
+#                entry.customer, 
+#                entry.customer.email,
+#            ))
 
         # prepare the messages
-        print('Prepare messages goes here...')
+        print('Preparing messages ...')
         reminder_messages = []
         for entry in entries:
             message = (
-                'Apointment Reminder',
+                settings.DIARY_SITE_NAME+': Appointment Reminder',
                 render_to_string(
                     'diary/email_reminder.txt',
-                    context={'entry': entry},
+                    context={
+                        'entry': entry,
+                        'site_name': settings.DIARY_SITE_NAME,
+                    },
                 ),
-                settings.DEFAULT_FROM_EMAIL,
+                main_settings.DEFAULT_FROM_EMAIL,
                 [entry.customer.email],
             )
-            print(
-                'Message: \n'
-                'From: {2}\n'
-                'To: {3}\n'
-                'Subject: {0}\n'
-                'Body:\n{1}'.format(
-                    message[0], 
-                    message[1], 
-                    message[2],
-                    message[3],
-                )
-            )
+#            print(
+#                'Message: \n'
+#                'From: {2}\n'
+#                'To: {3}\n'
+#                'Subject: {0}\n'
+#                'Body:\n{1}'.format(
+#                    message[0], # subject
+#                    message[1], # body
+#                    message[2], # from
+#                    message[3], # to
+#                )
+#            )
             reminder_messages.append(message)
 
         # send the messages
-        print('Send messages goes here...')
+        print('Sending reminders ...')
         mail.send_mass_mail(reminder_messages, fail_silently=False)
+        print('Reminders sent: {0}'.format(len(reminder_messages)))
+

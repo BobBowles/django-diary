@@ -48,3 +48,6 @@ DIARY_CLOSING_TIMES = get('DIARY_CLOSING_TIMES', DEFAULT_CLOSING_TIMES)
 # minimum advance booking time for customers in days
 DIARY_MIN_BOOKING = get('DIARY_MIN_BOOKING', 0)
 
+# site name for use by email_reminder
+DIARY_SITE_NAME = get('DIARY_SITE_NAME', 'Django-Diary')
+
