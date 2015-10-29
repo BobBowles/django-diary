@@ -219,7 +219,18 @@ After installation you should have 'something-that-works' but it will look ugly 
 Administration
 --------------
 
-A custom command has been added to enable easy implementation of the routine task of sending out email reminders. At the moment configuration settings for this are kept to a minimum, requiring only a name for the site, given as ``DIARY_SITE_NAME``, plus the correct configuration of the email facility itself, covered in the `Installation`_ and `Configuration`_ sections. 
+A custom command has been added to enable easy implementation of the routine task of sending out email reminders. At the moment configuration settings for this are kept to a minimum, requiring a name for the site, given as ``DIARY_SITE_NAME``, plus the correct configuration of the email facility itself. 
+
+Most of the email configuration is covered in the `Installation`_ and `Configuration`_ sections. To make use of administration notifications, two further email settings are needed in ``settings.py``, for ``ADMINS`` and ``SERVER_EMAIL``, for example::
+
+    # tuple of tuples of administrator names and emails
+    ADMINS = (
+        ('Boss 1', 'boss1@example.com),
+        ('Boss 2', 'boss2@example.com),
+    )
+    
+    # server email address
+    SERVER_EMAIL = 'webmaster@example.com'
 
 The code assumes reminders are required only for those ``Customers`` with emails who have an ``Entry`` in the diary for the following day.
 
@@ -227,7 +238,7 @@ To run the email reminders, the command is::
 
     ./manage.py email_reminder
 
-The simplest way to set this up for regular use is via a daily ``cron`` job on your server.
+The simplest way to schedule this for regular use is via a daily ``cron`` job on your server.
 
 
 Dependencies

@@ -146,6 +146,11 @@ STATIC_URL = '/static/'
 
 # test email server setup
 if DEBUG:
+    ADMINS = (
+        ('Mr Big', 'admin@example.com'),
+        ('Mrs Big', 'admin2@example.com'),
+    )
+    SERVER_EMAIL = 'root@example.com'
     EMAIL_HOST = 'localhost'
     EMAIL_PORT = 1025
     EMAIL_HOST_USER = ''

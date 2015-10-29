@@ -23,22 +23,28 @@ class Command(BaseCommand):
 
         # select the entries that qualify for reminders
         # TODO: currently hard-coded to remind the day before
-        print('Selecting Entries ...')
         today, now = get_today_now()
         tomorrow = today + datetime.timedelta(days=1)
         entries = Entry.objects.filter(
             date=tomorrow,
             customer__email__gt='', # test for non-blank (not non-null) email
-        )
-        print('Selected {0} Entries:'.format(entries.count()))
-#        for entry in entries:
-#            print('Customer {0}, email {1}'.format(
-#                entry.customer, 
-#                entry.customer.email,
-#            ))
+        ).order_by('time')
+
+        # collect summary info for site admins
+        n_emails = entries.count()
+        summary = []
+        for entry in entries:
+            summary.append(
+                '{0} <{1}>: {2} {3}:  {4}'.format(
+                    entry.customer, 
+                    entry.customer.email,
+                    entry.date,
+                    entry.time,
+                    entry.treatment,
+                )
+            )
 
         # prepare the messages
-        print('Preparing messages ...')
         reminder_messages = []
         for entry in entries:
             message = (
@@ -53,22 +59,22 @@ class Command(BaseCommand):
                 main_settings.DEFAULT_FROM_EMAIL,
                 [entry.customer.email],
             )
-#            print(
-#                'Message: \n'
-#                'From: {2}\n'
-#                'To: {3}\n'
-#                'Subject: {0}\n'
-#                'Body:\n{1}'.format(
-#                    message[0], # subject
-#                    message[1], # body
-#                    message[2], # from
-#                    message[3], # to
-#                )
-#            )
             reminder_messages.append(message)
 
+        # add a message to notify site admins
+        admin_message = 'Reminders sent to {0} customers:\n\n'.format(n_emails)
+        admin_message += '\n'.join(summary)
+        reminder_messages.append(
+            (
+                settings.DIARY_SITE_NAME +
+                    ': Reminders Summary for {0} at {1}'.format(today, now),
+                admin_message,
+                main_settings.SERVER_EMAIL,
+                [email for name, email in main_settings.ADMINS],
+            )
+        )
+
         # send the messages
-        print('Sending reminders ...')
         mail.send_mass_mail(reminder_messages, fail_silently=False)
-        print('Reminders sent: {0}'.format(len(reminder_messages)))
+        print('Reminder messages sent: {0}'.format(len(reminder_messages)))
 
