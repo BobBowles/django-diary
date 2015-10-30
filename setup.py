@@ -93,7 +93,12 @@ setup(
         "Topic :: Utilities",
     ],
     package_dir={'': packageDir},
-    packages=['diary', 'diary.migrations'],
+    packages=[
+        'diary',
+        'diary.migrations',
+        'diary.management',
+        'diary.management.commands',
+    ],
     install_requires=[
         'Django>=1.8.3',
         'django-datetime-widget>=0.9.3',
