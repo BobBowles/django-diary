@@ -1,0 +1,3 @@
+#!/bin/bash
+# run python's built-in dummy email server on port localhost:1025
+python -m smtpd -n -c DebuggingServer localhost:1025
