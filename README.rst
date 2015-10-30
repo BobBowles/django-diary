@@ -98,6 +98,8 @@ A complete sample project is available on `GitHub <https://github.com/BobBowles/
 
         python -m smtpd -n -c DebuggingServer localhost:1025
 
+    (or just use the bash script checked into the `GitHub project <https://github.com/BobBowles/django-diary>`_).
+
     In your ``settings.py`` add your email server's details. The following snippet links to the dummy email server described above:
 
     ::
