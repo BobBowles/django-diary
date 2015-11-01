@@ -12,7 +12,8 @@ from .widgets import RelatedFieldWidgetCanAdd
 TIME_FORMATS = ['%H:%M', '%I:%M%p', '%I:%M %p',]
 DURATION_FORMATS = ['%H:%M',]
 DATE_WIDGET_OPTIONS = {
-#    'todayBtn': True,
+    # NB convert between conventions for numbering days (widget uses Sunday=0)
+    'weekStart': ((settings.DIARY_FIRST_DAY_OF_WEEK + 1) % 7),
     'minView': 2,
     'maxView': 3,
 }
