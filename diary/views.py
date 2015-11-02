@@ -519,7 +519,7 @@ def entry(request, pk=None, slug=None, customer_pk=None):
 
     # determine the navigation context for redirection
     next_url = get_redirect_url(request, reverse('diary:home'))
-    print('Entry: next_url is {0}'.format(next_url))
+    #print('Entry: next_url is {0}'.format(next_url))
 
     # decide whether we are creating a new entry or editing a new one
     if pk:                              # edit existing entry
@@ -596,12 +596,12 @@ def entry_update(request):
     """
 
     pk = request.POST['pk']
-    print('pk is {0}'.format(pk))
+    #print('pk is {0}'.format(pk))
     entry = get_object_or_404(Entry, pk=pk)
     entry.editor = request.user
 
     datetime_slug = request.POST['slug']
-    print('datetime_slug is {0}'.format(datetime_slug))
+    #print('datetime_slug is {0}'.format(datetime_slug))
     date, time = getDatetimeFromSlug(datetime_slug)
 
     # try updating the entry
@@ -658,11 +658,11 @@ def entry_modal(request, pk):
     # avoid infinite recursion if this is for a popup on history view.
     enable_history_button = not 'history' in redirect_url
 
-    # book-ahead date hard-coded to midday 7 days in advance of today
-    book_ahead_date = today + datetime.timedelta(days=7)
+    # initial book-ahead date hard-coded to 7 days in advance of chosen entry
+    book_ahead_date = entry.date + datetime.timedelta(days=7)
     book_ahead_datetime_slug = datetime.datetime.combine(
         book_ahead_date, 
-        datetime.time(hour=12)
+        entry.time,
     ).strftime(DATETIME_SLUG_FORMAT)
 
     if request.user.is_staff:

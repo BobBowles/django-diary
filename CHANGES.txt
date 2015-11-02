@@ -36,5 +36,7 @@ v0.2.7      2015-10-26      *   Bugfix: Refactor reminders/updates html as an
 v0.3        2015-10-30      *   Add email reminder functionality.
 v0.3.1      2015-11-01      *   Bugfix: Make widget calendar layout match month
                             view.
+v0.3.2      2015-11-02      *   Bugfix: Initialize book-ahead to same day and
+                            time one week ahead of selected entry.
 ========    ============    ====================================================
 
