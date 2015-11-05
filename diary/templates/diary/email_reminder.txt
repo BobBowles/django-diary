@@ -4,6 +4,13 @@ This is a reminder of your appointment tomorrow:
 
 At {{ entry.time }} on {{ entry.date }}{% if entry.treatment %} for {{ entry.treatment }}{% endif %}.
 
+If you need to change/cancel your appointment, please contact us as soon as
+possible:
+
+by email: {{ contact_email }}{% if contact_phone %}
+by phone: {{ contact_phone }}{% endif %}.
+
+
 Kind Regards
 
 {{ site_name }}

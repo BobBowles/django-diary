@@ -130,6 +130,8 @@ DIARY_CLOSING_TIMES[6] = sunday_closing_time
 
 DIARY_MIN_BOOKING = 1
 
+DIARY_CONTACT_PHONE = '01234567890'
+
 # User customisation
 # NOTE: use of InheritanceQuerySet in the backend dispenses with the need for 
 # any other setting. (django-model-utils)

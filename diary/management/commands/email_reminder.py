@@ -54,6 +54,8 @@ class Command(BaseCommand):
                     context={
                         'entry': entry,
                         'site_name': settings.DIARY_SITE_NAME,
+                        'contact_email': main_settings.DEFAULT_FROM_EMAIL,
+                        'contact_phone': settings.DIARY_CONTACT_PHONE,
                     },
                 ),
                 main_settings.DEFAULT_FROM_EMAIL,

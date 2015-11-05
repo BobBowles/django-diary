@@ -38,5 +38,7 @@ v0.3.1      2015-11-01      *   Bugfix: Make widget calendar layout match month
                             view.
 v0.3.2      2015-11-02      *   Bugfix: Initialize book-ahead to same day and
                             time one week ahead of selected entry.
+v0.3.3      2015-11-05      *   Add configurable contact information to email
+                            reminder text.
 ========    ============    ====================================================
 

@@ -51,3 +51,6 @@ DIARY_MIN_BOOKING = get('DIARY_MIN_BOOKING', 0)
 # site name for use by email_reminder
 DIARY_SITE_NAME = get('DIARY_SITE_NAME', 'Django-Diary')
 
+# contact phone number for use by email_reminder
+DIARY_CONTACT_PHONE = get('DIARY_CONTACT_PHONE', '')
+

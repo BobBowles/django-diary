@@ -92,7 +92,7 @@ A complete sample project is available on `GitHub <https://github.com/BobBowles/
             'django.contrib.auth.views.password_reset_complete'),
         url(r'^diary/', include('diary.urls', namespace='diary')),
 
-#.  For the password administration you need to set up an email service. It is sufficient to use Python's built-in dummy server for development and testing. This just prints out the result of email requests onto the console. From the command line:
+#.  For password administration and/or the email reminder service you need to set up an email service. It is sufficient to use Python's built-in dummy server for development and testing. This just prints out the result of email requests onto the console. From the command line:
 
     ::
 
@@ -200,6 +200,8 @@ After installation you should have 'something-that-works' but it will look ugly 
                                                         is no minimum period.
     ``DIARY_SITE_NAME``         ``Django-   str         Name of site for use
                                 Diary``                 in emails.
+    ``DIARY_CONTACT_PHONE``     ``''``      str         Contact phone number for
+                                                        use in emails.
     ``DIARY_XXXXX``             ``xx``      xx          **TODO**: Template
                                                         for ``DIARY_XXXXX``.
     =========================== =========== =========== ========================
@@ -221,7 +223,7 @@ After installation you should have 'something-that-works' but it will look ugly 
 Administration
 --------------
 
-A custom command has been added to enable easy implementation of the routine task of sending out email reminders. At the moment configuration settings for this are kept to a minimum, requiring a name for the site, given as ``DIARY_SITE_NAME``, plus the correct configuration of the email facility itself. 
+A custom command has been added to enable easy implementation of the routine task of sending out email reminders. At the moment configuration settings for this are kept to a minimum, requiring a name for the site, given as ``DIARY_SITE_NAME``, and an optional contact phone number ``DIARY_CONTACT_PHONE``, plus the correct configuration of the email facility itself. 
 
 Most of the email configuration is covered in the `Installation`_ and `Configuration`_ sections. To make use of administration notifications, two further email settings are needed in ``settings.py``, for ``ADMINS`` and ``SERVER_EMAIL``, for example::
 
@@ -234,13 +236,15 @@ Most of the email configuration is covered in the `Installation`_ and `Configura
     # server email address
     SERVER_EMAIL = 'webmaster@example.com'
 
+Additionally, make sure the ``DEFAULT_FROM_EMAIL`` refers to a mailbox that can be replied to.
+
 The code assumes reminders are required only for those ``Customers`` with emails who have an ``Entry`` in the diary for the following day.
 
-To run the email reminders, the command is::
+To run the email reminders from the command line, in the root project directory type::
 
     ./manage.py email_reminder
 
-The simplest way to schedule this for regular use is via a daily ``cron`` job on your server.
+The simplest way to schedule reminders for regular use is via a daily ``cron`` job on your server.
 
 
 Dependencies
