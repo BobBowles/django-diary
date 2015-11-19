@@ -27,6 +27,7 @@ class Command(BaseCommand):
         tomorrow = today + datetime.timedelta(days=1)
         entries = Entry.objects.filter(
             date=tomorrow,
+            cancelled=False, # reminders not needed for cancelled entries
             customer__email__gt='', # test for non-blank (not non-null) email
         ).order_by('time')
 
