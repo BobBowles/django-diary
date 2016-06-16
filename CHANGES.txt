@@ -43,6 +43,8 @@ v0.3.3      2015-11-05      *   Add configurable contact information to email
 v0.3.4      2015-11-19      *   Bugfix: Do not include cancelled entries in the
                             email reminders.
 v0.3.5      2016-06-16      *   New: Add Customer notes to popup.
+                            *   Bugfix: Ensure redirection restores 'today' when
+                            no date is specified.
 v0.4.0      TBA             *   BETA??
                             *   TBA
 ========    ============    ====================================================

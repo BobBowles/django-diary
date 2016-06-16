@@ -490,11 +490,10 @@ def get_redirect_url(request, default):
     ).split('/')
     date_index = next_url_bits.index('diary') + 2
 
-    if not next_url_bits[date_index]:       # no date so give today as slug
-        slug = datetime.datetime.today().strftime(DATE_SLUG_FORMAT)
-        return '/'.join(x for x in next_url_bits) + slug + '/'
+    if not next_url_bits[date_index]:       # no date, so assume today
+        return '/'.join(x for x in next_url_bits)
 
-    if not next_url_bits[date_index+1]:     # no change component
+    if not next_url_bits[date_index+1]:     # no change component, pass as-is
         return '/'.join(x for x in next_url_bits)
 
     # deal with change component by re-calculating the date slug
