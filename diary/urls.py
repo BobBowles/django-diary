@@ -98,7 +98,6 @@ urlpatterns = [
         views.customer_change, 
         name='customer_edit',                       # edit customer
     ),
-    # TODO: this url does not seem to work as intended - security issue??
     url(r'^customer_change/$', 
         views.customer_change, 
         name='customer_change',                     # default is current user

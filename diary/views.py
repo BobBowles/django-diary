@@ -785,11 +785,15 @@ def get_customer_and_redirect(request, pk):
     """
     Utility to derive the customer and redirect url to use.
     
+    Only allow pk different from user if user is staff.
     If no pk is specified the current logged-on user is assumed.
     If no url is found diary:home is used as default/fallback.
     """
 
-    customer = Customer.objects.get(pk=pk) if pk else request.user
+    customer = (
+        Customer.objects.get(pk=pk) if (pk and request.user.is_staff) 
+        else request.user
+    )
 
     redirect_url = (
         request.GET['next'] if 'next' in request.GET 
