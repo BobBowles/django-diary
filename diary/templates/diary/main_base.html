@@ -5,11 +5,11 @@
     <head>
         {% block head_extra %}
         {# layouts are based on bootstrap so these links need to be somewhere #}
-        <link rel="stylesheet" 
+        <link rel="stylesheet"
 href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" />
-        <link rel="stylesheet" 
+        <link rel="stylesheet"
 href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css" />
-        <link rel="stylesheet" type="text/css" 
+        <link rel="stylesheet" type="text/css"
 href="http://fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext" />
         {% endblock head_extra %}
         {% block title %} {# override or delete as required #}
@@ -24,9 +24,9 @@ href="http://fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext" />
     padding: 20px, 20px, 20px, 40px;
 }
 
-.page-head h1, 
-.page-head h1 a, 
-.page-head h1 a:visited, 
+.page-head h1,
+.page-head h1 a,
+.page-head h1 a:visited,
 .page-head h1 a:active {
     color: white;
     font-size: 36pt;
@@ -75,12 +75,12 @@ ul.nav {
                 {% if user.is_authenticated %}
                     <p class="top-menu">
                         Hello {{ user.username }}
-                        
-                        
+
+
                     </p>
                     {% block links %}
-                        <a 
-                            class="top-menu" 
+                        <a
+                            class="top-menu"
                             href="{% url 'diary:multi_day_now' %}"
                             >
                             <span class="glyphicon glyphicon-calendar"></span>
@@ -92,7 +92,7 @@ ul.nav {
                         >
                         <span class="glyphicon glyphicon-lock"></span>
                     </a>
-                    <a 
+                    <a
                         class="top-menu"
                         {% if user.is_superuser %}
                             href="{% url 'admin:index' %}"
@@ -102,27 +102,27 @@ href="{% url 'diary:customer_change' %}?next={{ request.path|urlencode|default:'
                         >
                         <span class="glyphicon glyphicon-user"></span>
                     </a>
-                    <a 
+                    <a
                         class="top-menu"
-                        href="{% url 'django.contrib.auth.views.logout' %}"
+                        href="{% url 'logout' %}"
                         >
                         <span class="glyphicon glyphicon-log-out"></span>
                     </a>
                 {% else %}
-                    <a 
-                        class="top-menu" 
-                        href="{% url "django.contrib.auth.views.login" %}"
+                    <a
+                        class="top-menu"
+                        href="{% url 'login' %}"
                         >
                         <span class="glyphicon glyphicon-log-in"></span>
                     </a>
-                    <a 
-                        class="top-menu" 
+                    <a
+                        class="top-menu"
                         href="{% url "diary:customer_add" %}"
                         >
                         <span class="glyphicon glyphicon-plus"></span>
                     </a>
                 {% endif %}
-                
+
                 <h1><a href="">Diary Test App</a></h1>
             </div>
         {% endblock nav_menu %}
@@ -186,12 +186,12 @@ href="{% url 'diary:customer_change' %}?next={{ request.path|urlencode|default:'
 
 
                         {# diary main content goes here #}
-                        {% block diary_content %} 
+                        {% block diary_content %}
                         {% endblock diary_content %}
                     </div>
                     <div class="col-md-2">
                         {# diary sidebar reminders go here #}
-                        {% block diary_sidebar %} 
+                        {% block diary_sidebar %}
                             {% include 'diary/reminders.html' %}
                         {% endblock diary_sidebar %}
                     </div>
@@ -201,4 +201,3 @@ href="{% url 'diary:customer_change' %}?next={{ request.path|urlencode|default:'
 
     </body>
 </html>
-

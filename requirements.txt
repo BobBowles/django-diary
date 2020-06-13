@@ -1,5 +1,5 @@
-Django==1.8.3
+Django==1.11.29
 django-datetime-widget==0.9.3
-django-model-utils==2.3.1
-pytz==2015.4
-six==1.9.0
+django-model-utils==3.2.0
+pytz==2020.1
+six==1.15.0

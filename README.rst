@@ -62,7 +62,7 @@ A complete sample project is available on `GitHub <https://github.com/BobBowles/
     ::
 
         # User customisation
-        # NOTE: use of InheritanceQuerySet in the backend dispenses with the need for 
+        # NOTE: use of InheritanceQuerySet in the backend dispenses with the need for
         # any other setting. (django-model-utils)
         # http://scottbarnham.com/blog/2008/08/21/extending-the-django-user-model-with-inheritance/
         AUTHENTICATION_BACKENDS = (
@@ -72,25 +72,25 @@ A complete sample project is available on `GitHub <https://github.com/BobBowles/
 #.  Set up the ``diary`` app's urls, and (if you want to use the customer administration) the administration urls. In your root ``urls.py`` you need the following ``urlpatterns``:
 
     ::
-
-        url(r'^admin/', include(admin.site.urls)),
-        url(r'^accounts/login/$', 'django.contrib.auth.views.login'),
-        url(r'^accounts/logout/$', 
-            'django.contrib.auth.views.logout', 
-            {'next_page': '/'}),
-        url(r'^accounts/password/reset/$', 
-            'django.contrib.auth.views.password_reset', 
-            {'post_reset_redirect' : '/accounts/password/reset/done/'},
-            name="password_reset"),
-        url(r'^accounts/password/reset/done/$',
-            'django.contrib.auth.views.password_reset_done'),
-        url(r'^accounts/password/reset/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$', 
-            'django.contrib.auth.views.password_reset_confirm', 
-            {'post_reset_redirect' : '/accounts/password/done/'},
-            name='password_reset_confirm'),
-        url(r'^accounts/password/done/$', 
-            'django.contrib.auth.views.password_reset_complete'),
-        url(r'^diary/', include('diary.urls', namespace='diary')),
+        from django.contrib.auth import views as auth_views
+        ...
+            url(r'^admin/', admin.site.urls),
+            url(r'^accounts/login/$', auth_views.login, name='login'),
+            url(r'^accounts/logout/$',
+                auth_views.logout,
+                {'next_page': '/'},
+                name='logout'),
+            url(r'^accounts/password/reset/$',
+                auth_views.password_reset,
+                {'post_reset_redirect' : '/accounts/password/reset/done/'},
+                name='password_reset'),
+            url(r'^accounts/password/reset/done/$', auth_views.password_reset_done),
+            url(r'^accounts/password/reset/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$',
+                auth_views.password_reset_confirm,
+                {'post_reset_redirect' : '/accounts/password/done/'},
+                name='password_reset_confirm'),
+            url(r'^accounts/password/done/$', auth_views.password_reset_complete),
+            url(r'^diary/', include('diary.urls', namespace='diary')),
 
 #.  For password administration and/or the email reminder service you need to set up an email service. It is sufficient to use Python's built-in dummy server for development and testing. This just prints out the result of email requests onto the console. From the command line:
 
@@ -166,12 +166,12 @@ After installation you should have 'something-that-works' but it will look ugly 
                                                         set to ``6``).
     ``DIARY_MULTI_DAY_NUMBER``  ``3``       int         The number of days to
                                                         show in the multi-day
-                                                        view. ``3`` is a 
+                                                        view. ``3`` is a
                                                         minimum.
                                                         The practical maximum is
                                                         ``7``.
     ``DIARY_SHOW_MERIDIAN``     ``False``   bool        Enable display of times
-                                                        in meridian format. 
+                                                        in meridian format.
                                                         **NB**: If ``True`` some
                                                         additional configuration
                                                         is needed to enable
@@ -195,7 +195,7 @@ After installation you should have 'something-that-works' but it will look ugly 
                                                         number. Default is 17:00
                                                         all week.
     ``DIARY_MIN_BOOKING``       ``0``       int         Minimum advance booking
-                                                        time for customers in 
+                                                        time for customers in
                                                         days. ``0`` means there
                                                         is no minimum period.
     ``DIARY_SITE_NAME``         ``Django-   str         Name of site for use
@@ -223,7 +223,7 @@ After installation you should have 'something-that-works' but it will look ugly 
 Administration
 --------------
 
-A custom command has been added to enable easy implementation of the routine task of sending out email reminders. At the moment configuration settings for this are kept to a minimum, requiring a name for the site, given as ``DIARY_SITE_NAME``, and an optional contact phone number ``DIARY_CONTACT_PHONE``, plus the correct configuration of the email facility itself. 
+A custom command has been added to enable easy implementation of the routine task of sending out email reminders. At the moment configuration settings for this are kept to a minimum, requiring a name for the site, given as ``DIARY_SITE_NAME``, and an optional contact phone number ``DIARY_CONTACT_PHONE``, plus the correct configuration of the email facility itself.
 
 Most of the email configuration is covered in the `Installation`_ and `Configuration`_ sections. To make use of administration notifications, two further email settings are needed in ``settings.py``, for ``ADMINS`` and ``SERVER_EMAIL``, for example::
 
@@ -232,7 +232,7 @@ Most of the email configuration is covered in the `Installation`_ and `Configura
         ('Boss 1', 'boss1@example.com),
         ('Boss 2', 'boss2@example.com),
     )
-    
+
     # server email address
     SERVER_EMAIL = 'webmaster@example.com'
 
@@ -254,23 +254,23 @@ At the fundamental level the dependencies of this app are recorded in the ``requ
 
 The styling, layout, widgets, and javascript all utilize Twitter Bootstrap and jQuery. The Javascript dependencies are self-contained, but obviously it is more harmonious if your project as a whole is designed around Bootstrap. If the Bootstrap styling css is not already declared in your template's header you will need to add it.
 
-I have made no effort to write this for Python 2.7, targeting Python 3 from the outset, and specifically Python 3.4. I intend to look at that at a future date.
+I have made no effort to write this for Python 2.7, targeting Python 3 from the outset, and specifically Python 3.4. From V0.3.5 the target Python is 3.8, and support for Python 3.4 has now been dropped.
 
 The Python/Django package dependencies are as follows::
 
-    Django==1.8.3
+    Django==1.11.29
     django-datetime-widget==0.9.3
-    django-model-utils==2.3.1
-    pytz==2015.4
-    six==1.9.0
+    django-model-utils==3.2.0
+    pytz==2020.1
+    six==1.15.0
 
 Although they are listed here as strict requirements, they are probably more accurately *minimum* requirements. However, while I am continuing to develop the code I am opting for a simple life...
 
 ``Django``
-    is self-explanatory. At time of writing I am still actively developing, so I am focusing only on Django 1.8. At some point I intend to improve coverage, but the demand at present is to get something-that-works.
+    is self-explanatory. Up V0.3.5 the target was Django 1.8. Following versions drop support for Django 1.8. Currently Django 1.11 is supported, and it is intended to cover Django 3.0
 
 ``django-datetime-widget``
-    is a project to provide some nice Bootstrap date and time widgets for Django. It needs to be added as an app in the settings file. To use meridian time, the time formats also need to be added to the settings, as the Django defaults ignore meridian (see the Configuration section). 
+    is a project to provide some nice Bootstrap date and time widgets for Django. It needs to be added as an app in the settings file. To use meridian time, the time formats also need to be added to the settings, as the Django defaults ignore meridian (see the Configuration section).
 
 ``django-model-utils``
     is a project that provides a number of useful tools for manipulating models. It is primarily used here for facilitating subclassing of User.
@@ -306,7 +306,7 @@ The decision for web deployment, coupled with a preference for Python as the mai
 
 I found a tutorial by ``LightBird``. Although the code was terrible and outdated, it gave me a model workflow to follow as I both developed a calendar app and learned Django, JavaScript, CSS, HTML5, and other necessary technologies.
 
-I eventually decided to subclass ``User`` to make a custom user class called ``Customer``. I did that to enable a tight relationship between customers as users and diary entries in the simplest possible way. Other options seemed to involve jumping through too many database join hoops. This may work against reusability of this app, but I think the tweaks I have put into the admin backend (thanks to ``django-model-utils``) may mitigate this. In principle the admin backend in this app should be able to accommodate other custom users, but I may not have given enough attention to that possibility in my own code. It will be interesting to get feedback about that from devs, so keep me posted! 
+I eventually decided to subclass ``User`` to make a custom user class called ``Customer``. I did that to enable a tight relationship between customers as users and diary entries in the simplest possible way. Other options seemed to involve jumping through too many database join hoops. This may work against reusability of this app, but I think the tweaks I have put into the admin backend (thanks to ``django-model-utils``) may mitigate this. In principle the admin backend in this app should be able to accommodate other custom users, but I may not have given enough attention to that possibility in my own code. It will be interesting to get feedback about that from devs, so keep me posted!
 
 To make the UI fast and intuitive to use, some effort has been put into applying drag-and-drop and modal displays of selected data using ``ajax``. However, most features that involve changes to database content continue to be displayed and updated via conventional ``GET`` and ``POST`` of forms. In this way, an ``Entry`` can be quickly updated with a new time or date by simply dragging it to an appropriate place on the diary grid. Where time is less critical the more robust approach of conventional Django forms takes over.
 
@@ -339,4 +339,3 @@ This started out as a series of experimental projects built on top of Django tut
 #. `Freezegun <https://github.com/spulec/freezegun/>`_
 
 #. `Django Model Utilities <https://github.com/carljm/django-model-utils>`_
-

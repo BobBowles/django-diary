@@ -6,11 +6,11 @@ v0.1.1      2015-09-26      *   Bugfix: packaging and deployment.
 v0.1.2      2015-10-05      *   Bugfix: superuser customer administration.
 v0.1.3      2015-10-07      *   Bugfix: customer model email help text.
                             *   Code tidy.
-v0.1.4      2015-10-07      *   Bugfix: customer selection widget shows 
+v0.1.4      2015-10-07      *   Bugfix: customer selection widget shows
                             alphabetic list.
 v0.2        2015-10-10      *   Improve basic entry manipulation.
-v0.2.1      2015-10-16      *   Add business rules for manipulation of historic 
-                            data. 
+v0.2.1      2015-10-16      *   Add business rules for manipulation of historic
+                            data.
                             *   Several new ``settings`` options.
                             *   Several bugfixes and refactorings.
                             *   Add ``freezegun`` as dependency for dev/testing.
@@ -18,17 +18,17 @@ v0.2.2      2015-10-18      *   Add administration fields to Entry model.
                             *   Adapt workflow for cancellations, no-shows,
                             deleting.
 v0.2.3      2015-10-20      *   Customer review added.
-v0.2.4      2015-10-21      *   Bugfix: back out former fix v0.1.3, apply email 
+v0.2.4      2015-10-21      *   Bugfix: back out former fix v0.1.3, apply email
                             help text via forms without bad consequences.
-v0.2.5      2015-10-22      *   Bugfix: don't show history or customer buttons 
+v0.2.5      2015-10-22      *   Bugfix: don't show history or customer buttons
                             on modal when there is no customer.
 v0.2.6      2015-10-25      *   Add entry statistics to month view for admin.
-                            *   Highlight cancelled and no-show entries in 
+                            *   Highlight cancelled and no-show entries in
                             upcoming list for admin.
                             *   Better style control for entries.
                             *   Bugfix: no_show is like cancelled for removing
                             resource conflicts.
-                            *   Add modal popup entry to month and history 
+                            *   Add modal popup entry to month and history
                             views.
                             *   Add book-ahead button to modal.
 v0.2.7      2015-10-26      *   Bugfix: Refactor reminders/updates html as an
@@ -45,7 +45,6 @@ v0.3.4      2015-11-19      *   Bugfix: Do not include cancelled entries in the
 v0.3.5      2016-06-16      *   New: Add Customer notes to popup.
                             *   Bugfix: Ensure redirection restores 'today' when
                             no date is specified.
-v0.4.0      TBA             *   BETA??
+v0.4        TBA             *   Upgrade to Python 3.8 and Django 3.0.
                             *   TBA
 ========    ============    ====================================================
-

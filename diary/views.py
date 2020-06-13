@@ -1,14 +1,13 @@
 from django.shortcuts import (
-    get_object_or_404, 
+    get_object_or_404,
     redirect,
-    render, 
-    render_to_response,
+    render,
 )
 from django.contrib.auth.decorators import login_required
 import datetime
 from django.utils import timezone
 import calendar
-from django.core.context_processors import csrf
+from django.template.context_processors import csrf
 from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
 from django.core.urlresolvers import reverse
 from django.db.models import Q
@@ -32,7 +31,7 @@ calendar.setfirstweekday(settings.DIARY_FIRST_DAY_OF_WEEK)
 
 MONTH_NAMES = calendar.month_name[1:]
 DAY_NAMES = (
-    calendar.day_name[calendar.firstweekday():] + 
+    calendar.day_name[calendar.firstweekday():] +
     calendar.day_name[:calendar.firstweekday()]
 )
 
@@ -85,7 +84,7 @@ def get_statistics(entries):
             if entry.cancelled: cancelled += 1
             if entry.no_show: no_show += 1
         return Statistics(total, cancelled, no_show)
-    else: 
+    else:
         return None
 
 
@@ -104,7 +103,7 @@ def evaluateTimeSlots():
         thisTime = time.time()
         time += settings.DIARY_TIME_INC
         timeSlots.append((
-            thisTime.strftime(TIME_FORMAT), 
+            thisTime.strftime(TIME_FORMAT),
             thisTime.strftime(TIME_SLUG_FORMAT),
             thisTime,
             time.time(),
@@ -136,12 +135,12 @@ def reminders(request):
     user = request.user
     queryset = (                            # customers see their own entries
         Entry.objects.filter(
-            Q(date=today, time__gte=now)|Q(date=tomorrow), 
-            customer=user, 
+            Q(date=today, time__gte=now)|Q(date=tomorrow),
+            customer=user,
             cancelled=False,
         ) if isinstance(user, Customer)
         else Entry.objects.filter(          # admin/staff users see everything
-            Q(date=today, time__gte=now)|Q(date=tomorrow), 
+            Q(date=today, time__gte=now)|Q(date=tomorrow),
         )
     )
     return queryset.order_by('date', 'time')
@@ -165,28 +164,28 @@ def year(request, year=None):
         months = []
         for n, month in enumerate(MONTH_NAMES):
             entries = Entry.objects.filter(date__year=yr, date__month=n+1)
-            entry = (True if entries 
+            entry = (True if entries
                 else False)
             current = (True if (yr == now.year) and (n == now.month-1)
                 else False)
             months.append({
                 'n': n+1,
-                'name': month, 
-                'entry': entry, 
+                'name': month,
+                'entry': entry,
                 'current': current,
                 })
         years.append((yr, months))
 
-    return render_to_response(
-        'diary/year.html', 
+    return render(
+        request,
+        'diary/year.html',
         {
             'years': years,
             'user': request.user,
             'prev_year': year - 3,
             'next_year': year + 3,
             'reminders': reminders(request),
-        }, 
-        context_instance=RequestContext(request),
+        },
     )
 
 
@@ -207,7 +206,7 @@ def month(request, year=None, month=None, change=None):
     # handle month change, with year rollover
     if change:
         monthDelta = datetime.timedelta(days=31)
-        if change == 'prev': 
+        if change == 'prev':
             monthDelta = datetime.timedelta(days=-31)
         date = date + monthDelta
 
@@ -226,7 +225,7 @@ def month(request, year=None, month=None, change=None):
             entries = (
                 Entry.objects.filter(date=dayDate) if request.user.is_staff
                 else Entry.objects.filter(
-                    date=dayDate, 
+                    date=dayDate,
                     customer=request.user,
                     cancelled=False,
                 )
@@ -243,7 +242,8 @@ def month(request, year=None, month=None, change=None):
             weeks.append([])
             week_no += 1
 
-    return render_to_response(
+    return render(
+        request,
         'diary/month.html',
         {
             'date': date,
@@ -251,8 +251,7 @@ def month(request, year=None, month=None, change=None):
             'month_name': MONTH_NAMES[date.month-1],
             'day_names': DAY_NAMES,
             'reminders': reminders(request),
-        }, 
-        context_instance=RequestContext(request),
+        },
     )
 
 
@@ -312,7 +311,7 @@ def getDatetimeFromSlug(slug):
 
 def evaluateBusinessLogic(day, startTime, endTime):
     """
-    Evaluate the booleans that control the display business logic for day and 
+    Evaluate the booleans that control the display business logic for day and
     multi-day views.
     """
     today, now = get_today_now()
@@ -324,7 +323,7 @@ def evaluateBusinessLogic(day, startTime, endTime):
     historic = (
         day < today or (day == today and endTime < now)
     ) # historic data
-    booking_allowed_date = (today + 
+    booking_allowed_date = (today +
         datetime.timedelta(days=settings.DIARY_MIN_BOOKING)
     )
     before_advance = day < booking_allowed_date
@@ -367,14 +366,14 @@ def multi_day(request, slug=None, change=None):
         for day, dayHeader, date_slug in date_slots:
             entries = (
                 Entry.objects.filter(
-                    date=day, 
-                    time__gte=startTime, 
-                    time__lt=endTime, 
+                    date=day,
+                    time__gte=startTime,
+                    time__lt=endTime,
                 ) if request.user.is_staff
                 else Entry.objects.filter(
                     date=day,
-                    time__gte=startTime, 
-                    time__lt=endTime, 
+                    time__gte=startTime,
+                    time__lt=endTime,
                     customer=request.user,
                     cancelled=False,
                 )
@@ -394,13 +393,14 @@ def multi_day(request, slug=None, change=None):
                 allow_dnd, # allow drag-n-drop
             ))
         time_slots.append((
-            timeLabel, 
+            timeLabel,
             startTime,
             day_entries,
         ))
 
-    return render_to_response(
-        'diary/multi_day.html', 
+    return render(
+        request,
+        'diary/multi_day.html',
         {
             'date': date,
             'n_cols': settings.DIARY_MULTI_DAY_NUMBER,
@@ -412,8 +412,7 @@ def multi_day(request, slug=None, change=None):
             'time_slots': time_slots,
             'date_slots': date_slots,
             'reminders': reminders(request),
-        }, 
-        context_instance=RequestContext(request),
+        },
     )
 
 
@@ -431,14 +430,14 @@ def day(request, slug=None, change=None):
     for timeLabel, time_slug, startTime, endTime in TIME_SLOTS:
         entries = (
             Entry.objects.filter(
-                date=date, 
-                time__gte=startTime, 
+                date=date,
+                time__gte=startTime,
                 time__lt=endTime,
             ) if request.user.is_staff
             else Entry.objects.filter(
-                date=date, 
-                time__gte=startTime, 
-                time__lt=endTime, 
+                date=date,
+                time__gte=startTime,
+                time__lt=endTime,
                 customer=request.user,
                 cancelled=False,
             )
@@ -449,19 +448,20 @@ def day(request, slug=None, change=None):
             evaluateBusinessLogic(date, startTime, endTime)
 
         time_slots.append((
-            timeLabel, 
+            timeLabel,
             '_'.join((date_slug, time_slug)),
             startTime,
             entries,
             current, # flag now
-            trading_time, # trading 
+            trading_time, # trading
             historic, # historic data
             before_advance, # advance booking prohibited
             allow_dnd,
         ))
 
-    return render_to_response(
-        'diary/day.html', 
+    return render(
+        request,
+        'diary/day.html',
         {
             'date': date,
             'nav_slug': date_slug,
@@ -469,18 +469,17 @@ def day(request, slug=None, change=None):
             'month_name': MONTH_NAMES[date.month-1],
             'time_slots': time_slots,
             'reminders': reminders(request),
-        }, 
-        context_instance=RequestContext(request),
+        },
     )
 
 
 def get_redirect_url(request, default):
     """
     Utility to derive the correct url for redirections.
-    
-    The url to be used is obtained from the request's GET dict, which gets it 
+
+    The url to be used is obtained from the request's GET dict, which gets it
     from the clicked template link via the '?next=' parameter.
-    
+
     A default url must be specified for use in the event of failure.
     """
 
@@ -498,7 +497,7 @@ def get_redirect_url(request, default):
 
     # deal with change component by re-calculating the date slug
     slug = getDateFromSlug(
-        next_url_bits[date_index], 
+        next_url_bits[date_index],
         next_url_bits[date_index+1],
     ).strftime(DATE_SLUG_FORMAT)
 
@@ -545,8 +544,8 @@ def entry(request, pk=None, slug=None, customer_pk=None):
 
     exclude_customer = not request.user.is_staff
     form = EntryForm(
-        request.POST or None, 
-        instance=entry, 
+        request.POST or None,
+        instance=entry,
         exclude_customer=exclude_customer
     )
     if form.is_valid():
@@ -580,17 +579,18 @@ def entry(request, pk=None, slug=None, customer_pk=None):
         'return_nav_next': next_url+'next/',
         'reminders': reminders(request),
     }
-    return render_to_response(
-        'diary/entry.html', 
-        context, 
-        context_instance=RequestContext(request),
+
+    return render(
+        request,
+        'diary/entry.html',
+        context,
     )
 
 
 @login_required
 def entry_update(request):
     """
-    Update an entry's details via ajax. 
+    Update an entry's details via ajax.
     At present only the date and time can be changed this way.
     """
 
@@ -620,9 +620,9 @@ def entry_update(request):
             ).time()
         otherEntry = Entry.objects\
             .filter(
-                date=date, 
-                time__gte=time, 
-                time__lt=endTime, 
+                date=date,
+                time__gte=time,
+                time__lt=endTime,
             ).first()
         if otherEntry.time_end() >= endTime:
             # really no more space in this time slot
@@ -660,7 +660,7 @@ def entry_modal(request, pk):
     # initial book-ahead date hard-coded to 7 days in advance of chosen entry
     book_ahead_date = entry.date + datetime.timedelta(days=7)
     book_ahead_datetime_slug = datetime.datetime.combine(
-        book_ahead_date, 
+        book_ahead_date,
         entry.time,
     ).strftime(DATETIME_SLUG_FORMAT)
 
@@ -675,8 +675,8 @@ def entry_modal(request, pk):
             today + datetime.timedelta(days=settings.DIARY_MIN_BOOKING)
         )
         if (
-            entry.date == today and 
-            booking_threshold == today and 
+            entry.date == today and
+            booking_threshold == today and
             entry.time > now
         ):
             enable_edit_buttons = True
@@ -703,7 +703,7 @@ def entry_modal(request, pk):
 def entry_admin(request, pk, action):
     """
     Deal with a diary entry's administrative status.
-    
+
     action is one of:
     delete          delete the entry - remove it from the database
     cancel          mark the entry as cancelled
@@ -723,7 +723,7 @@ def entry_admin(request, pk, action):
         entry.save()
 
     return redirect(
-        redirect_url, 
+        redirect_url,
         slug=date.strftime(DATE_SLUG_FORMAT),
     )
 
@@ -731,7 +731,7 @@ def entry_admin(request, pk, action):
 def customer_add(request, entry_pk=None, entry_slug=None):
     """
     Customer creation.
-    
+
     The entry_pk and entry_slug give ways to redirect to the entry form where
     this method was invoked.
     """
@@ -742,7 +742,7 @@ def customer_add(request, entry_pk=None, entry_slug=None):
         if entry_pk:
             return HttpResponseRedirect(
                 reverse(
-                    'diary:entry_customer', 
+                    'diary:entry_customer',
                     kwargs={
                         'pk': entry_pk,
                         'customer_pk': form.instance.pk,
@@ -774,29 +774,30 @@ def customer_add(request, entry_pk=None, entry_slug=None):
         'entry_slug': entry_slug,
         'reminders': reminders(request),
     }
-    return render_to_response(
-        'diary/customer_add.html', 
-        context, 
-        context_instance=RequestContext(request),
+
+    return render(
+        request,
+        'diary/customer_add.html',
+        context,
     )
 
 
 def get_customer_and_redirect(request, pk):
     """
     Utility to derive the customer and redirect url to use.
-    
+
     Only allow pk different from user if user is staff.
     If no pk is specified the current logged-on user is assumed.
     If no url is found diary:home is used as default/fallback.
     """
 
     customer = (
-        Customer.objects.get(pk=pk) if (pk and request.user.is_staff) 
+        Customer.objects.get(pk=pk) if (pk and request.user.is_staff)
         else request.user
     )
 
     redirect_url = (
-        request.GET['next'] if 'next' in request.GET 
+        request.GET['next'] if 'next' in request.GET
         else reverse('diary:home')
     )
 
@@ -823,10 +824,11 @@ def customer_change(request, pk):
         'customer': customer,
         'reminders': reminders(request),
     }
-    return render_to_response(
-        'diary/customer_change.html', 
-        context, 
-        context_instance=RequestContext(request),
+
+    return render(
+        request,
+        'diary/customer_change.html',
+        context,
     )
 
 
@@ -847,7 +849,7 @@ def history(request, pk):
         ).order_by('date', 'time')
     )
 
-    # some arithmetic 
+    # some arithmetic
     statistics = get_statistics(entries)
 
     context = {
@@ -857,9 +859,9 @@ def history(request, pk):
         'statistics': statistics,
         'reminders': reminders(request),
     }
-    return render_to_response(
-        'diary/history.html', 
-        context, 
-        context_instance=RequestContext(request),
-    )
 
+    return render(
+        request,
+        'diary/history.html',
+        context,
+    )
