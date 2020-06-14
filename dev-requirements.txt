@@ -3,5 +3,5 @@ django-datetime-widget==0.9.3
 django-model-utils==3.2.0
 freezegun==0.3.5
 python-dateutil==2.4.2
-pytz==2020.1
-six==1.15.0
+pytz>=2020.1
+six>=1.15.0
