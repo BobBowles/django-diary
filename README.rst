@@ -320,6 +320,20 @@ To avoid complications with constantly changing dates and times during tests som
 ``Freezegun`` introduces some additional dependencies above those needed to run ``django-diary``. These are recorded in ``dev-requirements.txt`` which should be used in place of ``requirements.txt`` for setting up testing and development environments from git clones.
 
 
+Development Path
+----------------
+
+======= ====== ======= =========================================================
+Version Python Django  Description
+======= ====== ======= =========================================================
+<=v0.35 3.4    1.8     Original development versions. EOL.
+v0.4    3.8    1.11.29 Base Python 3.8 implementation.
+v1.x    3.8    1.11.29 Django 1 bugfix releases. django-model-utils==3.2.0
+v2.x    3.8    2.2.13  Django 2 bugfix releases.
+v3.x    3.8    3.x     Django 3 bugfix releases.
+======= ====== ======= =========================================================
+
+
 History And References
 ----------------------
 
