@@ -80,10 +80,10 @@ setup(
     classifiers=[
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.4",
+        "Programming Language :: Python :: 3.8",
         "Development Status :: 3 - Alpha",
         "Environment :: Web Environment",
-        "Framework :: Django :: 1.8",
+        "Framework :: Django :: 1.11.29",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",
         "Operating System :: POSIX :: Linux",  # TODO: only tested on Linux
@@ -100,9 +100,9 @@ setup(
         'diary.management.commands',
     ],
     install_requires=[
-        'Django>=1.8.3',
+        'Django==1.11.29',
         'django-datetime-widget>=0.9.3',
-        'django-model-utils>=2.3.1',
+        'django-model-utils==3.2.0',
         'pytz>=2015.4',
         'six>=1.9.0',
     ],
@@ -110,6 +110,3 @@ setup(
     data_files=dataFiles,
     zip_safe=False,
 )
-
-
-
