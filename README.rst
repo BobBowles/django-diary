@@ -72,6 +72,7 @@ A complete sample project is available on `GitHub <https://github.com/BobBowles/
 #.  Set up the ``diary`` app's urls, and (if you want to use the customer administration) the administration urls. In your root ``urls.py`` you need the following ``urlpatterns``:
 
     ::
+
         from django.contrib.auth import views as auth_views
         ...
             url(r'^admin/', admin.site.urls),
