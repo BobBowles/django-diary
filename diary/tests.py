@@ -5,7 +5,7 @@ import datetime
 from django.forms import ValidationError
 import traceback
 from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.conf import settings as main_settings
 from . import settings
 from . import views
@@ -58,7 +58,7 @@ class CustomerTests(TestCase):
 
     def test_customer_age_date_of_birth_not_set(self):
         """
-        Make sure something sensible happens when we calculate age from an 
+        Make sure something sensible happens when we calculate age from an
         undefined birth date.
         """
         undefinedBirthCustomer = Customer.objects.create(
@@ -94,8 +94,8 @@ def obtain_superuser():
     superuser = User.objects.filter(is_superuser=True).first()
     if not superuser:
         superuser = User.objects.create_superuser(
-            'admin', 
-            'admin@example.com', 
+            'admin',
+            'admin@example.com',
             'password'
         )
         superuser.save()
@@ -107,8 +107,8 @@ def create_treatment(name, min_duration, resource_required):
     Utility to create a treatment.
     """
     treatment = Treatment(
-        name=name, 
-        min_duration=min_duration, 
+        name=name,
+        min_duration=min_duration,
         resource_required=resource_required,
     )
     treatment.save()
@@ -120,7 +120,7 @@ def create_resource(name, description):
     Utility to make a resource
     """
     resource = Resource(
-        name=name, 
+        name=name,
         description=description,
     )
     resource.save()
@@ -157,7 +157,7 @@ def create_entry(dateDelta, time, duration, notes):
 
 class EntryModelTests(TestCase):
     """
-    Tests of the entry model methods. 
+    Tests of the entry model methods.
     These tests are primarily about making sure entries can do basic time
     arithmetic and comparisons, with the intention that they can determine time
     collisions.
@@ -172,7 +172,7 @@ class EntryModelTests(TestCase):
         time = datetime.time(hour=12)
         duration = datetime.timedelta(hours=1)
         entry = create_entry(
-            dateDelta, 
+            dateDelta,
             time,
             duration,
             'time calc test 1',
@@ -183,7 +183,7 @@ class EntryModelTests(TestCase):
 
     def test_entry_treatment_resource_required(self):
         """
-        If the entry has a treatment that specifies a resource a resource must 
+        If the entry has a treatment that specifies a resource a resource must
         be defined.
         """
         entry = create_entry(
@@ -205,12 +205,12 @@ class EntryModelTests(TestCase):
 
         # add a treatment that needs a resource
         entry.treatment = create_treatment(
-            'requires_resource', 
-            datetime.timedelta(hours=1), 
+            'requires_resource',
+            datetime.timedelta(hours=1),
             True,
         )
         self.assertRaisesMessage(
-            ValidationError, 
+            ValidationError,
             'Resource requirement is not met.',
             entry.clean,
         )
@@ -221,7 +221,7 @@ class EntryModelTests(TestCase):
             'resource',
         )
         self.assertRaisesMessage(
-            ValidationError, 
+            ValidationError,
             'Duration must be at least the minimum treament time.',
             entry.clean,
         )
@@ -248,7 +248,7 @@ class EntryModelTests(TestCase):
         time = datetime.time(hour=12)
         duration = datetime.timedelta(hours=1)
         entry1 = create_entry(
-            dateDelta1, 
+            dateDelta1,
             time,
             duration,
             'time calc test 1',
@@ -256,7 +256,7 @@ class EntryModelTests(TestCase):
 
         dateDelta2 = datetime.timedelta(days=1)
         entry2 = create_entry(
-            dateDelta2, 
+            dateDelta2,
             time,
             duration,
             'time calc test 1',
@@ -273,7 +273,7 @@ class EntryModelTests(TestCase):
         time1 = datetime.time(hour=12)
         duration1 = datetime.timedelta(hours=1)
         entry1 = create_entry(
-            dateDelta1, 
+            dateDelta1,
             time1,
             duration1,
             'time calc test 1',
@@ -283,7 +283,7 @@ class EntryModelTests(TestCase):
         time2 = datetime.time(hour=12)
         duration2 = datetime.timedelta(hours=1)
         entry2 = create_entry(
-            dateDelta2, 
+            dateDelta2,
             time2,
             duration2,
             'time calc test 1',
@@ -302,7 +302,7 @@ class EntryModelTests(TestCase):
         time1 = datetime.time(hour=12)
         duration1 = datetime.timedelta(hours=1)
         entry1 = create_entry(
-            dateDelta, 
+            dateDelta,
             time1,
             duration1,
             'time calc test 1',
@@ -311,7 +311,7 @@ class EntryModelTests(TestCase):
         time2 = datetime.time(hour=14)
         duration2 = datetime.timedelta(hours=1)
         entry2 = create_entry(
-            dateDelta, 
+            dateDelta,
             time2,
             duration2,
             'time calc test 1',
@@ -330,7 +330,7 @@ class EntryModelTests(TestCase):
         time1 = datetime.time(hour=12)
         duration1 = datetime.timedelta(hours=1)
         entry1 = create_entry(
-            dateDelta, 
+            dateDelta,
             time1,
             duration1,
             'time calc test 1',
@@ -339,7 +339,7 @@ class EntryModelTests(TestCase):
         time2 = datetime.time(hour=9)
         duration2 = datetime.timedelta(hours=1)
         entry2 = create_entry(
-            dateDelta, 
+            dateDelta,
             time2,
             duration2,
             'time calc test 1',
@@ -358,7 +358,7 @@ class EntryModelTests(TestCase):
         time1 = datetime.time(hour=12)
         duration1 = datetime.timedelta(hours=1)
         entry1 = create_entry(
-            dateDelta, 
+            dateDelta,
             time1,
             duration1,
             'time calc test 1',
@@ -367,7 +367,7 @@ class EntryModelTests(TestCase):
         time2 = entry1.time_end()
         duration2 = datetime.timedelta(hours=1)
         entry2 = create_entry(
-            dateDelta, 
+            dateDelta,
             time2,
             duration2,
             'time calc test 1',
@@ -386,7 +386,7 @@ class EntryModelTests(TestCase):
         time1 = datetime.time(hour=12)
         duration1 = datetime.timedelta(hours=3)
         entry1 = create_entry(
-            dateDelta, 
+            dateDelta,
             time1,
             duration1,
             'time calc test 1',
@@ -395,7 +395,7 @@ class EntryModelTests(TestCase):
         time2 = datetime.time(hour=13)
         duration2 = datetime.timedelta(hours=1)
         entry2 = create_entry(
-            dateDelta, 
+            dateDelta,
             time2,
             duration2,
             'time calc test 1',
@@ -415,7 +415,7 @@ class EntryModelTests(TestCase):
         time1 = datetime.time(hour=12)
         duration1 = datetime.timedelta(hours=1)
         entry1 = create_entry(
-            dateDelta1, 
+            dateDelta1,
             time1,
             duration1,
             'time calc test 1',
@@ -427,7 +427,7 @@ class EntryModelTests(TestCase):
         time2 = datetime.time(hour=12)
         duration2 = datetime.timedelta(hours=1)
         entry2 = create_entry(
-            dateDelta2, 
+            dateDelta2,
             time2,
             duration2,
             'time calc test 1',
@@ -436,7 +436,7 @@ class EntryModelTests(TestCase):
 
         self.assertTrue(entry1 == entry2)
         self.assertRaisesMessage(
-            ValidationError, 
+            ValidationError,
             'Resource clash with another Entry. Please change resource or time.',
             entry2.clean,
         )
@@ -453,7 +453,7 @@ class EntryModelTests(TestCase):
         time1 = datetime.time(hour=12)
         duration1 = datetime.timedelta(hours=1)
         entry1 = create_entry(
-            dateDelta1, 
+            dateDelta1,
             time1,
             duration1,
             'time calc test 1',
@@ -465,7 +465,7 @@ class EntryModelTests(TestCase):
         time2 = datetime.time(hour=12)
         duration2 = datetime.timedelta(hours=1)
         entry2 = create_entry(
-            dateDelta2, 
+            dateDelta2,
             time2,
             duration2,
             'time calc test 1',
@@ -496,7 +496,7 @@ class EntryModelTests(TestCase):
         time1 = datetime.time(hour=12)
         duration1 = datetime.timedelta(hours=1)
         entry1 = create_entry(
-            dateDelta1, 
+            dateDelta1,
             time1,
             duration1,
             'time calc test 1',
@@ -510,7 +510,7 @@ class EntryModelTests(TestCase):
         time2 = datetime.time(hour=12)
         duration2 = datetime.timedelta(hours=1)
         entry2 = create_entry(
-            dateDelta2, 
+            dateDelta2,
             time2,
             duration2,
             'time calc test 1',
@@ -539,7 +539,7 @@ class EntryModelTests(TestCase):
         time1 = datetime.time(hour=12)
         duration1 = datetime.timedelta(hours=1)
         entry1 = create_entry(
-            dateDelta1, 
+            dateDelta1,
             time1,
             duration1,
             'time calc test 1',
@@ -548,7 +548,7 @@ class EntryModelTests(TestCase):
         entry1.save()
 
         entry2 = Entry.objects.filter(
-            date=entry1.date, 
+            date=entry1.date,
             time=entry1.time,
         ).first()
         # make sure an exception is NOT raised
@@ -572,7 +572,7 @@ class EntryModelTests(TestCase):
         time = datetime.time(hour=12)
         duration = datetime.timedelta(hours=1)
         entry1 = create_entry(
-            dateDelta1, 
+            dateDelta1,
             time,
             duration,
             'resource_conflict_test_entry_1',
@@ -581,7 +581,7 @@ class EntryModelTests(TestCase):
 
         dateDelta2 = datetime.timedelta(days=0)
         entry2 = create_entry(
-            dateDelta2, 
+            dateDelta2,
             time,
             duration,
             'resource_conflict_test_entry_2',
@@ -609,7 +609,7 @@ class EntryModelTests(TestCase):
         time1 = datetime.time(hour=12)
         duration1 = datetime.timedelta(hours=1)
         entry1 = create_entry(
-            dateDelta1, 
+            dateDelta1,
             time1,
             duration1,
             'double-book test 1',
@@ -627,7 +627,7 @@ class EntryModelTests(TestCase):
 
         self.assertTrue(entry1 == entry2) # this passes the other tests
         self.assertRaisesMessage(
-            ValidationError, 
+            ValidationError,
             'Double booking is not allowed. Please choose another time.',
             entry2.clean,
         )
@@ -643,7 +643,7 @@ class EntryModelTests(TestCase):
         time1 = datetime.time(hour=12)
         duration1 = datetime.timedelta(hours=1)
         entry1 = create_entry(
-            dateDelta1, 
+            dateDelta1,
             time1,
             duration1,
             'double-book test 1',
@@ -683,7 +683,7 @@ class EntryModelTests(TestCase):
         time1 = datetime.time(hour=12)
         duration1 = datetime.timedelta(hours=1)
         entry1 = create_entry(
-            dateDelta1, 
+            dateDelta1,
             time1,
             duration1,
             'double-book test 1',
@@ -716,7 +716,7 @@ class EntryModelTests(TestCase):
     def test_entry_customer_out_of_hours(self):
         """
         Make sure customers cannot book outside trading hours.
-        
+
         This test is patched to avoid complications with changing times.
         """
 
@@ -750,7 +750,7 @@ class EntryModelTests(TestCase):
         time2 = change_time(date, openingTime, datetime.timedelta(hours=-1))
         entry.time = time2
         self.assertRaisesMessage(
-            ValidationError, 
+            ValidationError,
             'Sorry, the store is closed then. Try changing the time.',
             entry.clean,
         )
@@ -760,7 +760,7 @@ class EntryModelTests(TestCase):
     def test_entry_staff_out_of_hours(self):
         """
         Make sure staff are able to book any time.
-        
+
         This test is patched to avoid complications with changing times.
         """
 
@@ -792,7 +792,7 @@ class EntryModelTests(TestCase):
     def test_entry_customer_in_past(self):
         """
         Make sure customers cannot book in the past.
-        
+
         This test is patched to provide a constant value of 'now'
         """
 
@@ -811,7 +811,7 @@ class EntryModelTests(TestCase):
         entry.editor = customer
 
         self.assertRaisesMessage(
-            ValidationError, 
+            ValidationError,
             'Please book a date/time in the future.',
             entry.clean,
         )
@@ -822,7 +822,7 @@ class EntryModelTests(TestCase):
         """
         Make sure customers cannot book before the advance limit. (Time in
         future but before the advance booking limit).
-        
+
         This test is patched to provide a constant value of 'now'
         """
 
@@ -846,7 +846,7 @@ class EntryModelTests(TestCase):
         entry.editor = customer
 
         self.assertRaisesMessage(
-            ValidationError, 
+            ValidationError,
             'Need to book ahead.',
             entry.clean,
         )
@@ -873,12 +873,12 @@ class ViewTests(TestCase):
 
     def test_login_required_for_diary(self):
         """
-        Navigating to the diary automatically redirects to login page if 
+        Navigating to the diary automatically redirects to login page if
         not logged in.
         """
         response = self.client.get(reverse('diary:year_now'), follow=True)
         self.assertRedirects(
-            response, 
+            response,
             '/accounts/login/?next=/diary/year/',
         )
 
@@ -914,4 +914,3 @@ class ViewTests(TestCase):
         imp.reload(views)
         response = self.client.get(reverse('diary:month_now'))
         self.assertEqual(response.context['day_names'][0], 'Monday')
-

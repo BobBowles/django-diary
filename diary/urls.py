@@ -1,6 +1,7 @@
 from django.conf.urls import url
 from . import views
 
+app_name = 'diary'
 
 urlpatterns = [
 
@@ -11,7 +12,7 @@ urlpatterns = [
         views.month,
         name='month_nav',
     ),
-    url(r'^month/(?P<year>\d{4})/(?P<month>\d+)/$', 
+    url(r'^month/(?P<year>\d{4})/(?P<month>\d+)/$',
         views.month,
         name='month',
     ),
@@ -19,20 +20,20 @@ urlpatterns = [
 
 
     # slug format multi-day views. this is the default landing area
-    url(r'^multi_day/(?P<slug>\d{4}-\d\d-\d\d)/(?P<change>prev|next)/$', 
+    url(r'^multi_day/(?P<slug>\d{4}-\d\d-\d\d)/(?P<change>prev|next)/$',
         views.multi_day,
         name='multi_day_nav',
     ),
-    url(r'^multi_day/(?P<slug>\d{4}-\d\d-\d\d)/$', 
+    url(r'^multi_day/(?P<slug>\d{4}-\d\d-\d\d)/$',
         views.multi_day,
         name='multi_day',
     ),
-    url(r'^multi_day/$', 
-        views.multi_day, 
+    url(r'^multi_day/$',
+        views.multi_day,
         name='multi_day_now',
     ),                                              # default day is today
-    url(r'^multi_day/$', 
-        views.multi_day, 
+    url(r'^multi_day/$',
+        views.multi_day,
         name='home'
     ),                                              # 'home' page
 
@@ -48,25 +49,25 @@ urlpatterns = [
 
 
     # slug format entry views
-    url(r'^entry/(?P<slug>\d{4}-\d\d-\d\d_\d\d-\d\d)/$', 
+    url(r'^entry/(?P<slug>\d{4}-\d\d-\d\d_\d\d-\d\d)/$',
         views.entry,
         name='entry_new'
     ),
-    url(r'^entry/(?P<slug>\d{4}-\d\d-\d\d_\d\d-\d\d)/(?P<customer_pk>\d+)/$', 
+    url(r'^entry/(?P<slug>\d{4}-\d\d-\d\d_\d\d-\d\d)/(?P<customer_pk>\d+)/$',
         views.entry,
         name='entry_new_customer'
     ),
-    url(r'^entry/(?P<pk>\d+)/(?P<customer_pk>\d+)$', 
-        views.entry, 
+    url(r'^entry/(?P<pk>\d+)/(?P<customer_pk>\d+)$',
+        views.entry,
         name='entry_customer',
     ),
     url(r'^entry/(?P<pk>\d+)/$', views.entry, name='entry',),
-    url(r'^entry/$', 
-        views.entry, 
+    url(r'^entry/$',
+        views.entry,
         name='entry_empty',
     ),                                              # default is create new
     url(r'^entry_admin/(?P<pk>\d+)/(?P<action>cancel|no_show|delete)/$',
-        views.entry_admin, 
+        views.entry_admin,
         name='entry_admin',
     ),
 
@@ -80,36 +81,36 @@ urlpatterns = [
 
 
     # customer administration - overrides admin pages to control redirection
-    url(r'^customer_add/(?P<entry_pk>\d+)/$', 
-        views.customer_add, 
+    url(r'^customer_add/(?P<entry_pk>\d+)/$',
+        views.customer_add,
         name='customer_add_entry_pk',               # existing entry pk
     ),
-    url(r'^customer_add/(?P<entry_slug>\d{4}-\d\d-\d\d_\d\d-\d\d)/$', 
-        views.customer_add, 
+    url(r'^customer_add/(?P<entry_slug>\d{4}-\d\d-\d\d_\d\d-\d\d)/$',
+        views.customer_add,
         name='customer_add_entry_slug',             # new entry slug
     ),
-    url(r'^customer_add/$', 
-        views.customer_add, 
+    url(r'^customer_add/$',
+        views.customer_add,
         name='customer_add',                        # default has no entry
     ),
 
     # edit customer
-    url(r'^customer_change/(?P<pk>\d+)/$', 
-        views.customer_change, 
+    url(r'^customer_change/(?P<pk>\d+)/$',
+        views.customer_change,
         name='customer_edit',                       # edit customer
     ),
-    url(r'^customer_change/$', 
-        views.customer_change, 
+    url(r'^customer_change/$',
+        views.customer_change,
         name='customer_change',                     # default is current user
     ),
 
     # customer history
-    url(r'^history/(?P<pk>\d+)/$', 
-        views.history, 
+    url(r'^history/(?P<pk>\d+)/$',
+        views.history,
         name='history',                             # review treatment history
     ),
-    url(r'^history/$', 
-        views.history, 
+    url(r'^history/$',
+        views.history,
         name='history_default',                     # default is current user
     ),
 

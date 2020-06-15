@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Customer',
             fields=[
-                ('user_ptr', models.OneToOneField(auto_created=True, parent_link=True, serialize=False, to=settings.AUTH_USER_MODEL, primary_key=True)),
+                ('user_ptr', models.OneToOneField(auto_created=True, parent_link=True, serialize=False, to=settings.AUTH_USER_MODEL, primary_key=True, on_delete=models.CASCADE)),
                 ('phone', models.CharField(max_length=20, blank=True, validators=[django.core.validators.RegexValidator(message='Not a valid phone number', regex='[0-9][0-9 ]+')], null=True)),
                 ('date_of_birth', models.DateField(blank=True, null=True)),
                 ('gender', models.CharField(max_length=1, default='F', choices=[('M', 'Male'), ('F', 'Female')])),
@@ -43,8 +43,8 @@ class Migration(migrations.Migration):
                 ('duration', models.TimeField(blank=True, default=datetime.time(1, 0))),
                 ('notes', models.TextField(blank=True)),
                 ('created', models.DateTimeField(auto_now_add=True)),
-                ('creator', models.ForeignKey(blank=True, null=True, related_name='created_entries', to=settings.AUTH_USER_MODEL)),
-                ('customer', models.ForeignKey(blank=True, null=True, related_name='entries', to='diary.Customer')),
+                ('creator', models.ForeignKey(blank=True, null=True, related_name='created_entries', to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE),),
+                ('customer', models.ForeignKey(blank=True, null=True, related_name='entries', to='diary.Customer', on_delete=models.CASCADE)),
             ],
             options={
                 'verbose_name_plural': 'entries',
@@ -70,11 +70,11 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='entry',
             name='resource',
-            field=models.ForeignKey(blank=True, null=True, to='diary.Resource'),
+            field=models.ForeignKey(blank=True, null=True, to='diary.Resource', on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='entry',
             name='treatment',
-            field=models.ForeignKey(blank=True, null=True, to='diary.Treatment'),
+            field=models.ForeignKey(blank=True, null=True, to='diary.Treatment', on_delete=models.CASCADE),
         ),
     ]

@@ -9,7 +9,7 @@ from django.utils import timezone
 import calendar
 from django.template.context_processors import csrf
 from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.db.models import Q
 from django.forms import ValidationError
 from django.template.loader import render_to_string

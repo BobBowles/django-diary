@@ -43,16 +43,15 @@ INSTALLED_APPS = (
     'home', # a dummy home page for development purposes
 )
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.security.SecurityMiddleware',
-)
+]
 
 ROOT_URLCONF = 'test_project.urls'
 
@@ -133,7 +132,7 @@ DIARY_MIN_BOOKING = 1
 DIARY_CONTACT_PHONE = '01234567890'
 
 # User customisation
-# NOTE: use of InheritanceQuerySet in the backend dispenses with the need for 
+# NOTE: use of InheritanceQuerySet in the backend dispenses with the need for
 # any other setting. (django-model-utils)
 # http://scottbarnham.com/blog/2008/08/21/extending-the-django-user-model-with-inheritance/
 AUTHENTICATION_BACKENDS = (
@@ -160,4 +159,3 @@ if DEBUG:
     EMAIL_HOST_PASSWORD = ''
     EMAIL_USE_TLS = False
     DEFAULT_FROM_EMAIL = 'testing@example.com'
-

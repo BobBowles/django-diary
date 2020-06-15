@@ -24,6 +24,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='entry',
             name='editor',
-            field=models.ForeignKey(null=True, blank=True, to=settings.AUTH_USER_MODEL, related_name='edited_entries'),
+            field=models.ForeignKey(null=True, blank=True, to=settings.AUTH_USER_MODEL, related_name='edited_entries', on_delete=models.CASCADE),
         ),
     ]

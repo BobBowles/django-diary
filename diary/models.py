@@ -31,13 +31,13 @@ class CustomerManager(UserManager):
         return self.get(username=username)
 
 
-    def create_user(self, 
-        username, 
-        first_name, 
-        last_name, 
-        email, 
-        phone, 
-        date_of_birth, 
+    def create_user(self,
+        username,
+        first_name,
+        last_name,
+        email,
+        phone,
+        date_of_birth,
         gender,
         notes,
         password=None
@@ -63,7 +63,7 @@ class CustomerManager(UserManager):
 
 
 class Customer(User):
-    """ Customer/Client/Patient details. 
+    """ Customer/Client/Patient details.
     """
 
     # gender options
@@ -106,9 +106,9 @@ class Customer(User):
         default=MRS,
     )
     phone = models.CharField(
-        max_length=20, 
-        validators=[phoneValidator], 
-        blank=True, 
+        max_length=20,
+        validators=[phoneValidator],
+        blank=True,
         null=True)
     date_of_birth = models.DateField(blank=True, null=True)
     gender = models.CharField(
@@ -144,7 +144,7 @@ class Customer(User):
 class Resource(models.Model):
     """
     A finite bookable resource, such as a room or piece of equipment.
-    
+
     TODO: May need to generalise this by adding ResourceType.
     """
 
@@ -159,11 +159,11 @@ class Resource(models.Model):
 
 class Treatment(models.Model):
     """
-    A treatment. 
-    
-    Treatments are characterised by the resource(s) they need, and 
+    A treatment.
+
+    Treatments are characterised by the resource(s) they need, and
     the minimum time duration.
-    
+
     TODO: Currently the model assumes only one resource.
     """
 
@@ -184,7 +184,7 @@ class Entry(models.Model):
     Entries need to be able to compare times and do basic temporal arithmetic.
     To do this (I think) we need to implement rich comparator methods so one
     entry knows how to compare itself with another.
-    
+
     One possible (potentially undesirable) side-effect is that entries may
     consider each other 'equal' when they have neither the same start time
     nor the same duration. They will nevertheless be 'equivalent' in sharing
@@ -199,36 +199,49 @@ class Entry(models.Model):
 
     notes = models.TextField(blank=True)
     creator = models.ForeignKey(
-        User, 
-        blank=True, 
-        null=True, 
-        related_name='created_entries'
+        User,
+        blank=True,
+        null=True,
+        related_name='created_entries',
+        on_delete=models.CASCADE,
     )
     created = models.DateTimeField(auto_now_add=True)
 
     editor = models.ForeignKey(
-        User, 
-        blank=True, 
-        null=True, 
-        related_name='edited_entries'
+        User,
+        blank=True,
+        null=True,
+        related_name='edited_entries',
+        on_delete=models.CASCADE,
     )
     edited = models.DateTimeField(auto_now=True)
 
     customer = models.ForeignKey(
-        Customer, 
-        blank=True, 
-        null=True, 
+        Customer,
+        blank=True,
+        null=True,
         related_name='entries',
+        on_delete=models.CASCADE,
     )
-    treatment = models.ForeignKey(Treatment, blank=True, null=True)
-    resource = models.ForeignKey(Resource, blank=True, null=True)
+    treatment = models.ForeignKey(
+        Treatment,
+        blank=True,
+        null=True,
+        on_delete=models.CASCADE,
+    )
+    resource = models.ForeignKey(
+        Resource,
+        blank=True,
+        null=True,
+        on_delete=models.CASCADE,
+    )
     cancelled = models.BooleanField(default=False)
     no_show = models.BooleanField(default=False)
 
 
     def __str__(self):
         name = '{0}'.format(
-            self.customer if self.customer 
+            self.customer if self.customer
             else self.creator
         )
         return ' - '.join(
@@ -258,8 +271,8 @@ class Entry(models.Model):
         """
         Calculate the time of the end of the entry from the start time and the
         duration.
-        Sadly the naive method of adding the duration directly to the time 
-        is not supported in python datetime arithmetic; a datetime object has 
+        Sadly the naive method of adding the duration directly to the time
+        is not supported in python datetime arithmetic; a datetime object has
         to be used.
         """
         the_time = datetime.datetime.combine(self.date, self.time)
@@ -294,7 +307,7 @@ class Entry(models.Model):
     def validateResourceRequirement(self):
         """
         Context validation of resource requirements.
-        
+
         If a treatment requires a resource, a resource must be specified.
         """
         if self.treatment and self.treatment.resource_required:
@@ -307,13 +320,13 @@ class Entry(models.Model):
     def validateDuration(self):
         """
         Context validation of duration.
-        
+
         Duration may be invalid if it is smaller than the minimum for the
         treatment.
         """
         if self.treatment and self.treatment.min_duration:
             if (
-                not self.duration 
+                not self.duration
                 or self.treatment.min_duration > self.duration_delta()
             ):
                 raise ValidationError(
@@ -324,7 +337,7 @@ class Entry(models.Model):
     def validateNoResourceConflicts(self):
         """
         Context validation of date, time, duration and resource.
-        
+
         The entry is invalid if it clashes in time and resource with
         a pre-existing entry. Cancelled entries don't count.
         """
@@ -335,7 +348,7 @@ class Entry(models.Model):
 
             # get the day's uncancelled entries sharing the same resource
             savedEntries = Entry.objects.filter(
-                date=self.date, 
+                date=self.date,
                 resource=self.resource,
                 cancelled=False,
                 no_show=False,
@@ -354,7 +367,7 @@ class Entry(models.Model):
     def validateCustomerNotDoubleBooked(self):
         """
         Context validation of customer.
-        
+
         A named customer cannot have two entries at the same time, irrespective
         of other resource criteria. Cancelled entries don't count.
         """
@@ -365,7 +378,7 @@ class Entry(models.Model):
 
             # get any uncancelled entries for the same customer on the same day
             savedEntries = Entry.objects.filter(
-                date=self.date, 
+                date=self.date,
                 customer=self.customer,
                 cancelled=False,
                 no_show=False,
@@ -384,15 +397,15 @@ class Entry(models.Model):
     def validateTradingHours(self):
         """
         Context validation of trading times.
-        
-        Staff members may add/edit an entry at any time subject to other 
+
+        Staff members may add/edit an entry at any time subject to other
         business rules. Customers may only add/edit entries consistent with
         opening hours.
         """
         if not self.editor.is_staff:
             dow = self.date.weekday()
             if not (
-                self.time >= settings.DIARY_OPENING_TIMES[dow] and 
+                self.time >= settings.DIARY_OPENING_TIMES[dow] and
                 self.time_end() <= settings.DIARY_CLOSING_TIMES[dow]
             ):
                 raise ValidationError(
@@ -404,7 +417,7 @@ class Entry(models.Model):
         """
         Ensure customers cannot book times in the past or in the advance booking
         period.
-        
+
         Staff can book entries whenever they like, but customers can only book
         times in the future.
         """
@@ -417,7 +430,7 @@ class Entry(models.Model):
             advance_booking_date = (
                 datetime.datetime(
                     tz_now.year, tz_now.month, tz_now.day, 0, 0, 0,
-                ) + 
+                ) +
                 datetime.timedelta(days=settings.DIARY_MIN_BOOKING)
             )
             bookedTime = datetime.datetime.combine(self.date, self.time)
@@ -433,8 +446,8 @@ class Entry(models.Model):
 
     def clean(self, *args, **kwargs):
         """
-        Override Model method to validate the content in context. 
-        
+        Override Model method to validate the content in context.
+
         This applies the business rules of the Entry validateX methods.
         """
         self.validateResourceRequirement()
@@ -450,7 +463,7 @@ class Entry(models.Model):
 
     def save(self, *args, **kwargs):
         """
-        Override the parent method to ensure custom validation in clean() is 
+        Override the parent method to ensure custom validation in clean() is
         done.
         """
         self.full_clean()
@@ -459,4 +472,3 @@ class Entry(models.Model):
 
     class Meta:
         verbose_name_plural = 'entries'
-
