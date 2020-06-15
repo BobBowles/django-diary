@@ -100,7 +100,7 @@ setup(
         'diary.management.commands',
     ],
     install_requires=[
-        'Django==2.2.13',
+        'Django==2.0.13',
         'django-datetime-widget>=0.9.3',
         'django-model-utils==4.4.0',
         'pytz>=2015.4',
