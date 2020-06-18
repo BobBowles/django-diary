@@ -260,7 +260,7 @@ I have made no effort to write this for Python 2.7, targeting Python 3 from the 
 The Python/Django package dependencies are as follows::
 
     Django==1.11.29
-    django-datetime-widget==0.9.3
+    git+https://github.com/erwingelissen/django-datetime-widget.git
     django-model-utils==3.2.0
     pytz==2020.1
     six==1.15.0
@@ -268,10 +268,10 @@ The Python/Django package dependencies are as follows::
 Although they are listed here as strict requirements, they are probably more accurately *minimum* requirements. However, while I am continuing to develop the code I am opting for a simple life...
 
 ``Django``
-    is self-explanatory. Up V0.3.5 the target was Django 1.8. Following versions drop support for Django 1.8. Currently Django 1.11 is supported, and it is intended to cover Django 3.0
+    is self-explanatory. Up to V0.3.5 the target was Django 1.8. Following versions drop support for Django 1.8. Planned maintenance releases will cover Django 1.11.29 (v1.x), Django 2.2.13 (v2.x) and it is intended to cover Django 3 in the development stream (v3.x).
 
 ``django-datetime-widget``
-    is a project to provide some nice Bootstrap date and time widgets for Django. It needs to be added as an app in the settings file. To use meridian time, the time formats also need to be added to the settings, as the Django defaults ignore meridian (see the Configuration section).
+    is a project to provide some nice Bootstrap date and time widgets for Django. It needs to be added as an app in the settings file. To use meridian time, the time formats also need to be added to the settings, as the Django defaults ignore meridian (see the Configuration section). The original version (0.9.3) available in Pypi is fine for Django<2.1, but for Django>=2.1 an updated version can be downloaded direct from GitHub. The one chosen here is due to Erwin Gelissen (Thanks, Erwin). When upgrading between Django<2.1 and Django>=2.1 you need to ensure the complete removal of the Pypi version, because the version numbers have not been updated.
 
 ``django-model-utils``
     is a project that provides a number of useful tools for manipulating models. It is primarily used here for facilitating subclassing of User.

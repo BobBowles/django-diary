@@ -100,8 +100,8 @@ setup(
         'diary.management.commands',
     ],
     install_requires=[
-        'Django==2.0.13',
-        'django-datetime-widget>=0.9.3',
+        'Django==2.1.15',
+        'git+https://github.com/erwingelissen/django-datetime-widget.git',
         'django-model-utils==4.4.0',
         'pytz>=2015.4',
         'six>=1.9.0',

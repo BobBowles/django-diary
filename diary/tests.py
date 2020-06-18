@@ -890,8 +890,7 @@ class ViewTests(TestCase):
         self.setup()
 
         # test the default
-        response = self.client.get(reverse('diary:month_now'))
-        self.assertEqual(response.context['day_names'][0], 'Monday')
+        self.assertEqual(views.DAY_NAMES[0], 'Monday')
 
 
     def test_cal_first_day_of_week_sunday(self):
@@ -905,12 +904,10 @@ class ViewTests(TestCase):
         # test for sunday
         imp.reload(settings)
         imp.reload(views)
-        response = self.client.get(reverse('diary:month_now'))
-        self.assertEqual(response.context['day_names'][0], 'Sunday')
+        self.assertEqual(views.DAY_NAMES[0], 'Sunday')
 
         # tidy up the mess (make sure default is restored)
         setattr(main_settings, 'DIARY_FIRST_DAY_OF_WEEK', first_day_of_week_orig)
         imp.reload(settings)
         imp.reload(views)
-        response = self.client.get(reverse('diary:month_now'))
-        self.assertEqual(response.context['day_names'][0], 'Monday')
+        self.assertEqual(views.DAY_NAMES[0], 'Monday')

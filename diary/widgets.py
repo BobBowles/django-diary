@@ -48,7 +48,7 @@ class RelatedFieldWidgetCanAdd(widgets.Select):
                 name,
                 value,
                 *args,
-                **kwargs
+                **kwargs,
             )
         ]
         output.append('<a href="%s" class="add-another" id="add_id_%s" onclick="return showAddAnotherPopup(this);"> ' % \
