@@ -40,6 +40,11 @@ A complete sample project is available on `GitHub <https://github.com/BobBowles/
 
         pip install django-diary
 
+    For versions >= 2 this may need to be a two-stage process due to references to package forks not in Pypi (TBA)::
+
+        pip install django-diary --no-deps  # installs the app by itself
+        pip install django-diary            # installs the dependencies
+
 
 #.  Add ``diary`` and ``datetimewidget`` to your ``INSTALLED_APPS`` in ``settings.py`` underneath your main project app:
 
@@ -248,8 +253,8 @@ To run the email reminders from the command line, in the root project directory 
 The simplest way to schedule reminders for regular use is via a daily ``cron`` job on your server.
 
 
-Dependencies
-------------
+Dependencies and Versioning
+---------------------------
 
 At the fundamental level the dependencies of this app are recorded in the ``requirements.txt`` file.
 
@@ -257,13 +262,42 @@ The styling, layout, widgets, and javascript all utilize Twitter Bootstrap and j
 
 I have made no effort to write this for Python 2.7, targeting Python 3 from the outset, and specifically Python 3.4. From V0.3.5 the target Python is 3.8, and support for Python 3.4 has now been dropped.
 
-The Python/Django package dependencies are as follows::
+Going forward I intend to support a maintenance-only release for each major version of Django, plus new features to be added for the latest Django.
+
+The Python/Django package dependencies are as follows for the different versions.
+
+Version 1.x
+-----------
+
+::
 
     Django==1.11.29
-    git+https://github.com/erwingelissen/django-datetime-widget.git
+    django-datetime-widget.git==0.9.3
     django-model-utils==3.2.0
     pytz==2020.1
     six==1.15.0
+
+Version 2.x
+-----------
+
+::
+
+    Django==2.1.15 (TBA)
+    git+https://github.com/erwingelissen/django-datetime-widget.git
+    django-model-utils==4.0.0
+    pytz>=2020.1
+    six>=1.15.0
+
+Version 3.x (TBA)
+-----------------
+
+::
+
+    Django==2.1.15 (TBA)
+    git+https://github.com/erwingelissen/django-datetime-widget.git
+    django-model-utils==4.0.0
+    pytz>=2020.1
+    six>=1.15.0
 
 Although they are listed here as strict requirements, they are probably more accurately *minimum* requirements. However, while I am continuing to develop the code I am opting for a simple life...
 
