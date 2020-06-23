@@ -28,21 +28,6 @@ DURATION_WIDGET_OPTIONS = {
 }
 
 
-# class DateInput(forms.DateInput):
-#     """
-#     Override the DateInput's default text input field so the form will use an
-#     HTML5 date selector. How this appears will be browser and locale dependent.
-#     """
-#     input_type = 'date'
-#
-#
-# class TimeInput(forms.TimeInput):
-#     """
-#     Override the TimeInput's default text input field so the form will use an
-#     HTML5 time selector. The appearance will depend on browser and locale.
-#     """
-#     input_type = 'time'
-
 
 class EntryForm(forms.ModelForm):
 
@@ -89,9 +74,6 @@ class EntryForm(forms.ModelForm):
                 bootstrap_version=3,
                 options=DURATION_WIDGET_OPTIONS,
             ),
-            # 'date': DateInput(),
-            # 'time': TimeInput(),
-            # 'duration': TimeInput(),
         }
         input_formats = {
             'time': TIME_FORMATS,

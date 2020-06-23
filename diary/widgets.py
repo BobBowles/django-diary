@@ -53,5 +53,5 @@ class RelatedFieldWidgetCanAdd(widgets.Select):
         ]
         output.append('<a href="%s" class="add-another" id="add_id_%s" onclick="return showAddAnotherPopup(this);"> ' % \
             (self.related_url, name))
-        output.append('<img src="%sadmin/img/icon_addlink.gif" width="10" height="10" alt="%s"/></a>' % (settings.STATIC_URL, _('Add Another')))
+        output.append('<img src="%sadmin/img/icon_addlink.gif" width="10" height="10" alt="%s"/></a>' % (settings.STATIC_URL, _('+ New')))
         return mark_safe(''.join(output))

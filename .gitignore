@@ -12,3 +12,6 @@ MANIFEST
 
 # local files
 ISSUES.txt
+
+# static files
+staticfiles
