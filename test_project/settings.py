@@ -136,14 +136,17 @@ DIARY_CONTACT_PHONE = '01234567890'
 # any other setting. (django-model-utils)
 # http://scottbarnham.com/blog/2008/08/21/extending-the-django-user-model-with-inheritance/
 AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
     'diary.backends.CustomUserModelBackend',
 )
 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
-
 STATIC_URL = '/static/'
+
+# enable collection of static files
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 
 # test email server setup
