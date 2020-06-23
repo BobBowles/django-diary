@@ -1,5 +1,5 @@
 {% extends 'diary/modal_base.html' %}
-{% load staticfiles %}
+{% load static %}
 
 
 {% block diary_head_extra %}
@@ -39,7 +39,7 @@
         {% for week in weeks %}
             <div class="row cols-7">
                 {% for day, nav_slug, entries, statistics, current in week %}
-                    <div 
+                    <div
                         class=
 "col-md-1 day
 {% if day != 0 %} regular{% endif %}
@@ -52,7 +52,7 @@
                             </a>
                             {% if entries %}
                                 {% for entry in entries %}
-                                    <span 
+                                    <span
                                         class=
 "entry{% if entry.cancelled %} cancelled{% endif %}
 {% if entry.no_show %} no_show{% endif %}"
@@ -79,4 +79,3 @@
     </div>
 
 {% endblock diary_content %}
-
