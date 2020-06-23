@@ -133,7 +133,7 @@ DIARY_MIN_BOOKING = 1
 DIARY_CONTACT_PHONE = '01234567890'
 
 # User customisation
-# NOTE: use of InheritanceQuerySet in the backend dispenses with the need for 
+# NOTE: use of InheritanceQuerySet in the backend dispenses with the need for
 # any other setting. (django-model-utils)
 # http://scottbarnham.com/blog/2008/08/21/extending-the-django-user-model-with-inheritance/
 AUTHENTICATION_BACKENDS = (
@@ -145,6 +145,7 @@ AUTHENTICATION_BACKENDS = (
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 
 # test email server setup
@@ -160,4 +161,3 @@ if DEBUG:
     EMAIL_HOST_PASSWORD = ''
     EMAIL_USE_TLS = False
     DEFAULT_FROM_EMAIL = 'testing@example.com'
-

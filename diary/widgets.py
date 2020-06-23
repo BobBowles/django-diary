@@ -10,18 +10,18 @@ from django.utils.translation import ugettext as _
 class RelatedFieldWidgetCanAdd(widgets.Select):
     """
     Supplements the standard Select widget behaviour by adding an 'add' button.
-    
+
     Added related_kwargs for targeted redirection.
-    
+
     Adapted from:
     http://stackoverflow.com/questions/28068168/django-adding-an-add-new-button-for-a-foreignkey-in-a-modelform
     """
 
 
     def __init__(
-        self, 
-        related_model, 
-        related_url=None, 
+        self,
+        related_model,
+        related_url=None,
         related_kwargs=None, *args, **kwargs
     ):
 
@@ -40,23 +40,18 @@ class RelatedFieldWidgetCanAdd(widgets.Select):
 
     def render(self, name, value, *args, **kwargs):
         self.related_url = reverse(
-            self.related_url, 
+            self.related_url,
             kwargs=self.related_kwargs,
         )
         output = [
             super(RelatedFieldWidgetCanAdd, self).render(
-                name, 
-                value, 
-                *args, 
+                name,
+                value,
+                *args,
                 **kwargs
             )
         ]
         output.append('<a href="%s" class="add-another" id="add_id_%s" onclick="return showAddAnotherPopup(this);"> ' % \
             (self.related_url, name))
-<<<<<<< HEAD
-        output.append('<img src="%sadmin/img/icon_addlink.gif" width="10" height="10" alt="%s"/></a>' % (settings.STATIC_URL, _('Add Another')))                                                                                                                               
-=======
         output.append('<img src="%sadmin/img/icon_addlink.gif" width="10" height="10" alt="%s"/></a>' % (settings.STATIC_URL, _('+ New')))
->>>>>>> 4fca2ba... Bugfix static file handling.
         return mark_safe(''.join(output))
-
