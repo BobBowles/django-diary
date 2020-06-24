@@ -71,6 +71,7 @@ A complete sample project is available on `GitHub <https://github.com/BobBowles/
         # any other setting. (django-model-utils)
         # http://scottbarnham.com/blog/2008/08/21/extending-the-django-user-model-with-inheritance/
         AUTHENTICATION_BACKENDS = (
+            'django.contrib.auth.backends.ModelBackend',
             'diary.backends.CustomUserModelBackend',
         )
 
@@ -231,7 +232,7 @@ Administration
 
 A custom command has been added to enable easy implementation of the routine task of sending out email reminders. At the moment configuration settings for this are kept to a minimum, requiring a name for the site, given as ``DIARY_SITE_NAME``, and an optional contact phone number ``DIARY_CONTACT_PHONE``, plus the correct configuration of the email facility itself.
 
-Most of the email configuration is covered in the `Installation`_ and `Configuration`_ sections. To make use of administration notifications, two further email settings are needed in ``settings.py``, for ``ADMINS`` and ``SERVER_EMAIL``, for example::
+Most of the email configuration is covered in the `Installation`_ and `Configuration`_ sections. To make use of administration notifications, two further email settings are needed in ``settings.py``, for ``ADMINS`` and ``SERVER_EMAIL``. The ``ADMINS`` receive reports on the email reminders, and the ``SERVER_EMAIL`` is the email account used for the mail-out. For example::
 
     # tuple of tuples of administrator names and emails
     ADMINS = (
@@ -293,7 +294,7 @@ Version 3.x (TBA)
 
 ::
 
-    Django==2.1.15 (TBA)
+    Django>=3.0 (TBA)
     git+https://github.com/erwingelissen/django-datetime-widget.git
     django-model-utils==4.0.0
     pytz>=2020.1
