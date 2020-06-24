@@ -148,6 +148,8 @@ STATIC_URL = '/static/'
 # enable collection of static files
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
+# redirect logout to a sane place (since Django>~2.0)
+LOGOUT_REDIRECT_URL = '/'
 
 # test email server setup
 if DEBUG:
