@@ -102,7 +102,6 @@ setup(
     install_requires=[
         'Django==2.1.15',
         'django-datetime-widget @ git+https://github.com/erwingelissen/django-datetime-widget.git',
-        'django-model-utils==4.0.0',
         'pytz>=2015.4',
         'six>=1.9.0',
     ],
