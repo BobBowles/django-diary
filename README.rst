@@ -319,9 +319,9 @@ Reusability
 At this early stage reusability is an aspiration rather than a reality. To achieve this the following considerations have been/need to be made:
 
 *  Overriding of templates and styles. A main_base.html template has been constructed that forms the basis of a working example of the app, and at the same time provides a starting point for overriding. Attention also needs to be given to navigation hooks.
-*  Configuration. While wanting the diary app to be configurable for different scenarios, it is also important to keep focused on core function and _not_ provide too many hooks. A ``settings.py`` file exists in the diary which provides default values for a few parameters that can be overridden in the project's settings file. For easy discrimination, all configurable parameters have names of the form ``DIARY_XXXXX``. The parameter names will be chosen to be reasonably self-explanatory, and (eventually) will be documented somewhere.
+*  Configuration. While wanting the diary app to be configurable for different scenarios, it is also important to keep focused on core function and *not* provide too many hooks. A ``settings.py`` file exists in the diary which provides default values for a few parameters that can be overridden in the project's settings file. For easy discrimination, all configurable parameters have names of the form ``DIARY_XXXXX``. The parameter names will be chosen to be reasonably self-explanatory, and (eventually) will be documented somewhere.
 *  Dependencies. Kept to a minimum. They will be documented (promise!).
-*  Debate about using a subclass of ``User`` for ``Customer``. It is noted the modern Django approach makes subclassing ``User`` almost _de rigeur_.
+*  Debate about using a subclass of ``User`` for ``Customer``. It is noted the modern Django approach makes subclassing ``User`` almost *de rigeur*.
 
 
 Design Considerations
