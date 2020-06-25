@@ -62,17 +62,14 @@ A complete sample project is available on `GitHub <https://github.com/BobBowles/
         ./manage.py migrate
 
 
-#.  Change the authentication backend to enable the use of the ``Customer`` subclass of ``User``. Add the following to ``settings.py``:
+#.  Change the authentication backend to enable the use of the ``Customer`` subclass of ``User``. Add the following to ``settings.py`` (NB This is different for Django<2, check the documentation in the v1 branch of this project.):
 
     ::
 
         # User customisation
-        # NOTE: use of InheritanceQuerySet in the backend dispenses with the need for
-        # any other setting. (django-model-utils)
-        # http://scottbarnham.com/blog/2008/08/21/extending-the-django-user-model-with-inheritance/
         AUTHENTICATION_BACKENDS = (
+            'diary.backends.CustomerAuthBackend',
             'django.contrib.auth.backends.ModelBackend',
-            'diary.backends.CustomUserModelBackend',
         )
 
 #.  Set up the ``diary`` app's urls, and (if you want to use the customer administration) the administration urls. In your root ``urls.py`` you need the following ``urlpatterns``:
@@ -285,7 +282,6 @@ Version 2.x
 
     Django==2.1.15 (TBA)
     git+https://github.com/erwingelissen/django-datetime-widget.git
-    django-model-utils==4.0.0
     pytz>=2020.1
     six>=1.15.0
 
@@ -296,7 +292,6 @@ Version 3.x (TBA)
 
     Django>=3.0 (TBA)
     git+https://github.com/erwingelissen/django-datetime-widget.git
-    django-model-utils==4.0.0
     pytz>=2020.1
     six>=1.15.0
 
@@ -309,7 +304,7 @@ Although they are listed here as strict requirements, they are probably more acc
     is a project to provide some nice Bootstrap date and time widgets for Django. It needs to be added as an app in the settings file. To use meridian time, the time formats also need to be added to the settings, as the Django defaults ignore meridian (see the Configuration section). The original version (0.9.3) available in Pypi is fine for Django<2.1, but for Django>=2.1 an updated version can be downloaded direct from GitHub. The one chosen here is due to Erwin Gelissen (Thanks, Erwin). When upgrading between Django<2.1 and Django>=2.1 you need to ensure the complete removal of the Pypi version, because the version numbers have not been updated.
 
 ``django-model-utils``
-    is a project that provides a number of useful tools for manipulating models. It is primarily used here for facilitating subclassing of User.
+    is a project that provides a number of useful tools for manipulating models. It is primarily used here for facilitating subclassing of User. It is not needed for Django>=2.0.
 
 ``pytz``
     is needed for date and time manipulation.
@@ -326,7 +321,7 @@ At this early stage reusability is an aspiration rather than a reality. To achie
 *  Overriding of templates and styles. A main_base.html template has been constructed that forms the basis of a working example of the app, and at the same time provides a starting point for overriding. Attention also needs to be given to navigation hooks.
 *  Configuration. While wanting the diary app to be configurable for different scenarios, it is also important to keep focused on core function and _not_ provide too many hooks. A ``settings.py`` file exists in the diary which provides default values for a few parameters that can be overridden in the project's settings file. For easy discrimination, all configurable parameters have names of the form ``DIARY_XXXXX``. The parameter names will be chosen to be reasonably self-explanatory, and (eventually) will be documented somewhere.
 *  Dependencies. Kept to a minimum. They will be documented (promise!).
-*  Debate about using a subclass of ``User`` for ``Customer``. This may adversely affect reusability, but may have been mitigated by using ``django-model-utils`` for subclass manipulation.
+*  Debate about using a subclass of ``User`` for ``Customer``. It is noted the modern Django approach makes subclassing ``User`` almost _de rigeur_.
 
 
 Design Considerations

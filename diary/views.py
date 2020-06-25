@@ -531,7 +531,8 @@ def entry(request, pk=None, slug=None, customer_pk=None):
             time=time,
             creator=request.user,
             customer=(
-                request.user if not request.user.is_staff
+                get_object_or_404(Customer, pk=request.user.pk)
+                    if not request.user.is_staff
                 else None
             ),
         )
@@ -793,7 +794,7 @@ def get_customer_and_redirect(request, pk):
 
     customer = (
         Customer.objects.get(pk=pk) if (pk and request.user.is_staff)
-        else request.user
+        else Customer.objects.get(request.user.pk)
     )
 
     redirect_url = (

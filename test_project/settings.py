@@ -136,8 +136,8 @@ DIARY_CONTACT_PHONE = '01234567890'
 # any other setting. (django-model-utils)
 # http://scottbarnham.com/blog/2008/08/21/extending-the-django-user-model-with-inheritance/
 AUTHENTICATION_BACKENDS = (
+    'diary.backends.CustomerAuthBackend',
     'django.contrib.auth.backends.ModelBackend',
-    'diary.backends.CustomUserModelBackend',
 )
 
 
