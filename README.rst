@@ -2,6 +2,11 @@
 Django Diary
 ============
 
+.. image:: https://pypip.in/v/django-diary/badge.png
+    :target: https://crate.io/packages/django-diary
+.. image:: https://pypip.in/d/django-diary/badge.png
+    :target: https://crate.io/packages/django-diary
+
 
 Description
 -----------
@@ -260,7 +265,7 @@ The styling, layout, widgets, and javascript all utilize Twitter Bootstrap and j
 
 I have made no effort to write this for Python 2.7, targeting Python 3 from the outset, and specifically Python 3.4. From V0.3.5 the target Python is 3.8, and support for Python 3.4 has now been dropped.
 
-Going forward I intend to support a maintenance-only release for each major version of Django, plus new features to be added for the latest Django.
+Going forward I intend to support a maintenance-only release for each major version of ``Django``, plus new features to be added for the latest ``Django``.
 
 The Python/Django package dependencies are as follows for the different versions.
 
@@ -281,7 +286,7 @@ Version 2.x
 ::
 
     Django==2.1.15 (TBA)
-    git+https://github.com/erwingelissen/django-datetime-widget.git
+    django-datetime-widget2>=0.9.4
     pytz>=2020.1
     six>=1.15.0
 
@@ -291,7 +296,7 @@ Version 3.x (TBA)
 ::
 
     Django>=3.0 (TBA)
-    git+https://github.com/erwingelissen/django-datetime-widget.git
+    django-datetime-widget2>=0.9.4
     pytz>=2020.1
     six>=1.15.0
 
@@ -301,7 +306,7 @@ Although they are listed here as strict requirements, they are probably more acc
     is self-explanatory. Up to V0.3.5 the target was Django 1.8. Following versions drop support for Django 1.8. Planned maintenance releases will cover Django 1.11.29 (v1.x), Django 2.2.13 (v2.x) and it is intended to cover Django 3 in the development stream (v3.x).
 
 ``django-datetime-widget``
-    is a project to provide some nice Bootstrap date and time widgets for Django. It needs to be added as an app in the settings file. To use meridian time, the time formats also need to be added to the settings, as the Django defaults ignore meridian (see the Configuration section). The original version (0.9.3) available in Pypi is fine for Django<2.1, but for Django>=2.1 an updated version can be downloaded direct from GitHub. The one chosen here is due to Erwin Gelissen (Thanks, Erwin). When upgrading between Django<2.1 and Django>=2.1 you need to ensure the complete removal of the Pypi version, because the version numbers have not been updated.
+    is a project to provide some nice Bootstrap date and time widgets for ``Django``. It needs to be added as an app in the settings file. To use meridian time, the time formats also need to be added to the settings, as the ``Django`` defaults ignore meridian (see the Configuration section). The original version (0.9.3) available in Pypi is fine for ``Django<2.1``, but for ``Django>=2.1`` an updated version due to Erwin Gelissen has been published as ``django-datetime-widget2``.
 
 ``django-model-utils``
     is a project that provides a number of useful tools for manipulating models. It is primarily used here for facilitating subclassing of User. It is not needed for Django>=2.0.
