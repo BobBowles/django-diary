@@ -267,7 +267,7 @@ I have made no effort to write this for Python 2.7, targeting Python 3 from the 
 
 Going forward I intend to support a maintenance-only release for each major version of ``Django``, plus new features to be added for the latest ``Django``.
 
-The Python/Django package dependencies are as follows for the different versions.
+The recommended Python/Django package dependencies are as follows for the different versions.
 
 Version 1.x
 -----------
@@ -275,7 +275,7 @@ Version 1.x
 ::
 
     Django==1.11.29
-    django-datetime-widget.git==0.9.3
+    django-datetime-widget==0.9.3
     django-model-utils==3.2.0
     pytz==2020.1
     six==1.15.0
@@ -285,7 +285,7 @@ Version 2.x
 
 ::
 
-    Django==2.1.15 (TBA)
+    Django>=2.2.13, <3
     django-datetime-widget2>=0.9.4
     pytz>=2020.1
     six>=1.15.0
