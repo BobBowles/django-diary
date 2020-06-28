@@ -304,6 +304,13 @@ class Entry(models.Model):
         return True
 
 
+    def __hash__(self):
+        """
+        Fix for hash becoming None when __eq__() overrides the parent class.
+        """
+        return super().__hash__()
+
+
     def validateResourceRequirement(self):
         """
         Context validation of resource requirements.
