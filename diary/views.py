@@ -616,7 +616,7 @@ def entry_update(request):
     except ValidationError as ve:
         # attempt to fit the entry in later in the time slot
         endTime = (
-            datetime.datetime.combine(date, time) + TIME_INC
+            datetime.datetime.combine(date, time) + DIARY_TIME_INC
             ).time()
         otherEntry = Entry.objects\
             .filter(
