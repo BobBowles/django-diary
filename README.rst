@@ -295,8 +295,8 @@ Version 3.x (TBA)
 
 ::
 
-    Django>=3.0 (TBA)
-    django-datetime-widget2>=0.9.4
+    Django>=3.0.7
+    django-datetime-widget2>=0.9.5
     pytz>=2020.1
     six>=1.15.0
 
