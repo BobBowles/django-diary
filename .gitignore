@@ -1,6 +1,6 @@
 *.pyc
 __pycache__
-db.*
+*.sqlite3
 .DS_Store
 
 # setup.py files
