@@ -1,5 +1,5 @@
 {% extends 'diary/base.html' %}
-{% load staticfiles %}
+{% load static %}
 
 
 {% block diary_head_extra %}
@@ -9,7 +9,7 @@
     <script src="{% static 'ajax_csrf.js' %}"></script>
 
     {# define variables used by the following js scripts #}
-    <script> 
+    <script>
 var entry_dnd_url = "{% url 'diary:entry_dnd' %}";
 console.log('entry_dnd_url is '+entry_dnd_url);
 var enable_new_buttons_disable = ('{{ request.user.is_staff }}'=='False');
@@ -32,4 +32,3 @@ console.log('redirect_url is '+redirect_url);
 <div class="modal fade" id="ajaxModal" role="dialog"></div>
 
 {% endblock diary_content %}
-
