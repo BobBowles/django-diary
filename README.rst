@@ -232,6 +232,10 @@ After installation you should have 'something-that-works' but it will look ugly 
 Administration
 --------------
 
+A custom command has been added to help maintain the database. ``clean_entries`` deletes all diary entries older than a given age, or earlier than a given date, to help reduce bloat. Usage::
+
+    > python manage.py clean_entries [-a|--age n][-b|--before=<yyyy-mm-dd>]
+
 A custom command has been added to enable easy implementation of the routine task of sending out email reminders. At the moment configuration settings for this are kept to a minimum, requiring a name for the site, given as ``DIARY_SITE_NAME``, and an optional contact phone number ``DIARY_CONTACT_PHONE``, plus the correct configuration of the email facility itself.
 
 Most of the email configuration is covered in the `Installation`_ and `Configuration`_ sections. To make use of administration notifications, two further email settings are needed in ``settings.py``, for ``ADMINS`` and ``SERVER_EMAIL``. The ``ADMINS`` receive reports on the email reminders, and the ``SERVER_EMAIL`` is the email account used for the mail-out. For example::
