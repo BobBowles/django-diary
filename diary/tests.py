@@ -9,7 +9,10 @@ from django.urls import reverse
 from django.conf import settings as main_settings
 from . import settings
 from . import views
+from .views import get_today_now
 import importlib as imp         # since Python 3.4
+from django.core.management import call_command
+from django.core.management.base import CommandError
 from freezegun import freeze_time
 
 
@@ -135,14 +138,21 @@ def change_time(date, time, delta):
     return (datetime.datetime.combine(date, time) + delta).time()
 
 
-def create_entry(dateDelta, time, duration, notes):
+def create_entry_from_delta(dateDelta, time, duration, notes):
     """
-    Utility to create an entry for testing.
+    Utility to create an entry for testing using a dateDelta.
+    """
+    date = timezone.datetime.today() + dateDelta
+    return create_entry(date, time, duration, notes)
+
+
+def create_entry(date, time, duration, notes):
+    """
+    Utility to create an entry for testing using a date.
     Updated to use timefield for duration.
     Updated to add a power user as default creator.
     Updated to add a power user as default editor.
     """
-    date = timezone.datetime.today() + dateDelta
     duration_as_time = change_time(date, TIME_ZERO, duration)
     entry = Entry(
         notes=notes,
@@ -171,7 +181,7 @@ class EntryModelTests(TestCase):
         dateDelta = datetime.timedelta(days=0)
         time = datetime.time(hour=12)
         duration = datetime.timedelta(hours=1)
-        entry = create_entry(
+        entry = create_entry_from_delta(
             dateDelta,
             time,
             duration,
@@ -186,7 +196,7 @@ class EntryModelTests(TestCase):
         If the entry has a treatment that specifies a resource a resource must
         be defined.
         """
-        entry = create_entry(
+        entry = create_entry_from_delta(
             datetime.timedelta(days=0),
             datetime.time(hour=12),
             datetime.timedelta(hours=0),
@@ -247,7 +257,7 @@ class EntryModelTests(TestCase):
         dateDelta1 = datetime.timedelta(days=0)
         time = datetime.time(hour=12)
         duration = datetime.timedelta(hours=1)
-        entry1 = create_entry(
+        entry1 = create_entry_from_delta(
             dateDelta1,
             time,
             duration,
@@ -255,7 +265,7 @@ class EntryModelTests(TestCase):
         )
 
         dateDelta2 = datetime.timedelta(days=1)
-        entry2 = create_entry(
+        entry2 = create_entry_from_delta(
             dateDelta2,
             time,
             duration,
@@ -272,7 +282,7 @@ class EntryModelTests(TestCase):
         dateDelta1 = datetime.timedelta(days=0)
         time1 = datetime.time(hour=12)
         duration1 = datetime.timedelta(hours=1)
-        entry1 = create_entry(
+        entry1 = create_entry_from_delta(
             dateDelta1,
             time1,
             duration1,
@@ -282,7 +292,7 @@ class EntryModelTests(TestCase):
         dateDelta2 = datetime.timedelta(days=0)
         time2 = datetime.time(hour=12)
         duration2 = datetime.timedelta(hours=1)
-        entry2 = create_entry(
+        entry2 = create_entry_from_delta(
             dateDelta2,
             time2,
             duration2,
@@ -301,7 +311,7 @@ class EntryModelTests(TestCase):
 
         time1 = datetime.time(hour=12)
         duration1 = datetime.timedelta(hours=1)
-        entry1 = create_entry(
+        entry1 = create_entry_from_delta(
             dateDelta,
             time1,
             duration1,
@@ -310,7 +320,7 @@ class EntryModelTests(TestCase):
 
         time2 = datetime.time(hour=14)
         duration2 = datetime.timedelta(hours=1)
-        entry2 = create_entry(
+        entry2 = create_entry_from_delta(
             dateDelta,
             time2,
             duration2,
@@ -329,7 +339,7 @@ class EntryModelTests(TestCase):
 
         time1 = datetime.time(hour=12)
         duration1 = datetime.timedelta(hours=1)
-        entry1 = create_entry(
+        entry1 = create_entry_from_delta(
             dateDelta,
             time1,
             duration1,
@@ -338,7 +348,7 @@ class EntryModelTests(TestCase):
 
         time2 = datetime.time(hour=9)
         duration2 = datetime.timedelta(hours=1)
-        entry2 = create_entry(
+        entry2 = create_entry_from_delta(
             dateDelta,
             time2,
             duration2,
@@ -357,7 +367,7 @@ class EntryModelTests(TestCase):
 
         time1 = datetime.time(hour=12)
         duration1 = datetime.timedelta(hours=1)
-        entry1 = create_entry(
+        entry1 = create_entry_from_delta(
             dateDelta,
             time1,
             duration1,
@@ -366,7 +376,7 @@ class EntryModelTests(TestCase):
 
         time2 = entry1.time_end()
         duration2 = datetime.timedelta(hours=1)
-        entry2 = create_entry(
+        entry2 = create_entry_from_delta(
             dateDelta,
             time2,
             duration2,
@@ -385,7 +395,7 @@ class EntryModelTests(TestCase):
 
         time1 = datetime.time(hour=12)
         duration1 = datetime.timedelta(hours=3)
-        entry1 = create_entry(
+        entry1 = create_entry_from_delta(
             dateDelta,
             time1,
             duration1,
@@ -394,7 +404,7 @@ class EntryModelTests(TestCase):
 
         time2 = datetime.time(hour=13)
         duration2 = datetime.timedelta(hours=1)
-        entry2 = create_entry(
+        entry2 = create_entry_from_delta(
             dateDelta,
             time2,
             duration2,
@@ -414,7 +424,7 @@ class EntryModelTests(TestCase):
         dateDelta1 = datetime.timedelta(days=0)
         time1 = datetime.time(hour=12)
         duration1 = datetime.timedelta(hours=1)
-        entry1 = create_entry(
+        entry1 = create_entry_from_delta(
             dateDelta1,
             time1,
             duration1,
@@ -426,7 +436,7 @@ class EntryModelTests(TestCase):
         dateDelta2 = datetime.timedelta(days=0)
         time2 = datetime.time(hour=12)
         duration2 = datetime.timedelta(hours=1)
-        entry2 = create_entry(
+        entry2 = create_entry_from_delta(
             dateDelta2,
             time2,
             duration2,
@@ -452,7 +462,7 @@ class EntryModelTests(TestCase):
         dateDelta1 = datetime.timedelta(days=0)
         time1 = datetime.time(hour=12)
         duration1 = datetime.timedelta(hours=1)
-        entry1 = create_entry(
+        entry1 = create_entry_from_delta(
             dateDelta1,
             time1,
             duration1,
@@ -464,7 +474,7 @@ class EntryModelTests(TestCase):
         dateDelta2 = datetime.timedelta(days=0)
         time2 = datetime.time(hour=12)
         duration2 = datetime.timedelta(hours=1)
-        entry2 = create_entry(
+        entry2 = create_entry_from_delta(
             dateDelta2,
             time2,
             duration2,
@@ -495,7 +505,7 @@ class EntryModelTests(TestCase):
         dateDelta1 = datetime.timedelta(days=0)
         time1 = datetime.time(hour=12)
         duration1 = datetime.timedelta(hours=1)
-        entry1 = create_entry(
+        entry1 = create_entry_from_delta(
             dateDelta1,
             time1,
             duration1,
@@ -509,7 +519,7 @@ class EntryModelTests(TestCase):
         dateDelta2 = datetime.timedelta(days=0)
         time2 = datetime.time(hour=12)
         duration2 = datetime.timedelta(hours=1)
-        entry2 = create_entry(
+        entry2 = create_entry_from_delta(
             dateDelta2,
             time2,
             duration2,
@@ -538,7 +548,7 @@ class EntryModelTests(TestCase):
         dateDelta1 = datetime.timedelta(days=0)
         time1 = datetime.time(hour=12)
         duration1 = datetime.timedelta(hours=1)
-        entry1 = create_entry(
+        entry1 = create_entry_from_delta(
             dateDelta1,
             time1,
             duration1,
@@ -571,7 +581,7 @@ class EntryModelTests(TestCase):
         dateDelta1 = datetime.timedelta(days=0)
         time = datetime.time(hour=12)
         duration = datetime.timedelta(hours=1)
-        entry1 = create_entry(
+        entry1 = create_entry_from_delta(
             dateDelta1,
             time,
             duration,
@@ -580,7 +590,7 @@ class EntryModelTests(TestCase):
         entry1.save()
 
         dateDelta2 = datetime.timedelta(days=0)
-        entry2 = create_entry(
+        entry2 = create_entry_from_delta(
             dateDelta2,
             time,
             duration,
@@ -608,7 +618,7 @@ class EntryModelTests(TestCase):
         dateDelta1 = datetime.timedelta(days=0)
         time1 = datetime.time(hour=12)
         duration1 = datetime.timedelta(hours=1)
-        entry1 = create_entry(
+        entry1 = create_entry_from_delta(
             dateDelta1,
             time1,
             duration1,
@@ -617,7 +627,7 @@ class EntryModelTests(TestCase):
         entry1.customer = customer
         entry1.save()
 
-        entry2 = create_entry(
+        entry2 = create_entry_from_delta(
             dateDelta1,
             time1,
             duration1,
@@ -642,7 +652,7 @@ class EntryModelTests(TestCase):
         dateDelta1 = datetime.timedelta(days=0)
         time1 = datetime.time(hour=12)
         duration1 = datetime.timedelta(hours=1)
-        entry1 = create_entry(
+        entry1 = create_entry_from_delta(
             dateDelta1,
             time1,
             duration1,
@@ -652,7 +662,7 @@ class EntryModelTests(TestCase):
         entry1.cancelled = True
         entry1.save()
 
-        entry2 = create_entry(
+        entry2 = create_entry_from_delta(
             dateDelta1,
             time1,
             duration1,
@@ -682,7 +692,7 @@ class EntryModelTests(TestCase):
         dateDelta1 = datetime.timedelta(days=0)
         time1 = datetime.time(hour=12)
         duration1 = datetime.timedelta(hours=1)
-        entry1 = create_entry(
+        entry1 = create_entry_from_delta(
             dateDelta1,
             time1,
             duration1,
@@ -692,7 +702,7 @@ class EntryModelTests(TestCase):
         entry1.no_show = True
         entry1.save()
 
-        entry2 = create_entry(
+        entry2 = create_entry_from_delta(
             dateDelta1,
             time1,
             duration1,
@@ -727,7 +737,7 @@ class EntryModelTests(TestCase):
         openingTime = settings.DIARY_OPENING_TIMES[date.weekday()]
         time1 = change_time(date, openingTime, datetime.timedelta(hours=1))
         duration = datetime.timedelta(hours=1)
-        entry = create_entry(
+        entry = create_entry_from_delta(
             dateDelta,
             time1,
             duration,
@@ -769,7 +779,7 @@ class EntryModelTests(TestCase):
         openingTime = settings.DIARY_OPENING_TIMES[date.weekday()]
         time1 = change_time(date, openingTime, datetime.timedelta(hours=-1))
         duration = datetime.timedelta(hours=1)
-        entry = create_entry(
+        entry = create_entry_from_delta(
             dateDelta,
             time1,
             duration,
@@ -802,7 +812,7 @@ class EntryModelTests(TestCase):
         now = timezone.localtime(timezone.now()).time()
         time = change_time(date, now, datetime.timedelta(hours=-1))
         duration = datetime.timedelta(hours=1)
-        entry = create_entry(
+        entry = create_entry_from_delta(
             dateDelta,
             time,
             duration,
@@ -837,7 +847,7 @@ class EntryModelTests(TestCase):
         now = timezone.localtime(timezone.now()).time()
         time = change_time(date, now, datetime.timedelta(hours=1))
         duration = datetime.timedelta(hours=1)
-        entry = create_entry(
+        entry = create_entry_from_delta(
             dateDelta,
             time,
             duration,
@@ -911,3 +921,89 @@ class ViewTests(TestCase):
         imp.reload(settings)
         imp.reload(views)
         self.assertEqual(views.DAY_NAMES[0], 'Monday')
+
+
+def create_entries():
+    tenYearsAgo = yearsago(10)
+    fiveYearsAgo = yearsago(5)
+    now = yearsago(0)
+    time = datetime.time(hour=12)
+    duration = datetime.timedelta(hours=1)
+    entry1 = create_entry(tenYearsAgo, time, duration, "very old entry")
+    entry1.save()
+    entry2 = create_entry(fiveYearsAgo, time, duration, "old entry")
+    entry2.save()
+    entry3 = create_entry(now, time, duration, "new")
+    entry3.save()
+
+
+class Clean_Entry_Tests(TestCase):
+    """
+    Tests of the management command to clear out old entries.
+    """
+
+    @freeze_time('2020-07-01 12:00:00')
+    def test_no_args_gives_error(self):
+        """
+        Make sure providing no arguments raises an error.
+        """
+        msg = "Specify a valid before date (-b) or an age (-a)."
+        with self.assertRaisesMessage(CommandError, msg):
+            call_command('clean_entries')
+
+
+    @freeze_time('2020-07-01 12:00:00')
+    def test_negative_age_gives_error(self):
+        """
+        Make sure negative age raises an error.
+        """
+        msg = "Specify a valid before date (-b) or an age (-a)."
+        with self.assertRaisesMessage(CommandError, msg):
+            call_command('clean_entries', '-a=-3')
+
+
+    @freeze_time('2020-07-01 12:00:00')
+    def test_future_date_gives_error(self):
+        """
+        Make sure future date raises an error.
+        """
+        today, now = get_today_now()
+        futureDate = today.replace(year=today.year + 5)
+        futureDateString = futureDate.isoformat()
+        msg = "Specify a valid before date (-b) or an age (-a)."
+        with self.assertRaisesMessage(CommandError, msg):
+            call_command('clean_entries', '-b=%s' % (futureDateString))
+
+
+    @freeze_time('2020-07-01 12:00:00')
+    def test_very_old_entry_delete_by_age(self):
+        """
+        Make sure very old data is deleted by age.
+        """
+        create_entries()
+        call_command('clean_entries', '-a=8')
+        entries = Entry.objects.all()
+        self.assertEqual(2, len(entries))
+
+
+    @freeze_time('2020-07-01 12:00:00')
+    def test_very_old_entry_delete_by_before(self):
+        """
+        Make sure very old data is deleted by before date.
+        """
+        create_entries()
+        call_command('clean_entries', '-b=2012-07-01')
+        entries = Entry.objects.all()
+        self.assertEqual(2, len(entries))
+
+
+    @freeze_time('2020-07-01 12:00:00')
+    def test_age_overrides_before(self):
+        """
+        Make sure age criteria overrides the given before date.
+        """
+        create_entries()
+        call_command('clean_entries', '-a=3', '-b=2012-07-01')
+        entries = Entry.objects.all()
+        print("Entries after clean=", len(entries))
+        self.assertEqual(1, len(entries))
