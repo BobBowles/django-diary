@@ -1005,5 +1005,4 @@ class Clean_Entry_Tests(TestCase):
         create_entries()
         call_command('clean_entries', '-a=3', '-b=2012-07-01')
         entries = Entry.objects.all()
-        print("Entries after clean=", len(entries))
         self.assertEqual(1, len(entries))

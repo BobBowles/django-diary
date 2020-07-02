@@ -53,5 +53,12 @@ class Command(BaseCommand):
             raise CommandError("Specify a valid before date (-b) or an age (-a).")
 
         # delete entries before the selected date
-        print("Cleaning entries prior to ", before)
-        Entry.objects.filter(date__lt=before,).delete()
+        entries = Entry.objects.filter(date__lt=before,)
+        n = len(entries)
+        name = 'entry' if n==1 else 'entries'   # pluralisation
+        if kwargs['age']:
+            print(f"Cleaning {n} {name} older than {age} years ... ", end='')
+        else:
+            print(f"Cleaning {n} {name} prior to {before} ... ", end='')
+        entries.delete()
+        print("Done")
