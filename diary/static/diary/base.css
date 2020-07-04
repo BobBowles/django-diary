@@ -1,4 +1,16 @@
+/* Overrides for bootstrap defaults */
+
+
+.row {
+    margin-right: 0px;
+    margin-left: 15px;
+    padding-right: 0px;
+    padding-left: 0px;
+}
+
+
 /* css for diary page(s) */
+
 
 .current {
     background-color: #f57900 !important;
@@ -57,7 +69,7 @@
     color: #000000;
 }
 
-/* admin and trading are opposites. historic is the same as trading but in the 
+/* admin and trading are opposites. historic is the same as trading but in the
 past */
 .admin {
     background-color: #999999;
@@ -141,4 +153,3 @@ div.entry {
     display: inline;
     float: right;
 }
-

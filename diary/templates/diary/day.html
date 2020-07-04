@@ -20,13 +20,13 @@
     <div class="container-fluid">
         {% for label, datetime_slug, start_time, entries, current, trading, historic, advance, allow_dnd in time_slots %}
             <div class="row">
-                <div class="col-md-1">
+                <div class="col-md-2">
                     <b>{{ label }}</b>
                 </div>
-                <div 
+                <div
                     id="{{ datetime_slug }}"
                     class=
-"col-md-11 droptarget
+"row col-md-8 droptarget
 {% if current %} current{% endif %}
 {% if trading %}
 {% if historic %} historic{% elif advance%} advance{% else %} trading{% endif %}
@@ -40,16 +40,16 @@
                     {% endif %}
                     >
                 {% url 'diary:entry_new' slug=datetime_slug as new_entry %}
-                    <button 
-                        class="btn btn-link new" 
-                        type="button" 
+                    <button
+                        class="btn btn-link new"
+                        type="button"
 onclick="location.href='{{ new_entry }}?next={{ request.path }}'"
                         >
                         <span class="glyphicon glyphicon-plus">
                         </span>
                     </button>
                     {% for entry in entries %}
-                        <div 
+                        <div
 class="entry{% if entry.cancelled %} cancelled{% endif %}{% if entry.no_show %} no_show{% endif %}"
                             id="{{ entry.pk }}"
                             {% if request.user.is_staff or allow_dnd %}
@@ -57,7 +57,7 @@ class="entry{% if entry.cancelled %} cancelled{% endif %}{% if entry.no_show %} 
                                 ondragstart="drag(event);"
                             {% endif %}
                             >
-                            <div 
+                            <div
                                 data-href=
                             "{% url 'diary:entry_modal' pk=entry.pk %}"
                                 data-toggle="modal"
@@ -74,4 +74,3 @@ class="entry{% if entry.cancelled %} cancelled{% endif %}{% if entry.no_show %} 
     </div>
 
 {% endblock diary_content %}
-
