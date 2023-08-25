@@ -294,8 +294,8 @@ Version 2.x
     pytz>=2020.1
     six>=1.15.0
 
-Version 3.x (TBA)
------------------
+Version 3.5
+-----------
 
 ::
 
@@ -303,6 +303,16 @@ Version 3.x (TBA)
     django-datetime-widget2>=0.9.5
     pytz>=2020.1
     six>=1.15.0
+
+Version 3.6 (TBA)
+-----------------
+
+::
+
+    Django>=3.1.14
+    django-datetime-widget2>=0.9.5
+    pytz>=2023.3
+    six>=1.16.0
 
 Although they are listed here as strict requirements, they are probably more accurately *minimum* requirements. However, while I am continuing to develop the code I am opting for a simple life...
 
