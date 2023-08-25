@@ -60,6 +60,16 @@ A complete sample project is available on `GitHub <https://github.com/BobBowles/
             'datetimewidget',
         ...
 
+
+#.  Add the following to your ``settings.py`` for Django >= 3.2
+
+    ::
+
+        ...
+            DEFAULT_AUTO_FIELD='django.db.models.AutoField'
+        ...
+
+
 #.  Run the migrations:
 
     ::
