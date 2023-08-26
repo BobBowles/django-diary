@@ -84,7 +84,7 @@ setup(
         "Programming Language :: Python :: 3.8",
         "Development Status :: 3 - Alpha",
         "Environment :: Web Environment",
-        "Framework :: Django :: 3.1",
+        "Framework :: Django :: 4.0",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",
         "Operating System :: POSIX :: Linux",  # TODO: only tested on Linux
@@ -101,7 +101,7 @@ setup(
         'diary.management.commands',
     ],
     install_requires=[
-        'Django>=3.1.14',
+        'Django>=4.0.10',
         'django-datetime-widget2>=0.9.5',
         'pytz>=2023.3',
         'six>=1.15.0',
