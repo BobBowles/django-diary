@@ -283,19 +283,19 @@ Going forward I intend to support a maintenance-only release for each major vers
 
 The recommended Python/Django package dependencies are as follows for the different versions.
 
-Version 1.x
------------
+Version 1.x < 2 (Django 1 Maintenance Stream)
+---------------------------------------------
 
 ::
 
-    Django==1.11.29
+    Django>=1.11.29, <2
     django-datetime-widget==0.9.3
     django-model-utils==3.2.0
     pytz==2020.1
     six==1.15.0
 
-Version 2.x
------------
+Version 2.x < 3 (Django 2 Maintenance Stream)
+---------------------------------------------
 
 ::
 
@@ -304,22 +304,42 @@ Version 2.x
     pytz>=2020.1
     six>=1.15.0
 
-Version 3.5
------------
+Version 3.x < 3.6 (Django 3.0 Maintenance)
+------------------------------------------
 
 ::
 
-    Django>=3.0.7
+    Django>=3.0.7, <3.1
     django-datetime-widget2>=0.9.5
     pytz>=2020.1
     six>=1.15.0
 
-Version 3.6 (TBA)
------------------
+Version 3.6 (Django 3.1 Maintenance)
+-----------
 
 ::
 
-    Django>=3.1.14
+    Django==3.1.14
+    django-datetime-widget2>=0.9.5
+    pytz>=2023.3
+    six>=1.16.0
+
+Version 3.7 < 4 (Django 3.2 Maintenance)
+----------------------------------------
+
+::
+
+    Django==3.2.20
+    django-datetime-widget2>=0.9.5
+    pytz>=2023.3
+    six>=1.16.0
+
+Version 4+ (Django 4 Development)
+----------------------------------------
+
+::
+
+    Django>=4.0
     django-datetime-widget2>=0.9.5
     pytz>=2023.3
     six>=1.16.0
@@ -327,7 +347,7 @@ Version 3.6 (TBA)
 Although they are listed here as strict requirements, they are probably more accurately *minimum* requirements. However, while I am continuing to develop the code I am opting for a simple life...
 
 ``Django``
-    is self-explanatory. Up to V0.3.5 the target was Django 1.8. Following versions drop support for Django 1.8. Planned maintenance releases will cover Django 1.11.29 (v1.x), Django 2.2.13 (v2.x) and it is intended to cover Django 3 in the development stream (v3.x).
+    is self-explanatory. Up to V0.3.5 the target was Django 1.8. Following versions drop support for Django 1.8. Planned maintenance releases will cover Django 1.11.29 (v1.x), Django 2.2.13 (v2.x), Django 3.2.20 (v3.x) and it is intended to cover Django 4 in the development stream (v4.x).
 
 ``django-datetime-widget``
     is a project to provide some nice Bootstrap date and time widgets for ``Django``. It needs to be added as an app in the settings file. To use meridian time, the time formats also need to be added to the settings, as the ``Django`` defaults ignore meridian (see the Configuration section). The original version (0.9.3) available in Pypi is fine for ``Django<2.1``, but for ``Django>=2.1`` an updated version due to Erwin Gelissen has been published as ``django-datetime-widget2``.
