@@ -315,7 +315,7 @@ Version 3.x < 3.6 (Django 3.0 Maintenance)
     six>=1.15.0
 
 Version 3.6 (Django 3.1 Maintenance)
------------
+------------------------------------
 
 ::
 
@@ -335,7 +335,7 @@ Version 3.7 < 4 (Django 3.2 Maintenance)
     six>=1.16.0
 
 Version 4+ (Django 4 Development)
-----------------------------------------
+---------------------------------
 
 ::
 

@@ -71,6 +71,7 @@ setup(
     name='django-diary',
     version=__version__,
     description='A pluggable diary app for use in the Django framework.',
+    long_description_content_type="text/x-rst",
     long_description=open('README.rst').read(),
     author='Bob Bowles',
     author_email='bobjohnbowles@gmail.com',
