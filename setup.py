@@ -96,6 +96,8 @@ setup(
     package_dir={'': packageDir},
     packages=[
         'diary',
+        'diary.formats',
+        'diary.formats.en',
         'diary.migrations',
         'diary.management',
         'diary.management.commands',
