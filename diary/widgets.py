@@ -6,7 +6,6 @@ from django.utils.translation import gettext as _
 
 
 
-
 class RelatedFieldWidgetCanAdd(widgets.Select):
     """
     Supplements the standard Select widget behaviour by adding an 'add' button.

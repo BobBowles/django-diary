@@ -58,4 +58,7 @@ v3.0.6      2023-08-25      *   Upgrade to Django 3.1.14
 v3.0.7      2023-08-25      *   Upgrade to Django 3.2.20. Maintenance release 
                             for Django 3.
 v4.0.x      2023-08-26      *   Development stream for Django 4.
+v4.0.0      2023-08-26      *   Upgrade to Django 4.0.10.
+v4.0.0.1    2023-08-31      *   Bugfix: Change l10n defaults to allow meridian 
+                            times.
 ========    ============    ====================================================

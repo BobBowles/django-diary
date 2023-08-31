@@ -101,19 +101,14 @@ USE_L10N = True
 
 USE_TZ = True
 
-# the django default does not allow time with meridian
-TIME_INPUT_FORMATS = (
-    '%H:%M:%S',
-    '%H:%M',
-    '%I %p',
-    '%I:%M %p',
-    '%I:%M%p',
-    '%H:%M:%S.%f',
-)
+# To use meridian time in Django 4+ we have to provide custom overrides for the localisation
+FORMAT_MODULE_PATH = [
+    "diary.formats",
+]
 
 DIARY_MULTI_DAY_NUMBER = 5
 
-#DIARY_SHOW_MERIDIAN = True
+DIARY_SHOW_MERIDIAN = True # Default False, True for testing meridian times
 #DIARY_FIRST_DAY_OF_WEEK = 6
 
 DIARY_MIN_TIME = datetime.time(hour=6)

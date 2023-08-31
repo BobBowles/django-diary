@@ -225,18 +225,15 @@ After installation you should have 'something-that-works' but it will look ugly 
                                                         for ``DIARY_XXXXX``.
     =========================== =========== =========== ========================
 
-#.  Also in ``settings.py`` configure meridian time displays if required (see above). The default Django ``TIME_INPUT_FORMATS`` do not include meridian formats:
+#.  To permit the use of meridian time display and input in Django 4+ overrides must be provided in a formats directory. The following entry in ``settings.py`` enables the localisation to find the overrides for the Python defaults:
 
     ::
 
-        TIME_INPUT_FORMATS = (
-            '%H:%M:%S',
-            '%H:%M',
-            '%I %p',
-            '%I:%M %p',
-            '%I:%M%p',
-            '%H:%M:%S.%f',
-        )
+
+            # To use meridian time in Django 4+ we have to provide custom overrides for the localisation
+            FORMAT_MODULE_PATH = [
+                "diary.formats",
+            ]
 
 
 Administration
@@ -356,7 +353,7 @@ Although they are listed here as strict requirements, they are probably more acc
     is a project that provides a number of useful tools for manipulating models. It is primarily used here for facilitating subclassing of User. It is not needed for Django>=2.0.
 
 ``pytz``
-    is needed for date and time manipulation.
+    is needed for date and time manipulation, but is irrelevant for Django 4, and obsolete by Django 5.
 
 ``six``
     was dragged in at some point by one of the above (I think).
@@ -409,7 +406,8 @@ Version Python Django  Description
 v0.4    3.8    1.11.29 Base Python 3.8 implementation.
 v1.x    3.8    1.11.29 Django 1 bugfix releases. django-model-utils==3.2.0
 v2.x    3.8    2.2.13  Django 2 bugfix releases. django-model-utils==4.0.0
-v3.x    3.8    3.x     Django 3 bugfix releases.
+v3.x    3.8    3.2.20  Django 3 bugfix releases.
+v4.x    3.8+   4+      Django 4 development stream. 
 ======= ====== ======= =========================================================
 
 
