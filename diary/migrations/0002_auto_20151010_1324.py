@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 from django.db import models, migrations
 import datetime
-from django.utils.timezone import utc
+from django.utils.timezone import utc # DEPRECATED change to datetime.timezone ASAP
 from django.conf import settings
 
 

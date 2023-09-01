@@ -46,15 +46,15 @@ v0.3.5      2016-06-16      *   New: Add Customer notes to popup.
                             *   Bugfix: Ensure redirection restores 'today' when
                             no date is specified.
 v0.4        2020-06-13      *   Upgrade to Python 3.8 and Django 1.11.
-v1.0.x      2020-06-14      *   Maintenance release based on Django 1.11.29
-v2.0.x      2020-06-28      *   Maintenance release based on Django 2.2.13
-v3.0.x      2020-06-28      *   Development release based on Django 3.0.7
+v1.0.x      2020-06-14      *   Maintenance release based on Django 1.11.29.
+v2.0.x      2020-06-28      *   Maintenance release based on Django 2.2.13.
+v3.0.x      2020-06-28      *   Development release based on Django 3.0.7.
 v3.0.1      2020-07-01      *   New: Add clean_entries command.
 v3.0.2      2020-07-02      *   Add diagnostics to clean_entries.
 v3.0.3      2020-07-04      *   Cosmetic changes to diary display.
 v3.0.4      2020-07-04      *   Cosmetic Changes to diary display.
 v3.0.5      2023-07-28      *   Revert to v3.0.3.
-v3.0.6      2023-08-25      *   Upgrade to Django 3.1.14
+v3.0.6      2023-08-25      *   Upgrade to Django 3.1.14.
 v3.0.7      2023-08-25      *   Upgrade to Django 3.2.20. Maintenance release 
                             for Django 3.
 v4.0.x      2023-08-26      *   Development stream for Django 4.
@@ -63,4 +63,5 @@ v4.0.0.1    2023-08-31      *   Bugfix: Change l10n defaults to allow meridian
                             times.
 v4.0.0.2    2023-08-31      *   Bugfix: Enable distribution to correctly 
                             package l10n overrides.
+v4.0.1      2023-09-01      *   Upgrade to Django 4.1.10.
 ========    ============    ====================================================
