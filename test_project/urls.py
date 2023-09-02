@@ -18,13 +18,16 @@ from django.urls import re_path as url
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 
+from . import views
+
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^accounts/login/$', auth_views.LoginView.as_view(), name='login'),
-    url(r'^accounts/logout/$',
-        auth_views.LogoutView.as_view(),
-        {'next_page': '/'},
-        name='logout'),
+    url(r'^accounts/logout/$',      # Stop using class view to force logout by post (Django 5)
+        views.logout,
+        name='logout',
+    ),
     url(r'^accounts/password/reset/$',
         auth_views.PasswordResetView.as_view(),
         {'post_reset_redirect' : '/accounts/password/reset/done/'},
