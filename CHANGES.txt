@@ -64,5 +64,7 @@ v4.0.0.1    2023-08-31      *   Bugfix: Change l10n defaults to allow meridian
 v4.0.0.2    2023-08-31      *   Bugfix: Enable distribution to correctly 
                             package l10n overrides.
 v4.0.1      2023-09-01      *   Upgrade to Django 4.1.10.
-v4.0.2      2023-09-01      *   Upgrade to Django 4.2.4.
+v4.0.2      2023-09-02      *   Upgrade to Django 4.2.4.
+                            *   Ensure logout uses post not get.
+                            *   Troubleshoot password change.
 ========    ============    ====================================================

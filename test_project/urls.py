@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import include
 from django.urls import re_path as url
+#from django.urls import reverse_lazy
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 
@@ -29,13 +30,17 @@ urlpatterns = [
         name='logout',
     ),
     url(r'^accounts/password/reset/$',
-        auth_views.PasswordResetView.as_view(),
+        auth_views.PasswordResetView.as_view(
+            success_url = 'password_reset_done',
+        ),
         {'post_reset_redirect' : '/accounts/password/reset/done/'},
         name='password_reset'),
     url(r'^accounts/password/reset/done/$',
         auth_views.PasswordResetDoneView.as_view()),
     url(r'^accounts/password/reset/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$',
-        auth_views.PasswordResetConfirmView.as_view(),
+        auth_views.PasswordResetConfirmView.as_view(
+            success_url = 'password_reset_complete',
+        ),
         {'post_reset_redirect' : '/accounts/password/done/'},
         name='password_reset_confirm'),
     url(r'^accounts/password/done/$', auth_views.PasswordResetCompleteView.as_view()),

@@ -84,7 +84,7 @@ setup(
         "Programming Language :: Python :: 3.8",
         "Development Status :: 3 - Alpha",
         "Environment :: Web Environment",
-        "Framework :: Django :: 4.0",
+        "Framework :: Django :: 4.2",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",
         "Operating System :: POSIX :: Linux",  # TODO: only tested on Linux
