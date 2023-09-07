@@ -794,7 +794,7 @@ def get_customer_and_redirect(request, pk):
 
     customer = (
         Customer.objects.get(pk=pk) if (pk and request.user.is_staff)
-        else Customer.objects.get(request.user.pk)
+        else Customer.objects.get(pk=request.user.pk)
     )
 
     redirect_url = (
@@ -805,11 +805,13 @@ def get_customer_and_redirect(request, pk):
     return customer, redirect_url
 
 
-
 @login_required
-def customer_change(request, pk):
+def customer_change(request, pk=None):
     """
     Change the specified customer's personal details.
+
+    The default pk points to nothing and forces use of the logged 
+    user's pk.
     """
 
     customer, redirect_url = get_customer_and_redirect(request, pk)

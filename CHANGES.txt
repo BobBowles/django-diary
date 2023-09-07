@@ -67,4 +67,6 @@ v4.0.1      2023-09-01      *   Upgrade to Django 4.1.10.
 v4.0.2      2023-09-02      *   Upgrade to Django 4.2.4.
                             *   Ensure logout uses post not get.
                             *   Troubleshoot password change.
+v4.0.2.1    2023-09-05      *   Bugfix: Clean up behaviour of password reset.
+v4.0.2.2    2023-09-07      *   Bugfix: Correct errors in customer self-display.
 ========    ============    ====================================================

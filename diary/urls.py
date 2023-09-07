@@ -94,14 +94,14 @@ urlpatterns = [
         name='customer_add',                        # default has no entry
     ),
 
-    # edit customer
-    url(r'^customer_change/(?P<pk>\d+)/$',
-        views.customer_change,
-        name='customer_edit',                       # edit customer
-    ),
+    # display/edit dustomer details
     url(r'^customer_change/$',
         views.customer_change,
         name='customer_change',                     # default is current user
+    ),
+    url(r'^customer_change/(?P<pk>\d+)/$',
+        views.customer_change,
+        name='customer_edit',                       # edit some other customer
     ),
 
     # customer history
