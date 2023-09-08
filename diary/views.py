@@ -760,9 +760,9 @@ def customer_add(request, entry_pk=None, entry_slug=None):
                     }
                 )
             )
-        elif not request.user.is_authenticated():
+        elif not request.user.is_authenticated:
             return HttpResponseRedirect(
-                reverse('django.contrib.auth.views.login')
+                reverse('login')
             )
         else:
             return HttpResponseRedirect(
