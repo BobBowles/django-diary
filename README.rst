@@ -287,7 +287,7 @@ At the fundamental level the dependencies of this app are recorded in the ``requ
 
 The styling, layout, widgets, and javascript all utilize Twitter Bootstrap and jQuery. The Javascript dependencies are self-contained, but obviously it is more harmonious if your project as a whole is designed around Bootstrap. If the Bootstrap styling css is not already declared in your template's header you will need to add it.
 
-I have made no effort to write this for Python 2.7, targeting Python 3 from the outset, and specifically Python 3.4. From V0.3.5 the target Python is 3.8, and support for Python 3.4 has now been dropped.
+I have made no effort to write this for Python 2.7, targeting Python 3 from the outset, initially Python 3.4. From V0.3.5 the target Python is 3.8, and support for Python 3.4 has now been dropped. Python 3.8 is maintained for maintenance branches v1, v2, and v3. From maintenance v4 and ongoing development at time of writing the target is Python 3.11.4.
 
 Going forward I intend to support a maintenance-only release for each major version of ``Django``, plus new features to be added for the latest ``Django``.
 
@@ -302,7 +302,6 @@ Version 1.x < 2 (Django 1 Maintenance Stream)
     django-datetime-widget==0.9.3
     django-model-utils==3.2.0
     pytz==2020.1
-    six==1.15.0
 
 Version 2.x < 3 (Django 2 Maintenance Stream)
 ---------------------------------------------
@@ -312,7 +311,6 @@ Version 2.x < 3 (Django 2 Maintenance Stream)
     Django>=2.2.13, <3
     django-datetime-widget2>=0.9.4
     pytz>=2020.1
-    six>=1.15.0
 
 Version 3.x < 3.6 (Django 3.0 Maintenance)
 ------------------------------------------
@@ -322,7 +320,6 @@ Version 3.x < 3.6 (Django 3.0 Maintenance)
     Django>=3.0.7, <3.1
     django-datetime-widget2>=0.9.5
     pytz>=2020.1
-    six>=1.15.0
 
 Version 3.6 (Django 3.1 Maintenance)
 ------------------------------------
@@ -332,7 +329,6 @@ Version 3.6 (Django 3.1 Maintenance)
     Django==3.1.14
     django-datetime-widget2>=0.9.5
     pytz>=2023.3
-    six>=1.16.0
 
 Version 3.7 < 4 (Django 3.2 Maintenance)
 ----------------------------------------
@@ -342,17 +338,25 @@ Version 3.7 < 4 (Django 3.2 Maintenance)
     Django==3.2.20
     django-datetime-widget2>=0.9.5
     pytz>=2023.3
-    six>=1.16.0
 
-Version 4+ (Django 4 Development)
----------------------------------
+Version 4.2 < 5 (Django 4 Maintenance)
+--------------------------------------
 
 ::
 
-    Django>=4.0, <5
+    Django>=4.2.4,<5
     django-datetime-widget2>=0.9.5
-    pytz>=2023.3
-    six>=1.16.0
+    DateTime>=5.2
+
+Version 5+ (Django 5 Development - TBA)
+---------------------------------------
+
+::
+
+    Django>=4.2.4,<5
+    django-datetime-widget2>=0.9.5
+    DateTime>=5.2
+
 
 Although they are listed here as strict requirements, they are probably more accurately *minimum* requirements. However, while I am continuing to develop the code I am opting for a simple life...
 
@@ -365,11 +369,8 @@ Although they are listed here as strict requirements, they are probably more acc
 ``django-model-utils``
     is a project that provides a number of useful tools for manipulating models. It is primarily used here for facilitating subclassing of User. It is not needed for Django>=2.0.
 
-``pytz``
-    is needed for date and time manipulation, but is irrelevant for Django 4, and obsolete by Django 5.
-
-``six``
-    was dragged in at some point by one of the above (I think).
+``DateTime``
+    is needed for date and time manipulation in Django 5 and above. This pulls in other modules such as ``pytz``.
 
 
 Reusability

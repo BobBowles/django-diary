@@ -81,7 +81,7 @@ setup(
     classifiers=[
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.11",
         "Development Status :: 3 - Alpha",
         "Environment :: Web Environment",
         "Framework :: Django :: 4.2",
@@ -103,10 +103,9 @@ setup(
         'diary.management.commands',
     ],
     install_requires=[
-        'Django>=4.1.10',
+        'Django>=4.2.4',
         'django-datetime-widget2>=0.9.5',
-        'pytz>=2023.3',
-        'six>=1.15.0',
+        'DateTime>=5.2',
     ],
     package_data=packageData,
     data_files=dataFiles,

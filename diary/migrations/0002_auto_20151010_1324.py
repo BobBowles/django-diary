@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 from django.db import models, migrations
 import datetime
-from django.utils.timezone import utc # DEPRECATED change to datetime.timezone ASAP
+from datetime import timezone
 from django.conf import settings
 
 
@@ -18,12 +18,24 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='entry',
             name='edited',
-            field=models.DateTimeField(auto_now=True, default=datetime.datetime(2015, 10, 10, 12, 24, 48, 619511, tzinfo=utc)),
+            field=models.DateTimeField(
+                auto_now=True, 
+                default=datetime.datetime(
+                    2015, 10, 10, 12, 24, 48, 619511, 
+                    tzinfo=timezone.utc
+                )
+            ),
             preserve_default=False,
         ),
         migrations.AddField(
             model_name='entry',
             name='editor',
-            field=models.ForeignKey(null=True, blank=True, to=settings.AUTH_USER_MODEL, related_name='edited_entries', on_delete=models.CASCADE),
+            field=models.ForeignKey(
+                null=True, 
+                blank=True, 
+                to=settings.AUTH_USER_MODEL, 
+                related_name='edited_entries', 
+                on_delete=models.CASCADE
+            ),
         ),
     ]
