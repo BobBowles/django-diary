@@ -71,4 +71,6 @@ v4.0.2.1    2023-09-05      *   Bugfix: Clean up behaviour of password reset.
 v4.0.2.2    2023-09-07      *   Bugfix: Correct errors in customer self-display.
 v4.0.2.3    2023-09-08      *   Bugfix: Correct logic and reversal for new 
                             customer add.
+v4.2.0      2023-09-09      *   New: Add entry change tracking for admins by 
+                            email.
 ========    ============    ====================================================

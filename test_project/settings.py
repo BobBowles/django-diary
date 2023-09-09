@@ -150,10 +150,11 @@ LOGOUT_REDIRECT_URL = '/'
 # test email server setup
 if DEBUG:
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-    ADMINS = (
+    ADMINS = [
         ('Mr Big', 'admin@example.com'),
         ('Mrs Big', 'admin2@example.com'),
-    )
+    ]
+    #ADMINS = None  # test entry change mails stop when this is null
     SERVER_EMAIL = 'root@example.com'
     EMAIL_HOST = 'localhost'
     EMAIL_PORT = 1025

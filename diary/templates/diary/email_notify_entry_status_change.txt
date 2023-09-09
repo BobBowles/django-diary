@@ -1,0 +1,3 @@
+Entry Status Change for {{ entry.customer }}:
+
+  at: {{ entry.date }} at {{ entry.time }}: {{ status }}

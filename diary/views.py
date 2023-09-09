@@ -14,6 +14,8 @@ from django.db.models import Q
 from django.forms import ValidationError
 from django.template.loader import render_to_string
 from django.template import RequestContext
+from django.core import mail
+from django.conf import settings as main_settings
 
 
 # Create your views here.
@@ -552,6 +554,21 @@ def entry(request, pk=None, slug=None, customer_pk=None):
     if form.is_valid():
         entry = form.save(commit=False)
         entry.save()
+
+        # notify listed admins by email
+        if main_settings.ADMINS:
+            mail.send_mail(
+                settings.DIARY_SITE_NAME+': New Entry for {}'.format(entry.customer),
+                render_to_string(
+                    'diary/email_notify_new_entry.txt',
+                    context={
+                        'entry': entry,
+                    },
+                ),
+                main_settings.DEFAULT_FROM_EMAIL,
+                main_settings.ADMINS,
+            )
+
         return redirect(next_url)
 
     # have to set up the customer widget after form creation
@@ -605,6 +622,8 @@ def entry_update(request):
     date, time = getDatetimeFromSlug(datetime_slug)
 
     # try updating the entry
+    old_entry_date = entry.date
+    old_entry_time = entry.time
     entry.date = date
     entry.time = time
 
@@ -631,6 +650,22 @@ def entry_update(request):
         # try adding after the other entry
         entry.time = otherEntry.time_end()
         entry.save()
+
+    # notify listed admins of changes by email
+    if main_settings.ADMINS:
+        mail.send_mail(
+            settings.DIARY_SITE_NAME+': Entry Change for {}'.format(entry.customer),
+            render_to_string(
+                'diary/email_notify_entry_change.txt',
+                context={
+                    'entry': entry,
+                    'old_entry_date': old_entry_date,
+                    'old_entry_time': old_entry_time,
+                },
+            ),
+            main_settings.DEFAULT_FROM_EMAIL,
+            main_settings.ADMINS,
+        )
 
     message = 'Date / time changed to {0}, {1}'.format(entry.date, entry.time)
     data = {'message': message}
@@ -723,6 +758,23 @@ def entry_admin(request, pk, action):
         entry.editor = request.user
         entry.save()
 
+    # notify listed admins of entry status change by email
+    if main_settings.ADMINS:
+        mail.send_mail(
+            settings.DIARY_SITE_NAME+': Entry status change for {}'
+            .format(entry.customer),
+            render_to_string(
+                'diary/email_notify_entry_status_change.txt',
+                context={
+                    'entry': entry,
+                    'status': action,
+                },
+            ),
+            main_settings.DEFAULT_FROM_EMAIL,
+            main_settings.ADMINS,
+        )
+
+
     return redirect(
         redirect_url,
         slug=date.strftime(DATE_SLUG_FORMAT),
@@ -810,7 +862,7 @@ def customer_change(request, pk=None):
     """
     Change the specified customer's personal details.
 
-    The default pk points to nothing and forces use of the logged 
+    The default pk points to nothing and forces use of the logged
     user's pk.
     """
 

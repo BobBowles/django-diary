@@ -94,24 +94,30 @@ A complete sample project is available on `GitHub <https://github.com/BobBowles/
         from django.contrib.auth import views as auth_views
         ...
             url(r'^admin/', admin.site.urls),
-            url(r'^accounts/login/$', auth_views.login, name='login'),
-            url(r'^accounts/logout/$',
-                auth_views.logout,
-                {'next_page': '/'},
-                name='logout'),
-            url(r'^accounts/password/reset/$',
-                auth_views.password_reset,
-                {'post_reset_redirect' : '/accounts/password/reset/done/'},
-                name='password_reset'),
-            url(r'^accounts/password/reset/done/$', auth_views.password_reset_done),
-            url(r'^accounts/password/reset/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$',
-                auth_views.password_reset_confirm,
-                {'post_reset_redirect' : '/accounts/password/done/'},
-                name='password_reset_confirm'),
-            url(r'^accounts/password/done/$', auth_views.password_reset_complete),
+            url(r'^accounts/login/$', auth_views.LoginView.as_view(), name='login'),
+            url(r'^accounts/logout/$',      # Stop using class view to force logout by post (Django 5)
+                views.logout,
+                name='logout',
+            ),
+            url(r'^accounts/password_reset/$',
+                auth_views.PasswordResetView.as_view(),
+                name = 'password_reset',
+            ),
+            url(r'^accounts/password_reset/password_reset_done/$',
+                auth_views.PasswordResetDoneView.as_view(),
+                name = 'password_reset_done',
+            ),
+            url(r'^accounts/password_reset_confirm/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$',
+                auth_views.PasswordResetConfirmView.as_view(),
+                name = 'password_reset_confirm',
+            ),
+            url(r'^accounts/password_reset_complete/$',
+                auth_views.PasswordResetCompleteView.as_view(),
+                name = 'password_reset_complete',
+            ),
             url(r'^diary/', include('diary.urls', namespace='diary')),
 
-#.  For password administration and/or the email reminder service you need to set up an email service. It is sufficient to use Python's built-in dummy server for development and testing. This just prints out the result of email requests onto the console. From the command line:
+#.  For password administration, the email reminder service, and admin entry tracking you need to set up an email service. It is sufficient to use Python's built-in dummy server for development and testing. This just prints out the result of email requests onto the console. From the command line:
 
     ::
 
@@ -131,6 +137,12 @@ A complete sample project is available on `GitHub <https://github.com/BobBowles/
             EMAIL_HOST_PASSWORD = ''
             EMAIL_USE_TLS = False
             DEFAULT_FROM_EMAIL = 'testing@example.com'
+            ADMINS = [
+                ('Admin 1', 'admin1@example.com'),
+                ('Admin 2', 'admin2@example.com'),
+            ]
+
+    Configuring the ``ADMINS`` list enables monitoring of diary entries via email. This is a useful feature to keep track of ``customer``-initiated changes in the diary. If not wanted, leave the ``ADMINS`` list empty or null.
 
 
 Configuration
@@ -169,6 +181,7 @@ After installation you should have 'something-that-works' but it will look ugly 
             DEFAULT_FROM_EMAIL = 'webmaster@mygoogledomain.com'
             EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']
             EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
+            ADMINS = os.environ['ADMINS']
 
     (Note the use of environment variables to keep sensitive information out of your revision control system. There are other ways to do this but this is pretty cool and simple).
 
@@ -245,13 +258,13 @@ A custom command has been added to help maintain the database. ``clean_entries``
 
 A custom command has been added to enable easy implementation of the routine task of sending out email reminders. At the moment configuration settings for this are kept to a minimum, requiring a name for the site, given as ``DIARY_SITE_NAME``, and an optional contact phone number ``DIARY_CONTACT_PHONE``, plus the correct configuration of the email facility itself.
 
-Most of the email configuration is covered in the `Installation`_ and `Configuration`_ sections. To make use of administration notifications, two further email settings are needed in ``settings.py``, for ``ADMINS`` and ``SERVER_EMAIL``. The ``ADMINS`` receive reports on the email reminders, and the ``SERVER_EMAIL`` is the email account used for the mail-out. For example::
+Most of the email configuration is covered in the `Installation`_ and `Configuration`_ sections. To make use of administration notifications, two email settings are needed in ``settings.py``, for ``ADMINS`` and ``SERVER_EMAIL``. The ``ADMINS`` receive reports on the email reminders, and the ``SERVER_EMAIL`` is the email account used for the mail-out. For example::
 
-    # tuple of tuples of administrator names and emails
-    ADMINS = (
+    # list of tuples of administrator names and emails
+    ADMINS = [
         ('Boss 1', 'boss1@example.com),
         ('Boss 2', 'boss2@example.com),
-    )
+    ]
 
     # server email address
     SERVER_EMAIL = 'webmaster@example.com'
@@ -336,7 +349,7 @@ Version 4+ (Django 4 Development)
 
 ::
 
-    Django>=4.0
+    Django>=4.0, <5
     django-datetime-widget2>=0.9.5
     pytz>=2023.3
     six>=1.16.0
@@ -407,7 +420,7 @@ v0.4    3.8    1.11.29 Base Python 3.8 implementation.
 v1.x    3.8    1.11.29 Django 1 bugfix releases. django-model-utils==3.2.0
 v2.x    3.8    2.2.13  Django 2 bugfix releases. django-model-utils==4.0.0
 v3.x    3.8    3.2.20  Django 3 bugfix releases.
-v4.x    3.8+   4+      Django 4 development stream. 
+v4.x    3.8+   4+      Django 4 development stream.
 ======= ====== ======= =========================================================
 
 
