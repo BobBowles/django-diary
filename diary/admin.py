@@ -82,12 +82,12 @@ class CustomerCreationForm(forms.ModelForm):
 
 class CustomerChangeForm(forms.ModelForm):
     """
-    A form for updating Customers. 
-    
+    A form for updating Customers.
+
     Customers can change their non-security-related information using this form.
-    
-    Excludes security-sensitive information like password and privileges, which 
-    are changed by other means (needs staff privilege except for self password 
+
+    Excludes security-sensitive information like password and privileges, which
+    are changed by other means (needs staff privilege except for self password
     change).
     """
 
@@ -99,9 +99,9 @@ class CustomerChangeForm(forms.ModelForm):
             'title',
             'first_name',
             'last_name',
-            'email', 
+            'email',
             'phone',
-            'date_of_birth', 
+            'date_of_birth',
             'gender',
             'notes',
         )
@@ -135,7 +135,7 @@ class CustomerAdmin(UserAdmin):
     fieldsets = (
         (None, {
             'fields': (
-                'username', 
+                'username',
                 'first_name',
                 'last_name',
                 #'password', # excluded from change form so excluded here too
@@ -173,8 +173,20 @@ class CustomerAdmin(UserAdmin):
 admin.site.register(Customer, CustomerAdmin)
 
 
-admin.site.register(Treatment)
-admin.site.register(Resource)
+@admin.register(Treatment)
+class TreatmentAdmin(admin.ModelAdmin):
+    list_display = ['name', 'min_duration', 'resource_required',]
+    list_editable = ['min_duration', 'resource_required',]
+    list_display_links = ['name',]
+    ordering = ['name', 'min_duration',]
+
+
+@admin.register(Resource)
+class ResourceAdmin(admin.ModelAdmin):
+    list_display = ['name', 'description',]
+    list_editable = ['description',]
+    list_display_links = ['name',]
+    ordering = ['name',]
 
 
 @admin.register(Entry)
@@ -215,4 +227,3 @@ class EntryAdmin(admin.ModelAdmin):
        }),
     )
     ordering = ('date', 'time', )
-

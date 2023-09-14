@@ -123,7 +123,13 @@ A complete sample project is available on `GitHub <https://github.com/BobBowles/
 
         python -m smtpd -n -c DebuggingServer localhost:1025
 
-    (or just use the bash script checked into the `GitHub project <https://github.com/BobBowles/django-diary>`_).
+    (or just use the bash script checked into the `GitHub project <https://github.com/BobBowles/django-diary>`_). Alternatively, and even more easily, ``Django`` provides a console email backend that can be implemented in place of the default smtp backend in ``settings.py`` as follows:
+
+    ::
+
+        # test email server console backend
+        if DEBUG:
+            EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
     In your ``settings.py`` add your email server's details. The following snippet links to the dummy email server described above:
 
@@ -257,6 +263,8 @@ A custom command has been added to help maintain the database. ``clean_entries``
     > python manage.py clean_entries [-a|--age n][-b|--before=<yyyy-mm-dd>]
 
 A custom command has been added to enable easy implementation of the routine task of sending out email reminders. At the moment configuration settings for this are kept to a minimum, requiring a name for the site, given as ``DIARY_SITE_NAME``, and an optional contact phone number ``DIARY_CONTACT_PHONE``, plus the correct configuration of the email facility itself.
+
+To make administration of the site easier the ``resource`` and ``treatment`` objects have been made editable inline since Version 4.2.2.
 
 Most of the email configuration is covered in the `Installation`_ and `Configuration`_ sections. To make use of administration notifications, two email settings are needed in ``settings.py``, for ``ADMINS`` and ``SERVER_EMAIL``. The ``ADMINS`` receive reports on the email reminders, and the ``SERVER_EMAIL`` is the email account used for the mail-out. For example::
 
