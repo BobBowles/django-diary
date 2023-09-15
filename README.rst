@@ -31,7 +31,7 @@ Entries are allowed to overlap in time, provided there are no resource conflicts
 
 There are two categories of ``User``. The standard admin ``Users`` are retained for administrative functions, and typically have at least ``is_staff`` privilege.
 
-Customers are also ``Users`` of the system (they are in fact a subclass of ``User``). While they have no administrative privileges, they have additional attributes. In keeping with the health clinic paradigm, they have demographic and health-related information associated with them, contact details, and of course their treatment history, which can be derived from their historical record of appointments.
+Customers are also ``Users`` of the system (they are in fact a subclass of ``User``). While they have no administrative privileges, they have additional attributes. In keeping with the health clinic paradigm, they have demographic and health-related information associated with them, contact details, and of course their treatment history, which can be derived from their historical record of appointments. Customers have the choice to opt out of email appointment reminders and appointment change notifications.
 
 In the interests of confidentiality, ``Customers`` may only see and alter their own details and appointments. Staff ``Users`` are able to see and alter the details of all entries.
 

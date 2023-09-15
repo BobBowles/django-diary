@@ -1,4 +1,4 @@
-Entry Change for {{ entry.customer }}:
+Diary Entry Change for {{ entry.customer }}:
 
 from: {{ old_entry_date }} at {{ old_entry_time }}
   to: {{ entry.date }} at {{ entry.time }}

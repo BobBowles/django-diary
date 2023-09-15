@@ -117,6 +117,8 @@ class Customer(User):
         default=FEMALE,
     )
     notes = models.TextField(blank=True)
+    opt_out_entry_reminder_email = models.BooleanField(default=False)
+    opt_out_entry_change_email = models.BooleanField(default=False)
 
 
     def natural_key(self):

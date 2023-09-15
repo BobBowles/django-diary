@@ -507,6 +507,34 @@ def get_redirect_url(request, default):
     return '/'.join(x for x in next_url_bits[:date_index]) + '/' + slug + '/'
 
 
+def email_notify_entry_change(entry, header_text, body_text_filename, context):
+    """
+    Notify admins and clients of changes in the diary entries by email.
+    """
+    # abort if not required
+    if not main_settings.ADMINS and not (entry.customer.email and not entry.customer.opt_out_entry_change_email):
+        return
+
+    # construct the list of recipients
+    recipients = []
+    for name, email in main_settings.ADMINS: # the admins
+        recipients.append(email)
+
+    if entry.customer.email and not entry.customer.opt_out_entry_change_email:
+        recipients.append(entry.customer.email)
+
+    mail.send_mail(
+        settings.DIARY_SITE_NAME+header_text.format(entry.customer),
+        render_to_string(
+            body_text_filename,
+            context=context,
+        ),
+        main_settings.DEFAULT_FROM_EMAIL,
+        recipients,
+            )
+
+
+
 @login_required
 def entry(request, pk=None, slug=None, customer_pk=None):
     """
@@ -555,19 +583,13 @@ def entry(request, pk=None, slug=None, customer_pk=None):
         entry = form.save(commit=False)
         entry.save()
 
-        # notify listed admins by email
-        if main_settings.ADMINS:
-            mail.send_mail(
-                settings.DIARY_SITE_NAME+': New Entry for {}'.format(entry.customer),
-                render_to_string(
-                    'diary/email_notify_new_entry.txt',
-                    context={
-                        'entry': entry,
-                    },
-                ),
-                main_settings.DEFAULT_FROM_EMAIL,
-                main_settings.ADMINS,
-            )
+        # notify changes by email
+        email_notify_entry_change(
+            entry,
+            ': New Diary Entry for {}',
+            'diary/email_notify_new_entry.txt',
+            {'entry': entry,},
+        )
 
         return redirect(next_url)
 
@@ -651,21 +673,17 @@ def entry_update(request):
         entry.time = otherEntry.time_end()
         entry.save()
 
-    # notify listed admins of changes by email
-    if main_settings.ADMINS:
-        mail.send_mail(
-            settings.DIARY_SITE_NAME+': Entry Change for {}'.format(entry.customer),
-            render_to_string(
-                'diary/email_notify_entry_change.txt',
-                context={
-                    'entry': entry,
-                    'old_entry_date': old_entry_date,
-                    'old_entry_time': old_entry_time,
-                },
-            ),
-            main_settings.DEFAULT_FROM_EMAIL,
-            main_settings.ADMINS,
-        )
+    # notify changes by email
+    email_notify_entry_change(
+        entry,
+        ': Diary Entry Change for {}',
+        'diary/email_notify_entry_change.txt',
+        {
+            'entry': entry,
+            'old_entry_date': old_entry_date,
+            'old_entry_time': old_entry_time,
+        },
+    )
 
     message = 'Date / time changed to {0}, {1}'.format(entry.date, entry.time)
     data = {'message': message}
@@ -758,22 +776,16 @@ def entry_admin(request, pk, action):
         entry.editor = request.user
         entry.save()
 
-    # notify listed admins of entry status change by email
-    if main_settings.ADMINS:
-        mail.send_mail(
-            settings.DIARY_SITE_NAME+': Entry status change for {}'
-            .format(entry.customer),
-            render_to_string(
-                'diary/email_notify_entry_status_change.txt',
-                context={
-                    'entry': entry,
-                    'status': action,
-                },
-            ),
-            main_settings.DEFAULT_FROM_EMAIL,
-            main_settings.ADMINS,
-        )
-
+    # notify entry status change by email
+    email_notify_entry_change(
+        entry,
+        ': Diary Entry Status Change for {}',
+        'diary/email_notify_entry_status_change.txt',
+        {
+            'entry': entry,
+            'status': action,
+        },
+    )
 
     return redirect(
         redirect_url,

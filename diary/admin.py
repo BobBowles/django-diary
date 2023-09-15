@@ -20,6 +20,10 @@ DATE_WIDGET_OPTIONS = {
 
 CUSTOMER_HELP_TEXTS = {
     'email': 'Make sure you use a valid email.',
+    'opt_out_entry_reminder_email':
+        'Leave unchecked to receive diary reminder emails.',
+    'opt_out_entry_change_email':
+        'Leave unchecked to receive diary change emails.',
 }
 
 
@@ -43,6 +47,8 @@ class CustomerCreationForm(forms.ModelForm):
             'first_name',
             'last_name',
             'email',
+            'opt_out_entry_reminder_email',
+            'opt_out_entry_change_email',
             'phone',
             'date_of_birth',
             'gender',
@@ -100,6 +106,8 @@ class CustomerChangeForm(forms.ModelForm):
             'first_name',
             'last_name',
             'email',
+            'opt_out_entry_reminder_email',
+            'opt_out_entry_change_email',
             'phone',
             'date_of_birth',
             'gender',
@@ -144,6 +152,8 @@ class CustomerAdmin(UserAdmin):
         ('Contact info', {
             'fields': (
                 'email',
+                'opt_out_entry_reminder_email',
+                'opt_out_entry_change_email',
                 'phone',
             )
         }),

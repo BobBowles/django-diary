@@ -29,6 +29,7 @@ class Command(BaseCommand):
             date=tomorrow,
             cancelled=False, # reminders not needed for cancelled entries
             customer__email__gt='', # test for non-blank (not non-null) email
+            customer__opt_out_entry_reminder_email=False, # customer wants reminders
         ).order_by('time')
 
         # collect summary info for site admins
@@ -37,7 +38,7 @@ class Command(BaseCommand):
         for entry in entries:
             summary.append(
                 '{0} <{1}>: {2} {3}:  {4}'.format(
-                    entry.customer, 
+                    entry.customer,
                     entry.customer.email,
                     entry.date,
                     entry.time,
@@ -80,4 +81,3 @@ class Command(BaseCommand):
         # send the messages
         mail.send_mass_mail(reminder_messages, fail_silently=False)
         print('Reminder messages sent: {0}'.format(len(reminder_messages)))
-
