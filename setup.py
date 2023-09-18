@@ -75,7 +75,7 @@ setup(
     long_description=open('README.rst').read(),
     author='Bob Bowles',
     author_email='bobjohnbowles@gmail.com',
-    url='http://pypi.python.org/pypi/diary/',
+    url='http://pypi.python.org/pypi/django-diary/',
     license='MIT License',
     keywords=["Diary", "Django",],
     classifiers=[
@@ -103,7 +103,7 @@ setup(
         'diary.management.commands',
     ],
     install_requires=[
-        'Django>=4.2.4',
+        'Django>=4.2.5, <5',
         'django-datetime-widget2>=0.9.5',
         'DateTime>=5.2',
     ],

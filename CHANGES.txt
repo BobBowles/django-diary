@@ -79,4 +79,5 @@ v4.2.2      2023-09-14      *   New: Make inline admin display of resources and
 v4.2.3      2023-09-15      *   New: Enable entry and administration change
                             notifications for Customers and admins with opt-out
                             options.
+v4.2.4      2023-09-18      *   Upgrade to Django 4.2.5 (LTS).
 ========    ============    ====================================================

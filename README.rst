@@ -352,7 +352,7 @@ Version 4.2 < 5 (Django 4 Maintenance)
 
 ::
 
-    Django>=4.2.4,<5
+    Django==4.2.5, <5
     django-datetime-widget2>=0.9.5
     DateTime>=5.2
 
@@ -361,7 +361,7 @@ Version 5+ (Django 5 Development - TBA)
 
 ::
 
-    Django>=4.2.4,<5
+    Django>=5.0, <6
     django-datetime-widget2>=0.9.5
     DateTime>=5.2
 
@@ -369,7 +369,7 @@ Version 5+ (Django 5 Development - TBA)
 Although they are listed here as strict requirements, they are probably more accurately *minimum* requirements. However, while I am continuing to develop the code I am opting for a simple life...
 
 ``Django``
-    is self-explanatory. Up to V0.3.5 the target was Django 1.8. Following versions drop support for Django 1.8. Planned maintenance releases will cover Django 1.11.29 (v1.x), Django 2.2.13 (v2.x), Django 3.2.20 (v3.x) and it is intended to cover Django 4 in the development stream (v4.x).
+    is self-explanatory. Up to V0.3.5 the target was Django 1.8. Following versions drop support for Django 1.8. Planned maintenance releases will cover Django 1.11.29 (v1.x), Django 2.2.13 (v2.x), Django 3.2.20 (v3.x), Django 4.2.5 LTS (v4.x - TBA). The development stream is expected to upgrade to Django 5 when there is a stable version available.
 
 ``django-datetime-widget``
     is a project to provide some nice Bootstrap date and time widgets for ``Django``. It needs to be added as an app in the settings file. To use meridian time, the time formats also need to be added to the settings, as the ``Django`` defaults ignore meridian (see the Configuration section). The original version (0.9.3) available in Pypi is fine for ``Django<2.1``, but for ``Django>=2.1`` an updated version due to Erwin Gelissen has been published as ``django-datetime-widget2``.
@@ -429,7 +429,8 @@ v0.4    3.8    1.11.29 Base Python 3.8 implementation.
 v1.x    3.8    1.11.29 Django 1 bugfix releases. django-model-utils==3.2.0
 v2.x    3.8    2.2.13  Django 2 bugfix releases. django-model-utils==4.0.0
 v3.x    3.8    3.2.20  Django 3 bugfix releases.
-v4.x    3.8+   4+      Django 4 development stream.
+v4.x    3.11   4.2.5   Django 4 bugfix releases.
+v5.x    3.11+  5.x     Django 5 development stream (TBA).
 ======= ====== ======= =========================================================
 
 
