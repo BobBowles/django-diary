@@ -512,7 +512,11 @@ def email_notify_entry_change(entry, header_text, body_text_filename, context):
     Notify admins and clients of changes in the diary entries by email.
     """
     # abort if not required
-    if not main_settings.ADMINS and not (entry.customer.email and not entry.customer.opt_out_entry_change_email):
+    if not entry.customer or (      # don't bother if no customer is set
+        not main_settings.ADMINS and not ( # don't bother if noone wants email
+            entry.customer.email and not entry.customer.opt_out_entry_change_email
+            )
+        ):
         return
 
     # construct the list of recipients
