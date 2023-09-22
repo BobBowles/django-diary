@@ -83,6 +83,8 @@ v4.2.4      2023-09-18      *   Upgrade to Django 4.2.5 (LTS).
 v4.2.5      2023-09-18      *   Bugfix: Allow for null customer in change
                             notifications.
 v4.2.6      2023-09-18      *   New: Entries coloured by resource.
-                            *   New: Enable unused resources to be disabled in 
+                            *   New: Enable unused resources to be disabled in
                             admin.
+v4.2.6.1    2023-09-22      *   Bugfix: Ensure templatetags are included in
+                            python packaging.
 ========    ============    ====================================================

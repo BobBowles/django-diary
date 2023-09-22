@@ -101,6 +101,7 @@ setup(
         'diary.migrations',
         'diary.management',
         'diary.management.commands',
+        'diary.templatetags',
     ],
     install_requires=[
         'Django>=4.2.5, <5',
