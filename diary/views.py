@@ -134,15 +134,24 @@ def reminders(request):
     today, now = get_today_now()
     tomorrow = today + datetime.timedelta(days=1)
 
-    user = request.user
-    queryset = (                            # customers see their own entries
-        Entry.objects.filter(
+    # get the customer corresponding to the user unless user is staff
+    customer = (
+        Customer.objects.get(
+            username=request.user.username
+        ) if not request.user.is_staff
+        else
+            request.user
+    )
+
+    queryset = (
+        Entry.objects.filter(          # admin/staff users see everything
             Q(date=today, time__gte=now)|Q(date=tomorrow),
-            customer=user,
+        ) if request.user.is_staff
+        else
+        Entry.objects.filter(          # customers only see their own entries
+            Q(date=today, time__gte=now)|Q(date=tomorrow),
+            customer=customer,
             cancelled=False,
-        ) if isinstance(user, Customer)
-        else Entry.objects.filter(          # admin/staff users see everything
-            Q(date=today, time__gte=now)|Q(date=tomorrow),
         )
     )
     return queryset.order_by('date', 'time')
@@ -371,13 +380,6 @@ def multi_day(request, slug=None, change=None):
                     date=day,
                     time__gte=startTime,
                     time__lt=endTime,
-                ) if request.user.is_staff
-                else Entry.objects.filter(
-                    date=day,
-                    time__gte=startTime,
-                    time__lt=endTime,
-                    customer=request.user,
-                    cancelled=False,
                 )
             ).order_by('time')
 
@@ -435,13 +437,6 @@ def day(request, slug=None, change=None):
                 date=date,
                 time__gte=startTime,
                 time__lt=endTime,
-            ) if request.user.is_staff
-            else Entry.objects.filter(
-                date=date,
-                time__gte=startTime,
-                time__lt=endTime,
-                customer=request.user,
-                cancelled=False,
             )
         ).order_by('time')
 

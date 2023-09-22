@@ -1,4 +1,5 @@
 {% extends 'diary/day_base.html' %}
+{% load diary_tags %}
 
 
 {% block diary_nav %}
@@ -48,26 +49,62 @@ onclick="location.href='{{ new_entry }}?next={{ request.path }}'"
                         <span class="glyphicon glyphicon-plus">
                         </span>
                     </button>
-                    {% for entry in entries %}
+                    {% for entry in entries %} <!-- entries loop -->
+<!-- Filter out entries not to be displayed at all -->
+                    {% if not request.user.is_staff and entry.no_show %} <!-- no-shows -->
+                    {% elif not request.user.is_staff and request.user.username != entry.customer.username and entry.cancelled %} <!-- cancelled -->
+                    {% elif not request.user.is_staff and request.user.username != entry.customer.username and not entry.resource %} <!-- no resource -->
+                    {% else %}
                         <div
 class="entry{% if entry.cancelled %} cancelled{% endif %}{% if entry.no_show %} no_show{% endif %}"
                             id="{{ entry.pk }}"
-                            {% if request.user.is_staff or allow_dnd %}
+                            {% if request.user.is_staff %}
                                 draggable="true"
                                 ondragstart="drag(event);"
+                            {% elif allow_dnd %}
+                                {% if request.user.username == entry.customer.username %}
+                                    draggable="true"
+                                    ondragstart="drag(event);"
+                                {% else %}
+                                    draggable="false"
+                                {% endif %}
+                            {% else %}
+                                draggable="false"
                             {% endif %}
                             >
+                            {% with fg_color="black" bg_color="white" %}
+                            {% if entry.resource %}
+                                {% update_variable entry.resource.fg_color as fg_color %}
+                                {% update_variable entry.resource.bg_color as bg_color %}
+                            {% endif %}
                             <div
-                                data-href=
+                                {% if request.user.is_staff or request.user.username == entry.customer.username and not entry.no_show %}
+                                    style="color:{{ fg_color }}; background-color:{{ bg_color }};"
+                                    data-href=
                             "{% url 'diary:entry_modal' pk=entry.pk %}"
-                                data-toggle="modal"
-                                data-target="#ajaxModal"
-                                >
-                                <b>{{ entry.customer }}</b> -
-                                {{ entry.short }}
+                                    data-toggle="modal"
+                                    data-target="#ajaxModal"
+                                    >
+                                    <b>{{ entry.customer }}</b> -
+                                    {{ entry.short }}
+                                {% elif request.user.username == entry.customer.username and entry.no_show %}
+                                    >
+                                    <b>{{ entry.customer }}</b> -
+                                    {{ entry.short }}
+                                {% elif not entry.customer or historic or not entry.resource %}
+                                    style="background-color: white; color: white;"
+                                    >
+                                    <b></b>
+                                {% else %}
+                                    style="background-color: {{ bg_color }}; color: {{ fg_color }};"
+                                    >
+                                    <b>XXXXXXXXXXXXXXXXXXXX</b>
+                                {% endif %}
                             </div>
+                            {% endwith %}
                         </div>
-                    {% endfor %}
+                    {% endif %}
+                    {% endfor %} <!-- end entries loop -->
                 </div>
             </div>
         {% endfor %}

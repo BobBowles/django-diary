@@ -85,12 +85,10 @@ past */
 
 /* highlight cancelled (admin only) or no_show entries */
 .cancelled {
-    background-color: #ff0000 !important;
-    color: #00ff00 !important;
+    border: 3px inset #ff0000 !important;
 }
 .no_show {
-    background-color: #00ff00 !important;
-    color: #ff0000 !important;
+    border: 3px inset #00ff00 !important;
     text-decoration: underline !important;
 }
 

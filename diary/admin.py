@@ -193,8 +193,8 @@ class TreatmentAdmin(admin.ModelAdmin):
 
 @admin.register(Resource)
 class ResourceAdmin(admin.ModelAdmin):
-    list_display = ['name', 'description',]
-    list_editable = ['description',]
+    list_display = ['name', 'description', 'fg_color', 'bg_color', 'enabled',]
+    list_editable = ['description', 'fg_color', 'bg_color', 'enabled',]
     list_display_links = ['name',]
     ordering = ['name',]
 

@@ -150,8 +150,158 @@ class Resource(models.Model):
     TODO: May need to generalise this by adding ResourceType.
     """
 
+    # named colors in html5
+    AQUAMARINE = "Aquamarine"
+    AZURE = "Azure"
+    BEIGE = "Beige"
+    BLACK = "Black"
+    BLUE = "Blue"
+    BLUE_VIOLET = "BlueViolet"
+    BROWN = "Brown"
+    CADET_BLUE = "CadetBlue"
+    CHARTREUSE = "Chartreuse"
+    CHOCOLATE = "Chocolate"
+    CORAL = "Coral"
+    CORNFLOWER_BLUE = "CornflowerBlue"
+    CRIMSON = "Crimson"
+    CYAN = "Cyan"
+    DARK_BLUE = "DarkBlue"
+    DARK_CYAN = "DarkCyan"
+    DARK_GOLDEN_ROD = "DarkGoldenRod"
+    DARK_GREY = "DarkGrey"
+    DARK_GREEN = "DarkGreen"
+    DARK_KHAKI = "DarkKhaki"
+    DARK_MAGENTA = "DarkMagenta"
+    DARK_OLIVE_GREEN = "DarkOliveGreen"
+    DARK_ORANGE = "DarkOrange"
+    DARK_RED = "DarkRed"
+    DARK_SALMON = "DarkSalmon"
+    DARK_SEA_GREEN = "DarkSeaGreen"
+    DARK_TURQUOISE = "DarkTurquoise"
+    DARK_VIOLET = "DarkViolet"
+    DEEP_PINK = "DeepPink"
+    DEEP_SKY_BLUE = "DeepSkyBlue"
+    DIM_GREY = "DimGrey"
+    FIRE_BRICK = "FireBrick"
+    FOREST_GREEN = "ForestGreen"
+    FUCHSIA = "Fuchsia"
+    GAINSBORO = "Gainsboro"
+    GOLD = "Gold"
+    GOLDEN_ROD = "GoldenRod"
+    GREEN = "Green"
+    GREEN_YELLOW = "GreenYellow"
+    GREY = "Grey"
+    HOT_PINK = "HotPink"
+    INDIAN_RED = "IndianRed"
+    INDIGO = "Indigo"
+    LAWN_GREEN = "LawnGreen"
+    LIGHT_BLUE = "LightBlue"
+    LIGHT_CORAL = "LightCoral"
+    LIGHT_CYAN = "LightCyan"
+    LIGHT_GOLDEN_ROD_YELLOW = "LightGoldenRodYellow" # max length
+    LIGHT_GREY = "LightGrey"
+    LIGHT_GREEN = "LightGreen"
+    LIGHT_PINK = "LightPink"
+    LIGHT_SALMON = "LightSalmon"
+    LIGHT_SEA_GREEN = "LightSeaGreen"
+    LIGHT_SKY_BLUE = "LightSkyBlue"
+    LIGHT_YELLOW = "LightYellow"
+    LIME = "Lime"
+    LIME_GREEN = "LimeGreen"
+    MAGENTA = "Magenta"
+    MAROON = "Maroon"
+    MIDNIGHT_BLUE = "MidnightBlue"
+    NAVY = "Navy"
+    OLIVE = "Olive"
+    OLIVE_DRAB = "OliveDrab"
+    ORANGE = "Orange"
+    ORANGE_RED = "OrangeRed"
+    ORCHID = "Orchid"
+    PALE_GOLDEN_ROD = "PaleGoldenRod"
+    PALE_GREEN = "PaleGreen"
+    PALE_TURQUOISE = "PaleTurquoise"
+    PALE_VIOLET_RED = "PaleVioletRed"
+    PERU = "Peru"
+    PINK = "Pink"
+    PLUM = "Plum"
+    PURPLE = "Purple"
+    RED = "Red"
+    ROYAL_BLUE = "RoyalBlue"
+    SALMON = "Salmon"
+    SANDY_BROWN = "SandyBrown"
+    SEA_GREEN = "SeaGreen"
+    SPRING_GREEN = "SpringGreen"
+    SILVER = "Silver"
+    TAN = "Tan"
+    TEAL = "Teal"
+    TURQUOISE = "Turquoise"
+    VIOLET = "Violet"
+    WHITE = "White"
+    YELLOW = "Yellow"
+    YELLOW_GREEN = "YellowGreen"
+
+    COLOR_CHOICES = (
+        # Greys
+        (BLACK, 'Black'),
+        (WHITE, 'White'),
+        (SILVER, 'Silver'),
+        (LIGHT_GREY, 'Light Grey'),
+        (DARK_GREY, 'Dark Grey'),
+        # Reds
+        (RED, 'Red'),
+        (CRIMSON, 'Crimson'),
+        (DARK_RED, 'Dark Red'),
+        (MAGENTA, 'Magenta'),
+        (DARK_MAGENTA, 'Dark Magenta'),
+        # Greens
+        (GREEN, 'Green'),
+        (LIGHT_GREEN, 'Light Green'),
+        (DARK_GREEN, 'Dark Green'),
+        (YELLOW_GREEN, 'Yellow Green'),
+        # Blues
+        (BLUE, 'Blue'),
+        (LIGHT_BLUE, 'Light Blue'),
+        (DARK_BLUE, 'Dark Blue'),
+        (ROYAL_BLUE, 'Royal Blue'),
+        (TEAL, 'Teal'),
+        # Yellows
+        (YELLOW, 'Yellow'),
+        (LIGHT_YELLOW, 'Light Yellow'),
+        (GOLD, 'Gold'),
+        (GOLDEN_ROD, 'Golden Rod'),
+        (LIGHT_GOLDEN_ROD_YELLOW, 'Light Golden Rod Yellow'),
+        (DARK_GOLDEN_ROD, 'Dark Golden Rod'),
+        # Browns
+        (BROWN, 'Brown'),
+        (TAN, 'Tan'),
+        (SANDY_BROWN, 'Sandy Brown'),
+        # Pinks
+        (PINK, 'Pink'),
+        (LIGHT_PINK, 'Light Pink'),
+        (SALMON, 'Salmon'),
+        (LIGHT_SALMON, 'Light Salmon'),
+        # Purples
+        (PURPLE, 'Purple'),
+        (VIOLET, 'Violet'),
+        (PALE_VIOLET_RED, 'Pale Violet Red'),
+        (DARK_VIOLET, 'Dark Violet'),
+    )
+
     name = models.CharField(max_length=40)
     description = models.TextField(blank=True)
+    fg_color = models.CharField(
+        blank=False,
+        choices=COLOR_CHOICES,
+        default=BLACK,
+        max_length=20,
+    )
+    bg_color = models.CharField(
+        blank=False,
+        choices=COLOR_CHOICES,
+        default=WHITE,
+        max_length=20,
+    )
+    enabled = models.BooleanField(default=True) # can disable unused resources
 
 
     def __str__(self):

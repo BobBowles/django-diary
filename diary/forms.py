@@ -1,5 +1,5 @@
 from django import forms
-from .models import Entry, Customer
+from .models import Entry, Customer, Resource
 from datetimewidget.widgets import (
     TimeWidget,
     DateWidget,
@@ -8,7 +8,7 @@ from . import settings
 from .widgets import RelatedFieldWidgetCanAdd
 
 
-
+# Time and date widget options
 TIME_FORMATS = ['%H:%M', '%I:%M%p', '%I:%M %p',]
 DURATION_FORMATS = ['%H:%M',]
 DATE_WIDGET_OPTIONS = {
@@ -28,14 +28,17 @@ DURATION_WIDGET_OPTIONS = {
 }
 
 
-
 class EntryForm(forms.ModelForm):
 
 
     def __init__(self, *args, **kwargs):
         """
         Override constructor to allow customer field to be configurably visible.
+
+        Also configure resource selection to exclude disabled resources.
         """
+
+        # configure exclusion of customer selection fields
         exclude_customer = kwargs.pop('exclude_customer', False)
         super(EntryForm, self).__init__(*args, **kwargs)
         if exclude_customer:
@@ -46,6 +49,9 @@ class EntryForm(forms.ModelForm):
                 'first_name',
                 'last_name',
             )
+
+        # configure resource selection list to exclude disabled resources
+        self.fields['resource'].queryset = Resource.objects.filter(enabled=True)
 
 
     class Meta:
