@@ -123,7 +123,7 @@ class="entry{% if entry.cancelled %} cancelled{% endif %}{% if entry.no_show %} 
                                     style="background-color: {{ bg_color }}; color: {{ fg_color }};"
                                         disabled="False"
                                     >
-                                    <b>XXXXXXXXXX</b>
+                                    <b>{{ entry.resource.name }} In Use</b>
                                 {% endif %}
                             </div>
                                         {% endwith %}

@@ -88,17 +88,15 @@ class="entry{% if entry.cancelled %} cancelled{% endif %}{% if entry.no_show %} 
                                     <b>{{ entry.customer }}</b> -
                                     {{ entry.short }}
                                 {% elif request.user.username == entry.customer.username and entry.no_show %}
+                                    disabled="False"
                                     >
                                     <b>{{ entry.customer }}</b> -
                                     {{ entry.short }}
-                                {% elif not entry.customer or historic or not entry.resource %}
-                                    style="background-color: white; color: white;"
-                                    >
-                                    <b></b>
                                 {% else %}
                                     style="background-color: {{ bg_color }}; color: {{ fg_color }};"
+                                    disabled="False"
                                     >
-                                    <b>XXXXXXXXXXXXXXXXXXXX</b>
+                                    <b>{{ entry.resource.name }} In Use</b>
                                 {% endif %}
                             </div>
                             {% endwith %}
