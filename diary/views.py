@@ -135,26 +135,30 @@ def reminders(request):
     tomorrow = today + datetime.timedelta(days=1)
 
     # get the customer corresponding to the user unless user is staff
-    customer = (
-        Customer.objects.get(
-            username=request.user.username
-        ) if not request.user.is_staff
-        else
-            request.user
-    )
-
-    queryset = (
-        Entry.objects.filter(          # admin/staff users see everything
-            Q(date=today, time__gte=now)|Q(date=tomorrow),
-        ) if request.user.is_staff
-        else
-        Entry.objects.filter(          # customers only see their own entries
-            Q(date=today, time__gte=now)|Q(date=tomorrow),
-            customer=customer,
-            cancelled=False,
+    if request.user.is_authenticated: # skip for anonymous users
+        customer = (
+            Customer.objects.get(
+                username=request.user.username
+            ) if not request.user.is_staff
+            else (
+                request.user
+            )
         )
-    )
-    return queryset.order_by('date', 'time')
+        queryset = (
+            Entry.objects.filter(          # admin/staff users see everything
+                Q(date=today, time__gte=now)|Q(date=tomorrow),
+            ) if request.user.is_staff
+            else
+            Entry.objects.filter(          # customers only see their own entries
+                Q(date=today, time__gte=now)|Q(date=tomorrow),
+                customer=customer,
+                cancelled=False,
+            )
+        )
+        return queryset.order_by('date', 'time')
+
+    # anonymour user so queryset is empty
+    return []
 
 
 
