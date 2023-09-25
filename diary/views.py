@@ -138,7 +138,7 @@ def reminders(request):
     if request.user.is_authenticated: # skip for anonymous users
         customer = (
             Customer.objects.get(
-                username=request.user.username
+                username=request.user.username,
             ) if not request.user.is_staff
             else (
                 request.user
@@ -147,6 +147,7 @@ def reminders(request):
         queryset = (
             Entry.objects.filter(          # admin/staff users see everything
                 Q(date=today, time__gte=now)|Q(date=tomorrow),
+                cancelled=False,
             ) if request.user.is_staff
             else
             Entry.objects.filter(          # customers only see their own entries
