@@ -10,14 +10,11 @@ from datetimewidget.widgets import DateWidget
 from .models import Customer, Treatment, Resource, Entry
 
 
-
 DATE_WIDGET_OPTIONS = {
     'minView': 2,
     'maxView': 4,
     'startView': 4,
 }
-
-
 CUSTOMER_HELP_TEXTS = {
     'email': 'Make sure you use a valid email.',
     'opt_out_entry_reminder_email':
@@ -25,7 +22,6 @@ CUSTOMER_HELP_TEXTS = {
     'opt_out_entry_change_email':
         'Leave unchecked to receive diary change emails.',
 }
-
 
 
 class CustomerCreationForm(forms.ModelForm):
@@ -43,15 +39,15 @@ class CustomerCreationForm(forms.ModelForm):
         model = Customer
         fields = (
             'username',
+            'gender',
             'title',
             'first_name',
             'last_name',
+            'phone',
             'email',
             'opt_out_entry_reminder_email',
             'opt_out_entry_change_email',
-            'phone',
             'date_of_birth',
-            'gender',
             'notes',
         )
         widgets = {
@@ -102,15 +98,15 @@ class CustomerChangeForm(forms.ModelForm):
         model = Customer
         fields = (
             'username',
+            'gender',
             'title',
             'first_name',
             'last_name',
+            'phone',
             'email',
             'opt_out_entry_reminder_email',
             'opt_out_entry_change_email',
-            'phone',
             'date_of_birth',
-            'gender',
             'notes',
         )
         widgets = {
@@ -144,27 +140,27 @@ class CustomerAdmin(UserAdmin):
         (None, {
             'fields': (
                 'username',
-                'first_name',
-                'last_name',
+                ('first_name', 'last_name'),
+                ('title', 'gender'),
                 #'password', # excluded from change form so excluded here too
-            )
-        }),
+                )
+            }
+        ),
         ('Contact info', {
             'fields': (
-                'email',
-                'opt_out_entry_reminder_email',
-                'opt_out_entry_change_email',
                 'phone',
-            )
-        }),
+                'email',
+                ('opt_out_entry_reminder_email', 'opt_out_entry_change_email'),
+                )
+            }
+        ),
         ('Personal info', {
             'fields': (
-                'title',
                 'date_of_birth',
-                'gender',
                 'notes',
-            )
-        }),
+                )
+            }
+        ),
 #        ('Permissions', {'fields': ('is_admin',)}),
     )
 #    # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
@@ -175,7 +171,7 @@ class CustomerAdmin(UserAdmin):
 #            'fields': ('username', 'password1', 'password2')}
 #        ),
 #    )
-    search_fields = ('username',)
+    search_fields = ('username', 'first_name', 'last_name')
     ordering = ('first_name', 'last_name', )
     filter_horizontal = ()
 
