@@ -40,8 +40,11 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'diary',
     'datetimewidget',
+    'crispy_forms',
+    'crispy_bootstrap3',
     'home', # a dummy home page for development purposes
 )
+CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

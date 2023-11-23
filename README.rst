@@ -51,14 +51,30 @@ A complete sample project is available on `GitHub <https://github.com/BobBowles/
         pip install django-diary            # installs the dependencies
 
 
-#.  Add ``diary`` and ``datetimewidget`` to your ``INSTALLED_APPS`` in ``settings.py`` underneath your main project app:
+#.  Add ``diary`` and ``datetimewidget`` underneath your main project app in
+        ``settings.py``
 
     ::
 
+        INSTALLED_APPS = [
         ...
             'diary',
             'datetimewidget',
         ...
+        ]
+
+
+#.  For better forms layouts add ``crispy_forms`` and its template pack for ``Bootstrap 3`` to your ``INSTALLED_APPS`` in ``settings.py``
+
+    ::
+
+        INSTALLED_APPS = [
+        ...
+            'crispy_forms',
+            'crispy-bootstrap3'
+        ...
+        ]
+        CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 
 #.  Add the following to your ``settings.py`` for Django >= 3.2
@@ -347,14 +363,25 @@ Version 3.7 < 4 (Django 3.2 Maintenance)
     django-datetime-widget2>=0.9.5
     pytz>=2023.3
 
-Version 4.2 < 5 (Django 4 Maintenance)
---------------------------------------
+Version 4.2 <= 4.2.7 (Django 4 Maintenance)
+-------------------------------------------
 
 ::
 
     Django==4.2.7, <5
     django-datetime-widget2>=0.9.5
     DateTime>=5.2
+
+Version 4.2.7.2 <5 (Django 4 Maintenance)
+-------------------------------------------
+
+    ::
+
+        Django==4.2.7, <5
+        django-datetime-widget2>=0.9.5
+        DateTime>=5.2
+        crispy_forms>=2.1
+        crispy-bootstrap3>=2022.1
 
 Version 5+ (Django 5 Development - TBA)
 ---------------------------------------

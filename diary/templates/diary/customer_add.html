@@ -1,4 +1,5 @@
 {% extends 'diary/form_base.html' %}
+{% load crispy_forms_tags %}
 
 
 {% block diary_nav %}
@@ -20,3 +21,6 @@
 {% endblock diary_title %}
 
 
+{% block diary_form_content %}
+  {% crispy form %}
+{% endblock %}

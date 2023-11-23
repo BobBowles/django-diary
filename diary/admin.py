@@ -9,6 +9,11 @@ from datetimewidget.widgets import DateWidget
 
 from .models import Customer, Treatment, Resource, Entry
 
+# crispy forms
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout, Submit, Row, Column, HTML
+
+
 
 DATE_WIDGET_OPTIONS = {
     'minView': 2,
@@ -61,6 +66,59 @@ class CustomerCreationForm(forms.ModelForm):
             'superuser_status',
         )
         help_texts = CUSTOMER_HELP_TEXTS
+
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            'username',
+            Row(
+                Column('first_name', css_class='form-group col-md-6 mb-0'),
+                Column('last_name', css_class='form-group col-md-6 mb-0'),
+                css_class='form-row',
+            ),
+            Row(
+                Column('password1', css_class='form-group col-md-6 mb-0'),
+                Column('password2', css_class='form-group col-md-6 mb-0'),
+                css_class='form-row',
+            ),
+            Row(
+                Column('gender', css_class='form-group col-md-6 mb-0'),
+                Column('title', css_class='form-group col-md-6 mb-0'),
+                css_class='form-row',
+            ),
+            'phone',
+            'email',
+            Row(
+                Column(
+                    'opt_out_entry_reminder_email',
+                    css_class='form-group col-md-6 mb-0',
+                ),
+                Column(
+                    'opt_out_entry_change_email',
+                    css_class='form-group col-md-6 mb-0',
+                ),
+                css_class='form-row',
+            ),
+            'date_of_birth',
+            'notes',
+            Row(
+                Column(
+                    HTML(''),
+                    css_class='form-group col-md-11 mb-0',
+                ),
+                Column(
+                    Submit(
+                        'save',
+                        'Save',
+                        css_class='save btn btn-default diarybutton'
+                    ),
+                    css_class='form-group col-md-1 mb-0',
+                ),
+                css_class='form-row',
+            )
+        )
 
 
     def clean_password2(self):
@@ -123,6 +181,53 @@ class CustomerChangeForm(forms.ModelForm):
         )
         help_texts = CUSTOMER_HELP_TEXTS
 
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            'username',
+            Row(
+                Column('first_name', css_class='form-group col-md-6 mb-0'),
+                Column('last_name', css_class='form-group col-md-6 mb-0'),
+                css_class='form-row',
+            ),
+            Row(
+                Column('gender', css_class='form-group col-md-6 mb-0'),
+                Column('title', css_class='form-group col-md-6 mb-0'),
+                css_class='form-row',
+            ),
+            'phone',
+            'email',
+            Row(
+                Column(
+                    'opt_out_entry_reminder_email',
+                    css_class='form-group col-md-6 mb-0',
+                ),
+                Column(
+                    'opt_out_entry_change_email',
+                    css_class='form-group col-md-6 mb-0',
+                ),
+                css_class='form-row',
+            ),
+            'date_of_birth',
+            'notes',
+            Row(
+                Column(
+                    HTML(''),
+                    css_class='form-group col-md-11 mb-0',
+                ),
+                Column(
+                    Submit(
+                        'save',
+                        'Save',
+                        css_class='save btn btn-default diarybutton'
+                    ),
+                    css_class='form-group col-md-1 mb-0',
+                ),
+                css_class='form-row',
+            ),
+        )
 
 
 class CustomerAdmin(UserAdmin):

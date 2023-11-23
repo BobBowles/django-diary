@@ -4,3 +4,5 @@ django-datetime-widget2==0.9.5
 freezegun==1.2.2
 python-dateutil==2.8.2
 DateTime==5.2
+django-crispy-forms>=2.1
+crispy-bootstrap3>=2022.1
