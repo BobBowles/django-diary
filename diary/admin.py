@@ -11,7 +11,7 @@ from .models import Customer, Treatment, Resource, Entry
 
 # crispy forms
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Submit, Row, Column, HTML
+from crispy_forms.layout import Layout, Submit, Row, Column, HTML, Fieldset
 
 
 
@@ -73,43 +73,50 @@ class CustomerBaseForm(forms.ModelForm):
 
     def initialise_crispy(self, display_password=False):
         """
-        Subclass the initialisation to enable crispy forms.
+        Perform the initialisation to enable crispy forms. This emulates the
+        admin Customer form layouts. Invoke from subclass __init__() method.
 
-        We use the display_password kwarg to enable subclasses to toggle
-        display of password fields.
+        display_password enables subclasses to toggle display of password
+        fields.
         """
         self.helper.layout = Layout(
-            'username',
-            Row(
-                Column('first_name', css_class='form-group col-md-6 mb-0'),
-                Column('last_name', css_class='form-group col-md-6 mb-0'),
-                css_class='form-row',
-            ),
-            Row(
-                Column('password1', css_class='form-group col-md-6 mb-0'),
-                Column('password2', css_class='form-group col-md-6 mb-0'),
-                css_class='form-row',
-            ) if display_password else None,
-            Row(
-                Column('gender', css_class='form-group col-md-6 mb-0'),
-                Column('title', css_class='form-group col-md-6 mb-0'),
-                css_class='form-row',
-            ),
-            'phone',
-            'email',
-            Row(
-                Column(
-                    'opt_out_entry_reminder_email',
-                    css_class='form-group col-md-6 mb-0',
+            Fieldset('',
+                'username',
+                Row(
+                    Column('first_name', css_class='form-group col-md-6 mb-0'),
+                    Column('last_name', css_class='form-group col-md-6 mb-0'),
+                    css_class='form-row',
                 ),
-                Column(
-                    'opt_out_entry_change_email',
-                    css_class='form-group col-md-6 mb-0',
+                Row(
+                    Column('password1', css_class='form-group col-md-6 mb-0'),
+                    Column('password2', css_class='form-group col-md-6 mb-0'),
+                    css_class='form-row',
+                ) if display_password else None,
+                Row(
+                    Column('gender', css_class='form-group col-md-6 mb-0'),
+                    Column('title', css_class='form-group col-md-6 mb-0'),
+                    css_class='form-row',
                 ),
-                css_class='form-row',
             ),
-            'date_of_birth',
-            'notes',
+            Fieldset('Contact Info',
+                'phone',
+                'email',
+                Row(
+                    Column(
+                        'opt_out_entry_reminder_email',
+                        css_class='form-group col-md-6 mb-0',
+                    ),
+                    Column(
+                        'opt_out_entry_change_email',
+                        css_class='form-group col-md-6 mb-0',
+                    ),
+                    css_class='form-row',
+                ),
+            ),
+            Fieldset('Personal Info',
+                'date_of_birth',
+                'notes',
+            ),
             Row(
                 Column(
                     HTML(''),
@@ -216,7 +223,7 @@ class CustomerAdmin(UserAdmin):
                 )
             }
         ),
-        ('Contact info', {
+        ('Contact Info', {
             'fields': (
                 'phone',
                 'email',
@@ -224,7 +231,7 @@ class CustomerAdmin(UserAdmin):
                 )
             }
         ),
-        ('Personal info', {
+        ('Personal Info', {
             'fields': (
                 'date_of_birth',
                 'notes',
