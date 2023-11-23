@@ -29,18 +29,16 @@ CUSTOMER_HELP_TEXTS = {
 }
 
 
-class CustomerCreationForm(forms.ModelForm):
+
+class CustomerBaseForm(forms.ModelForm):
     """
-    A form for creating new Customers. Includes all the required
-    fields, plus a repeated password.
+    Base form for displaying and altering Customer information.
     """
-    password1 = forms.CharField(
-        label='Password', widget=forms.PasswordInput)
-    password2 = forms.CharField(
-        label='Password confirmation', widget=forms.PasswordInput)
 
 
     class Meta:
+        abstract = True
+
         model = Customer
         fields = (
             'username',
@@ -71,6 +69,15 @@ class CustomerCreationForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
+
+
+    def initialise_crispy(self, display_password=False):
+        """
+        Subclass the initialisation to enable crispy forms.
+
+        We use the display_password kwarg to enable subclasses to toggle
+        display of password fields.
+        """
         self.helper.layout = Layout(
             'username',
             Row(
@@ -82,7 +89,7 @@ class CustomerCreationForm(forms.ModelForm):
                 Column('password1', css_class='form-group col-md-6 mb-0'),
                 Column('password2', css_class='form-group col-md-6 mb-0'),
                 css_class='form-row',
-            ),
+            ) if display_password else None,
             Row(
                 Column('gender', css_class='form-group col-md-6 mb-0'),
                 Column('title', css_class='form-group col-md-6 mb-0'),
@@ -121,6 +128,27 @@ class CustomerCreationForm(forms.ModelForm):
         )
 
 
+
+class CustomerCreationForm(CustomerBaseForm):
+    """
+    A form for creating new Customers. Includes all the required
+    fields, plus a repeated password.
+    """
+    password1 = forms.CharField(
+        label='Password', widget=forms.PasswordInput)
+    password2 = forms.CharField(
+        label='Password confirmation', widget=forms.PasswordInput)
+
+
+    class Meta(CustomerBaseForm.Meta):
+        abstract = False
+
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.initialise_crispy(display_password=True)
+
+
     def clean_password2(self):
         # Check that the two password entries match
         password1 = self.cleaned_data.get("password1")
@@ -140,7 +168,7 @@ class CustomerCreationForm(forms.ModelForm):
 
 
 
-class CustomerChangeForm(forms.ModelForm):
+class CustomerChangeForm(CustomerBaseForm):
     """
     A form for updating Customers.
 
@@ -152,82 +180,19 @@ class CustomerChangeForm(forms.ModelForm):
     """
 
 
-    class Meta:
-        model = Customer
-        fields = (
-            'username',
-            'gender',
-            'title',
-            'first_name',
-            'last_name',
-            'phone',
-            'email',
-            'opt_out_entry_reminder_email',
-            'opt_out_entry_change_email',
-            'date_of_birth',
-            'notes',
-        )
-        widgets = {
-            'date_of_birth': DateWidget(
-                bootstrap_version=3,
-                options=DATE_WIDGET_OPTIONS,
-            ),
-        }
+    class Meta(CustomerBaseForm.Meta):
+        abstract = False
         exclude = (
             'password',
             'staff_status',
             'superuser_status',
             'is_active',
         )
-        help_texts = CUSTOMER_HELP_TEXTS
 
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.layout = Layout(
-            'username',
-            Row(
-                Column('first_name', css_class='form-group col-md-6 mb-0'),
-                Column('last_name', css_class='form-group col-md-6 mb-0'),
-                css_class='form-row',
-            ),
-            Row(
-                Column('gender', css_class='form-group col-md-6 mb-0'),
-                Column('title', css_class='form-group col-md-6 mb-0'),
-                css_class='form-row',
-            ),
-            'phone',
-            'email',
-            Row(
-                Column(
-                    'opt_out_entry_reminder_email',
-                    css_class='form-group col-md-6 mb-0',
-                ),
-                Column(
-                    'opt_out_entry_change_email',
-                    css_class='form-group col-md-6 mb-0',
-                ),
-                css_class='form-row',
-            ),
-            'date_of_birth',
-            'notes',
-            Row(
-                Column(
-                    HTML(''),
-                    css_class='form-group col-md-11 mb-0',
-                ),
-                Column(
-                    Submit(
-                        'save',
-                        'Save',
-                        css_class='save btn btn-default diarybutton'
-                    ),
-                    css_class='form-group col-md-1 mb-0',
-                ),
-                css_class='form-row',
-            ),
-        )
+        self.initialise_crispy(display_password=False)
 
 
 class CustomerAdmin(UserAdmin):
