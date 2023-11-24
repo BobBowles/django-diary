@@ -2,11 +2,6 @@
 Django Diary
 ============
 
-.. image:: https://pypip.in/v/django-diary/badge.png
-    :target: https://crate.io/packages/django-diary
-.. image:: https://pypip.in/d/django-diary/badge.png
-    :target: https://crate.io/packages/django-diary
-
 
 Description
 -----------
@@ -373,15 +368,15 @@ Version 4.2 <= 4.2.7 (Django 4 Maintenance)
     DateTime>=5.2
 
 Version 4.2.7.2 <5 (Django 4 Maintenance)
--------------------------------------------
+-----------------------------------------
 
-    ::
+::
 
-        Django==4.2.7, <5
-        django-datetime-widget2>=0.9.5
-        DateTime>=5.2
-        crispy_forms>=2.1
-        crispy-bootstrap3>=2022.1
+    Django==4.2.7, <5
+    django-datetime-widget2>=0.9.5
+    DateTime>=5.2
+    crispy_forms>=2.1
+    crispy-bootstrap3>=2022.1
 
 Version 5+ (Django 5 Development - TBA)
 ---------------------------------------
