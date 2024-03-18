@@ -1,4 +1,4 @@
-Django==4.2.10
+Django==4.2.11
 dj-database-url==2.0.0 # needs Django >= 3.2
 django-datetime-widget2==0.9.5
 freezegun==1.2.2
