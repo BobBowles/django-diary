@@ -306,7 +306,7 @@ At the fundamental level the dependencies of this app are recorded in the ``requ
 
 The styling, layout, widgets, and javascript all utilize Twitter Bootstrap and jQuery. The Javascript dependencies are self-contained, but obviously it is more harmonious if your project as a whole is designed around Bootstrap. If the Bootstrap styling css is not already declared in your template's header you will need to add it.
 
-I have made no effort to write this for Python 2.7, targeting Python 3 from the outset, initially Python 3.4. From V0.3.5 the target Python is 3.8, and support for Python 3.4 has now been dropped. Python 3.8 is maintained for maintenance branches v1, v2, and v3. From maintenance v4 and ongoing development at time of writing the target is Python 3.11.8.
+I have made no effort to write this for Python 2.7, targeting Python 3 from the outset, initially Python 3.4. From V0.3.5 the target Python is 3.8, and support for Python 3.4 has now been dropped. Python 3.8 is maintained for maintenance branches v1, v2, and v3. From maintenance v4 and ongoing development at time of writing the target is the latest version of Python 3.12.
 
 Going forward I intend to support a maintenance-only release for each major version of ``Django``, plus new features to be added for the latest ``Django``.
 
@@ -358,12 +358,12 @@ Version 3.7 < 4 (Django 3.2 Maintenance)
     django-datetime-widget2>=0.9.5
     pytz>=2023.3
 
-Version 4.2 <= 4.2.14 (Django 4 Maintenance)
+Version 4.2 < 5 (Django 4 Maintenance)
 --------------------------------------------
 
 ::
 
-    Django==4.2.15, <5
+    Django==4.2.16, <5
     django-datetime-widget2>=0.9.5
     DateTime>=5.2
     crispy_forms>=2.1
@@ -384,7 +384,7 @@ Version 5+ (Django 5 Development - TBA)
 Although they are listed here as strict requirements, they are probably more accurately *minimum* requirements. However, while I am continuing to develop the code I am opting for a simple life...
 
 ``Django``
-    is self-explanatory. Up to V0.3.5 the target was Django 1.8. Following versions drop support for Django 1.8. Planned maintenance releases will cover Django 1.11.29 (v1.x), Django 2.2.13 (v2.x), Django 3.2.20 (v3.x), Django 4.2.15 (v4.x). The development stream is expected to upgrade to Django 5 when there is a stable version available.
+    is self-explanatory. Up to V0.3.5 the target was Django 1.8. Following versions drop support for Django 1.8. Planned maintenance releases will cover Django 1.11.29 (v1.x), Django 2.2.13 (v2.x), Django 3.2.20 (v3.x), Django 4.2.16 (v4.x). The development stream is expected to upgrade to Django 5 when there is a stable version available.
 
 ``django-datetime-widget``
     is a project to provide some nice Bootstrap date and time widgets for ``Django``. It needs to be added as an app in the settings file. To use meridian time, the time formats also need to be added to the settings, as the ``Django`` defaults ignore meridian (see the Configuration section). The original version (0.9.3) available in Pypi is fine for ``Django<2.1``, but for ``Django>=2.1`` an updated version due to Erwin Gelissen has been published as ``django-datetime-widget2``.
