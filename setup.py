@@ -81,7 +81,7 @@ setup(
     classifiers=[
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
         "Development Status :: 3 - Alpha",
         "Environment :: Web Environment",
         "Framework :: Django :: 4.2",
@@ -104,7 +104,7 @@ setup(
         'diary.templatetags',
     ],
     install_requires=[
-        'Django>=4.2.5, <5',
+        'Django~=4.2.17, <5',
         'django-datetime-widget2>=0.9.5',
         'DateTime>=5.2',
     ],
