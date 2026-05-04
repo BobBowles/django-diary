@@ -306,7 +306,7 @@ At the fundamental level the dependencies of this app are recorded in the ``requ
 
 The styling, layout, widgets, and javascript all utilize Twitter Bootstrap and jQuery. The Javascript dependencies are self-contained, but obviously it is more harmonious if your project as a whole is designed around Bootstrap. If the Bootstrap styling css is not already declared in your template's header you will need to add it.
 
-I have made no effort to write this for Python 2.7, targeting Python 3 from the outset, initially Python 3.4. From V0.3.5 the target Python is 3.8, and support for Python 3.4 has now been dropped. Python 3.8 is maintained for maintenance branches v1, v2, and v3. From maintenance v4 and ongoing development at time of writing the target is the latest version of Python 3.12.
+I have made no effort to write this for Python 2.7, targeting Python 3 from the outset, initially Python 3.4. From V0.3.5 the target Python is 3.8, and support for Python 3.4 has now been dropped. Python 3.8 is maintained for maintenance branches v1, v2, and v3. From maintenance v4 and ongoing development at time of writing the target is Python 3.13.
 
 Going forward I intend to support a maintenance-only release for each major version of ``Django``, plus new features to be added for the latest ``Django``.
 
@@ -430,7 +430,7 @@ Testing
 
 To avoid complications with constantly changing dates and times during tests some of the tests of the ``Entry`` functionality make use of ``freezegun``, so that tests that depend on time of day, etc, can be performed reliably and repeatably. After struggling with the Python built-in ``unittest.mock`` suite I found ``freezegun`` super-easy to use (like, one-line-of-code easy) and I recommend it to anyone who needs to test any code that uses or manipulates time-dependent phenomena.
 
-``Freezegun`` introduces some additional dependencies above those needed to run ``django-diary``. These are recorded in ``dev-requirements.txt`` which should be used in place of ``requirements.txt`` for setting up testing and development environments from git clones.
+``Freezegun`` introduces some additional dependencies above those needed to run ``django-diary``. These are recorded in ``test-requirements.txt`` which should be used in place of ``requirements.txt`` for setting up testing and development environments from git clones.
 
 
 Development Path
@@ -444,7 +444,7 @@ v0.4    3.8    1.11.29 Base Python 3.8 implementation.
 v1.x    3.8    1.11.29 Django 1 bugfix releases. django-model-utils==3.2.0
 v2.x    3.8    2.2.13  Django 2 bugfix releases. django-model-utils==4.0.0
 v3.x    3.8    3.2.20  Django 3 bugfix releases.
-v4.x    3.12   4.2.17+ Django 4 bugfix releases.
+v4.x    3.12+  4.2.17+ Django 4 bugfix releases.
 v5.x    3.12+  5.x     Django 5 development stream (TBA).
 ======= ====== ======= =========================================================
 

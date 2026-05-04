@@ -53,7 +53,10 @@ urlpatterns = [
         views.entry,
         name='entry_new'
     ),
-    url(r'^entry/(?P<slug>\d{4}-\d\d-\d\d_\d\d-\d\d)/(?P<customer_pk>\d+)/$',
+    url((r'^entry/(?P<slug>\d{4}-\d\d-\d\d_\d\d-\d\d)'
+        r'/(?P<customer_pk>\d+)'
+        r'/(?P<treatment_pk>\d*)'
+        r'/(?P<resource_pk>\d*)/$'),
         views.entry,
         name='entry_new_customer'
     ),

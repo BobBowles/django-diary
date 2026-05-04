@@ -20,7 +20,7 @@ from django.conf import settings as main_settings
 
 # Create your views here.
 
-from .models import Entry, Customer
+from .models import Entry, Customer, Treatment, Resource
 from .forms import EntryForm
 from .admin import CustomerCreationForm, CustomerChangeForm
 from . import settings
@@ -350,7 +350,7 @@ def evaluateBusinessLogic(day, startTime, endTime):
 @login_required
 def multi_day(request, slug=None, change=None):
     """
-    Display entries in a calendar-style 4-day layout.
+    Display entries in a calendar-style multi-day layout.
     """
 
     date = getDateFromSlug(slug, change)
@@ -540,7 +540,8 @@ def email_notify_entry_change(entry, header_text, body_text_filename, context):
 
 
 @login_required
-def entry(request, pk=None, slug=None, customer_pk=None):
+def entry(request, pk=None, slug=None, customer_pk=None,
+    treatment_pk=None, resource_pk=None,):
     """
     Edit/create an entry for the diary.
     """
@@ -576,6 +577,16 @@ def entry(request, pk=None, slug=None, customer_pk=None):
     if customer_pk:
         customer = get_object_or_404(Customer, pk=customer_pk)
         entry.customer = customer
+
+    # if a treatment is specified set as the treatment
+    if treatment_pk:
+        treatment = get_object_or_404(Treatment, pk=treatment_pk)
+        entry.treatment = treatment
+
+    # if a resource is specified set it as the resource
+    if resource_pk:
+        resource = get_object_or_404(Resource, pk=resource_pk)
+        entry.resource = resource
 
     exclude_customer = not request.user.is_staff
     form = EntryForm(
