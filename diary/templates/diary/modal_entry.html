@@ -114,7 +114,7 @@
                     type="button"
                     class="btn btn-default"
                     onclick=
-"next_url('{% url 'diary:entry_new_customer' slug=book_ahead_datetime_slug customer_pk=entry.customer.pk treatment_pk=entry.treatment.pk resource_pk=entry.resource.pk %}?next={{ redirect_url }}');"
+"next_url('{% url 'diary:entry_book_ahead' pk=entry.pk slug=book_ahead_datetime_slug %}?next={{ redirect_url }}');"
                     >
                     Book Ahead
                 </button>
